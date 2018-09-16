@@ -110,7 +110,7 @@ Design Considerations
     * Pro: Easier implementation
     * Con: Less complete view because corners will be unchanging
 
-* Int[][] vs. 2D Arraylist<Integer>
+* Cell[][] vs. 2D Arraylist<Cell>
     * We decided to use 2D Arraylist in case size needs to be altered
     * Pros: Flexibility in size, easier to use interface
     * Con: Worse performance, worse use of memory
