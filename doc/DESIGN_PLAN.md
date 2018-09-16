@@ -26,8 +26,8 @@ User Interface
     * Load XML file
     * Play, stop, pause, step frame buttons
 * Errors messages
-    * No input file, 
-    * Input file is not complete or valid
+    * No input file
+    * Input file is incomplete or invalid
 * Input file
     * Colors for states
     * Initial conditions
@@ -39,7 +39,7 @@ User Interface
 Design Details
 ==================
 * Cell
-    * The Cell class tracks the cell's grid position, currentState and nextState. By tracking both states, the rules can be applied "simultaneously" in a first pass and the currentState can be applied in a second. 
+    * The Cell class tracks the cell's grid position, currentState and nextState. By tracking both states, the rules can be applied "simultaneously" in a first pass and the currentState can be applied in a second.
     * Methods/Functions
         * getNeighbors(int neighborhoodSize)
     * Interactions with other components
@@ -49,7 +49,7 @@ Design Details
         * Rule
             * Passed to applyRule() in order to generate a nextState
 * CellManager
-    * CellManager is responsible for initializing the grid and modifying cells on it.  This design ensures that there is only one class that has the access to modify cells. CellManager  contains the grid of cells. 
+    * CellManager is responsible for initializing the grid and modifying cells on it.  This design ensures that there is only one class that has the access to modify cells. CellManager  contains the grid of cells.
     * Methods/Functions
         * Initial setup method (grid size, etc.)
         * Apply rules to generate nextState for all cells (1st pass)
@@ -61,7 +61,7 @@ Design Details
             * Initializes Rule instances
             * Passes cells to Rule
         * Cell
-            * modifies states
+            * Modifies states
         * UImanager
             * Handle play, pause, step, stop, reset
     * Error handling:
@@ -72,13 +72,13 @@ Design Details
         * applyRule() generates nextState
     * Interactions with other components:
         * CellManager
-            * CellManager initializes Rule instances 
+            * CellManager initializes Rule instances
             * Passes Cells to applyRule()
         * Cell
             * Passes list of neighbors to Rule
     * Extendable by subclasses implementing applyRule()
 * UImanager
-    * UImanager is responsible for maintaining parity between the abstract grid of cells and the graphical display of the grid. It also provides an interface to load XML files and control CellManager. By having a seperate class to manage the interface, the grid and cells can be completely abstract. 
+    * UImanager is responsible for maintaining parity between the abstract grid of cells and the graphical display of the grid. It also provides an interface to load XML files and control CellManager. By having a seperate class to manage the interface, the grid and cells can be completely abstract.
     * Methods/Functions
         * Initial setup UI (when you load file)
         * Go through and update cell displays
@@ -89,7 +89,7 @@ Design Details
         * XMLparser
             * Choose file to be parsed
 * XMLparser
-    * The XML parser reads data from the user provided file and passes it to CellManager, which then initializes the grid. 
+    * The XML parser reads data from the user provided file and passes it to CellManager, which then initializes the grid.
     * Methods/Functions
         * Read XML file
     * Interactions with other components
@@ -133,8 +133,11 @@ Use Cases
 * Switch simulations
     1. Instantiate new Rule
     2. CellManager passes current cell and all subsequent cells to new Rule
-    
-    
+
+
 Team Responsibilities
 ==================
-* Scott and Christopher on XML/backend, Allen on frontend
+* Christopher and Scott on XML/backend, Allen on frontend
+    * Allen will handle UI Class
+    * Christopher will handle CellManager and Cell Class
+    * Scott will handle XML parser and Rule Interface
