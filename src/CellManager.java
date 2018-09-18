@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 
 /*
 This class is responsible for managing the grid and editing cell states
@@ -27,5 +28,16 @@ public class CellManager {
     }
 
 
+    public ArrayList<Cell> getNeighbors(Cell cell) {
+        return null;
+    }
 
+    //TODO: REMOVE THIS METHOD. IT IS FOR TESTING PURPOSES ONLY
+    public void setNextState(Cell cell, int state){
+        cell.setNextState(state);
+    }
+
+    //Second pass sets currentState to nextState
+    public void updateCells() {
+    }
 }
