@@ -22,6 +22,10 @@ public class CellManager {
         return (cell.getRow() == 0 || cell.getRow() == grid.length || cell.getCol() == 0 || cell.getRow() == grid[0].length);
     }
 
+    public Cell getCell(int row, int col){
+        return grid[row][col];
+    }
+
 
 
 }
