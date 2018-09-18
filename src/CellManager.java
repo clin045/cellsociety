@@ -8,6 +8,7 @@ public class CellManager {
     private Cell[][] grid;
     private int rowSize;
     private int colSize;
+    private int neighborhoodSize = 1;
 
     //Initializes the grid of cells
     public void initializeGrid(int rows, int cols, int[][] initConditions){
@@ -33,7 +34,19 @@ public class CellManager {
 
 
     public ArrayList<Cell> getNeighbors(Cell cell) {
-        return null;
+        if(isEdge(cell)){
+            return null;
+        }
+        var neighbors = new ArrayList<Cell>();
+        for(int i = cell.getRow()-neighborhoodSize; i <= cell.getRow()+neighborhoodSize;i++){
+            for(int j = cell.getCol()-neighborhoodSize; j <= cell.getCol()+neighborhoodSize; j++){
+                if(grid[i][j] != cell) {
+                    neighbors.add(grid[i][j]);
+                }
+            }
+        }
+        System.out.println(neighbors.size());
+        return neighbors;
     }
 
     //TODO: REMOVE THIS METHOD. IT IS FOR TESTING PURPOSES ONLY
