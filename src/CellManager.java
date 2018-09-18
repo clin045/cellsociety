@@ -6,9 +6,13 @@ This class is responsible for managing the grid and editing cell states
  */
 public class CellManager {
     private Cell[][] grid;
+    private int rowSize;
+    private int colSize;
 
     //Initializes the grid of cells
     public void initializeGrid(int rows, int cols, int[][] initConditions){
+        rowSize = rows;
+        colSize = cols;
         grid = new Cell[rows][cols];
         for (int i = 0; i < initConditions.length; i ++){
             for(int j = 0; j < initConditions[0].length; j++){
@@ -39,5 +43,11 @@ public class CellManager {
 
     //Second pass sets currentState to nextState
     public void updateCells() {
+        for(int i = 0; i < rowSize; i++){
+            for(int j = 0; j < colSize; j++){
+                Cell currentCell = getCell(i,j);
+                currentCell.setCurrentState(currentCell.getNextState());
+            }
+        }
     }
 }
