@@ -12,20 +12,21 @@ public class CellManager {
 
     //Initializes the grid of cells
     public void initializeGrid(int rows, int cols, int[][] initConditions){
-        rowSize = rows;
-        colSize = cols;
-        grid = new Cell[rows][cols];
+        this.rowSize = rows;
+        this.colSize = cols;
+        this.grid = new Cell[rows][cols];
         for (int i = 0; i < initConditions.length; i ++){
             for(int j = 0; j < initConditions[0].length; j++){
-                Cell newCell = new Cell(i,j, initConditions[i][j]);
-                grid[i][j] = newCell;
+                Cell myNewCell = new Cell(i,j, initConditions[i][j]);
+                grid[i][j] = myNewCell;
             }
         }
     }
 
     //detects whether or not a cell is an edge cell
     private boolean isEdge(Cell cell){
-        return (cell.getRow() == 0 || cell.getRow() == grid.length || cell.getCol() == 0 || cell.getRow() == grid[0].length);
+        return (cell.getRow() == this.neighborhoodSize-1 || cell.getRow() == grid.length-(this.neighborhoodSize-1)
+                || cell.getCol() == this.neighborhoodSize-1 || cell.getRow() == grid[0].length-(this.neighborhoodSize-1));
     }
 
     public Cell getCell(int row, int col){
@@ -37,16 +38,15 @@ public class CellManager {
         if(isEdge(cell)){
             return null;
         }
-        var neighbors = new ArrayList<Cell>();
+        var myNeighbors = new ArrayList<Cell>();
         for(int i = cell.getRow()-neighborhoodSize; i <= cell.getRow()+neighborhoodSize;i++){
             for(int j = cell.getCol()-neighborhoodSize; j <= cell.getCol()+neighborhoodSize; j++){
                 if(grid[i][j] != cell) {
-                    neighbors.add(grid[i][j]);
+                    myNeighbors.add(grid[i][j]);
                 }
             }
         }
-        System.out.println(neighbors.size());
-        return neighbors;
+        return myNeighbors;
     }
 
     //TODO: REMOVE THIS METHOD. IT IS FOR TESTING PURPOSES ONLY
@@ -58,8 +58,8 @@ public class CellManager {
     public void updateCells() {
         for(int i = 0; i < rowSize; i++){
             for(int j = 0; j < colSize; j++){
-                Cell currentCell = getCell(i,j);
-                currentCell.setCurrentState(currentCell.getNextState());
+                Cell myCurrentCell = getCell(i,j);
+                myCurrentCell.setCurrentState(myCurrentCell.getNextState());
             }
         }
     }
