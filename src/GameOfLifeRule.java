@@ -8,9 +8,9 @@ import java.util.ArrayList;
  * @author Scott McConnell skm44
  **/
 public class GameOfLifeRule implements RuleInterface {
-    public int applyRule(Cell cell, ArrayList<Cell> myNeighbors) {
+    public int applyRule(Cell cell, ArrayList<Cell> neighborsArray) {
         int liveNeighborsCount = 0;
-        for (Cell neighbor : myNeighbors) {
+        for (Cell neighbor : neighborsArray) {
             liveNeighborsCount += neighbor.getCurrentState();
         }
 
