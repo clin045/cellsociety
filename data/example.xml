@@ -2,4 +2,6 @@
 <data media="Simulation">
     <title>Game of Life</title>
     <author>John Horton Conway</author>
+    <Xdimension>100</Xdimension>
+    <Ydimension>100</Ydimension>
 </data>
