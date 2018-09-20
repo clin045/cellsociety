@@ -16,6 +16,7 @@ Part 1
 5. Why do you think your design is good (also define what your measure of good is)?
     - I think that my design is good because our components are well defined and are minimally dependent on each other.
     This means that we can work independently very easily, and when one part breaks, the other parts do not break. 
+
 Part 2
 ===
 1. How is your area linked to/dependent on other areas of the project?
@@ -31,6 +32,7 @@ Part 2
 5. Focus on what things they have in common (these go in the superclass) and what about them varies (these go in the subclass).
     - Rules basically have nothing in common except that they generate a nextState for each cell. 
     This is why our group chose to use an interface instead of an abstract class. 
+
 Part 3
 ===
 1. Come up with at least five use cases for your part (most likely these will be useful for both teams).
