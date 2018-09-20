@@ -26,7 +26,7 @@ public class SegregationRule implements RuleInterface {
         percentSimilarTolerance = percent;
     }
 
-    public int applyRule(Cell cell, ArrayList<Cell> neighborsArray) {
+    public int applyRule(Cell cell, ArrayList<Cell> neighborsArray, int passNum) {
         int similarNeighborsCount = 0;
         for (Cell neighbor : neighborsArray) {
             if (cell.getCurrentState() == neighbor.getCurrentState()) {

@@ -67,6 +67,8 @@ public class CellManager {
     }
 
     public void nextGeneration(){
+        int numPasses = myActiveRule.getPasses();
+
         for(int i = 0; i < myRowSize; i++){
             for(int j = 0; j < myColSize; j++){
                 Cell currentCell = myGrid[i][j];

@@ -12,7 +12,7 @@ public class GameOfLifeRule implements RuleInterface {
     public int getPasses(){
         return NUM_PASSES;
     }
-    public int applyRule(Cell cell, ArrayList<Cell> neighborsArray) {
+    public int applyRule(Cell cell, ArrayList<Cell> neighborsArray,int passNum) {
         int liveNeighborsCount = 0;
         for (Cell neighbor : neighborsArray) {
             liveNeighborsCount += neighbor.getCurrentState();
