@@ -8,6 +8,10 @@ import java.util.ArrayList;
  * @author Scott McConnell skm44
  **/
 public class GameOfLifeRule implements RuleInterface {
+    final int NUM_PASSES = 1;
+    public int getPasses(){
+        return NUM_PASSES;
+    }
     public int applyRule(Cell cell, ArrayList<Cell> neighborsArray) {
         int liveNeighborsCount = 0;
         for (Cell neighbor : neighborsArray) {

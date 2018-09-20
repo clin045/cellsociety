@@ -9,4 +9,6 @@ import java.util.ArrayList;
  **/
 public interface RuleInterface {
     int applyRule(Cell myCell, ArrayList<Cell> myNeighbors);
+    int getPasses();
+
 }

@@ -13,7 +13,11 @@ import java.util.ArrayList;
 // 1: blue
 // 2: red
 public class SegregationRule implements RuleInterface {
+    final int NUM_PASSES = 2;
 
+    public int getPasses(){
+        return NUM_PASSES;
+    }
     // percent of neighbors that must be similar for happiness
     private double percentSimilarTolerance;
 
