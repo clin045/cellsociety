@@ -74,7 +74,9 @@ public class CellManager {
                 Cell currentCell = myGrid[i][j];
                 ArrayList<Cell> neighborList = getNeighbors(currentCell);
                 if(!isEdge(currentCell)){
-                    currentCell.setNextState(myActiveRule.applyRule(currentCell, neighborList));
+                    for (int k = 0; k < numPasses; k++){
+                        currentCell.setNextState(myActiveRule.applyRule(currentCell, neighborList, k));
+                    }
                 }
             }
         }
