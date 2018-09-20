@@ -8,12 +8,13 @@ import java.util.ArrayList;
  * @author Scott McConnell skm44
  **/
 
-// states:
-// 0: empty
-// 1: blue
-// 2: red
 public class SegregationRule implements RuleInterface {
     final int NUM_PASSES = 2;
+
+    final int VACANT = 0;
+    final int BLUE = 1;
+    final int RED = 2;
+    final int UNSATISFIED = 3;
 
     public int getPasses(){
         return NUM_PASSES;

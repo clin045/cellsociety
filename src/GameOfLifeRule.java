@@ -9,6 +9,9 @@ import java.util.ArrayList;
  **/
 public class GameOfLifeRule implements RuleInterface {
     final int NUM_PASSES = 1;
+    final int ALIVE = 1;
+    final int DEAD = 0;
+
     public int getPasses(){
         return NUM_PASSES;
     }
@@ -19,18 +22,18 @@ public class GameOfLifeRule implements RuleInterface {
         }
 
         // find next state of live cells
-        if (cell.getCurrentState() == 1) {
+        if (cell.getCurrentState() == ALIVE) {
             if (liveNeighborsCount < 2 || liveNeighborsCount > 3) {
-                return 0;
+                return DEAD;
             } else {
-                return 1;
+                return ALIVE;
             }
             // find next state of dead cells
         } else{
             if (liveNeighborsCount == 3) {
-                return 1;
+                return ALIVE;
             } else {
-                return 0;
+                return DEAD;
             }
         }
     }
