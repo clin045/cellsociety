@@ -37,6 +37,7 @@ public class CellManagerTest {
     @Test
     void getNeighbors(){
         ArrayList<Cell> neighbors = bigGrid.getNeighbors(bigGrid.getCell(1,1));
+        System.out.println(neighbors.size());
         assert(neighbors.size() == 8);
         assert(!neighbors.contains(bigGrid.getCell(1,1)));
         for(Cell c: neighbors){
@@ -49,5 +50,11 @@ public class CellManagerTest {
         littleGrid.setNextState(littleGrid.getCell(0,0),5);
         littleGrid.updateCells();
         assert(littleGrid.getCell(0,0).getCurrentState() == 5);
+    }
+    @Test
+    void nextGeneration(){
+        assert(bigGrid.getCell(1,1).getCurrentState() == 1);
+        bigGrid.nextGeneration();
+        assert(bigGrid.getCell(1,1).getCurrentState() == 0);
     }
 }

@@ -22,7 +22,7 @@ public class GameOfLifeRule implements RuleInterface {
                 return 1;
             }
             // find next state of dead cells
-        } else if (cell.getCurrentState() == 0) {
+        } else{
             if (liveNeighborsCount == 3) {
                 return 1;
             } else {

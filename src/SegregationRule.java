@@ -40,7 +40,7 @@ public class SegregationRule implements RuleInterface {
             } else {
                 return cell.getCurrentState();
             }
-        } else if (cell.getCurrentState() == 0) {
+        } else {
             return 0;
         }
     }

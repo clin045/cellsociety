@@ -9,6 +9,7 @@ public class CellManager {
     private int rowSize;
     private int colSize;
     private int neighborhoodSize = 1;
+    RuleInterface myActiveRule;
 
     //Initializes the grid of cells
     public void initializeGrid(int rows, int cols, int[][] initConditions){
@@ -21,12 +22,13 @@ public class CellManager {
                 grid[i][j] = myNewCell;
             }
         }
+        myActiveRule = new GameOfLifeRule();
     }
 
     //detects whether or not a cell is an edge cell
     private boolean isEdge(Cell cell){
-        return (cell.getRow() == this.neighborhoodSize-1 || cell.getRow() == grid.length-(this.neighborhoodSize-1)
-                || cell.getCol() == this.neighborhoodSize-1 || cell.getRow() == grid[0].length-(this.neighborhoodSize-1));
+        return (cell.getRow() == this.neighborhoodSize-1 || cell.getRow() == rowSize-(this.neighborhoodSize)
+                || cell.getCol() == this.neighborhoodSize-1 || cell.getCol() == colSize-(this.neighborhoodSize));
     }
 
     public Cell getCell(int row, int col){
@@ -62,5 +64,18 @@ public class CellManager {
                 myCurrentCell.setCurrentState(myCurrentCell.getNextState());
             }
         }
+    }
+
+    public void nextGeneration(){
+        for(int i = 0; i < rowSize; i++){
+            for(int j = 0; j < colSize;j++){
+                Cell currentCell = grid[i][j];
+                ArrayList<Cell> neighborList = getNeighbors(currentCell);
+                if(!isEdge(currentCell)){
+                    currentCell.setNextState(myActiveRule.applyRule(currentCell, neighborList));
+                }
+            }
+        }
+        updateCells();
     }
 }
