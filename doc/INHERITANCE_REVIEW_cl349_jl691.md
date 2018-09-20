@@ -36,9 +36,9 @@ Part 2
 Part 3
 ===
 1. Come up with at least five use cases for your part (most likely these will be useful for both teams).
-- Game of Life, Segregation, Predator Prey, Spreading Fire, Wator Life, any other CA simulation. 
+    - Game of Life, Segregation, Predator Prey, Spreading Fire, Wator Life, any other CA simulation. 
 2. What feature/design problem are you most excited to work on?
-- I'm excited to implement all the different rulesets. 
+    - I'm excited to implement all the different rulesets. 
 3. What feature/design problem are you most worried about working on?
-- I'm dreading having to contribute to the UI. UI design is always weird and fiddly. We also
+    - I'm dreading having to contribute to the UI. UI design is always weird and fiddly. We also
 realized that we may have to create an XML file editor in order to create test simulations. 
