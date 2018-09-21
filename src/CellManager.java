@@ -67,12 +67,16 @@ public class CellManager {
     }
 
     public void nextGeneration(){
+        int numPasses = myActiveRule.getPasses();
+
         for(int i = 0; i < myRowSize; i++){
             for(int j = 0; j < myColSize; j++){
                 Cell currentCell = myGrid[i][j];
                 ArrayList<Cell> neighborList = getNeighbors(currentCell);
                 if(!isEdge(currentCell)){
-                    currentCell.setNextState(myActiveRule.applyRule(currentCell, neighborList));
+                    for (int k = 0; k < numPasses; k++){
+                        currentCell.setNextState(myActiveRule.applyRule(currentCell, neighborList, k));
+                    }
                 }
             }
         }
