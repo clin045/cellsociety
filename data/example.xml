@@ -5,6 +5,7 @@
     <author>Scott McConnell</author>
     <rows>3</rows>
     <cols>3</cols>
-    <configs>[0,0,0,0,1,0,0,0,0]</configs>
+    <configs>0,0,0,0,1,0,0,0,0</configs>
+    <colors>ffffff,000000</colors>
 
 </data>
