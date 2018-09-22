@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  *
@@ -17,26 +18,31 @@ public class FireRule implements RuleInterface {
     public int getPasses(){
         return NUM_PASSES;
     }
+
     // Set the chance of a tree catching fire
     public void setProbCatch(double prob) { probCatch = prob; }
 
-    public int applyRule(Cell cell, ArrayList<Cell> neighborsArray,int passNum) {
-        int treeNeighborsCount = 0;
+    public int getNeighborhoodSize() {
+        return 1;
+    }
+
+    public void applyRule(Cell cell, ArrayList<Cell> neighborsArray,int passNum) {
+        boolean nearFire = false;
         for (Cell neighbor : neighborsArray) {
-            if (neighbor.getCurrentState() == TREE) {
-                treeNeighborsCount += 1;
+            if (neighbor.getCurrentState() == BURNING) {
+                nearFire = true;
             }
         }
 
-        // find next state of live cells
+        // find next state of tree cells
         if (cell.getCurrentState() == TREE) {
-
-        } else{
-            if (liveNeighborsCount == 3) {
-                return TREE;
-            } else {
-                return EMPTY;
+            if (nearFire && new Random().nextDouble() <= probCatch) {
+                cell.setNextState(BURNING);
             }
+        }
+        // if cell is empty or burning, make it empty next
+        else {
+            cell.setNextState(EMPTY);
         }
     }
 }
