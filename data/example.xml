@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <data media="Simulation">
-    <title>Game of Life</title>
-    <author>John Horton Conway</author>
-    <Xdimension>100</Xdimension>
-    <Ydimension>100</Ydimension>
+    <simulationName>Game of Life</simulationName>
+    <title>Glider</title>
+    <author>Scott McConnell</author>
+    <rows>100</rows>
+    <cols>100</cols>
+    <configs>[0,0,0,0,1,0,0,0,0]</configs>
+
 </data>
