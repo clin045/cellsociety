@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data media="Simulation">
+    <simulationName>Segregation</simulationName>
+    <title>Version 1</title>
+    <author>Scott McConnell</author>
+    <rows>3</rows>
+    <cols>3</cols>
+    <configs>0,2,1,2,1,0,2,1,0</configs>
+    <colors>ffffff,0000ff,ff0000</colors>
+</data>
