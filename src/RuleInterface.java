@@ -8,5 +8,8 @@ import java.util.ArrayList;
  ** @author Scott McConnell skm44
  **/
 public interface RuleInterface {
-    int applyRule(Cell myCell, ArrayList<Cell> myNeighbors);
+    void applyRule(Cell myCell, ArrayList<Cell> myNeighbors, int passNum);
+    int getNeighborhoodSize();
+    int getPasses();
+
 }
