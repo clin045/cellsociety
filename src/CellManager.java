@@ -8,7 +8,7 @@ public class CellManager {
     private Cell[][] myGrid;
     private int myRowSize;
     private int myColSize;
-    private int myNeighborhoodSize = 1;
+    private int myNeighborhoodSize;
     RuleInterface myActiveRule;
 
     //Initializes the myGrid of cells
@@ -17,6 +17,7 @@ public class CellManager {
         myColSize = cols;
         myGrid = new Cell[rows][cols];
         myActiveRule = activeRule;
+        myNeighborhoodSize = activeRule.getNeighborhoodSize();
         for (int i = 0; i < initConditions.length; i ++){
             for(int j = 0; j < initConditions[0].length; j++){
                 Cell myNewCell = new Cell(i,j, initConditions[i][j]);
@@ -194,13 +195,19 @@ public class CellManager {
 
     public void nextGeneration(){
         int numPasses = myActiveRule.getPasses();
-
+        //default all nextState to currentState to make some simulations easier
+        for(int i = 0; i < myRowSize; i++){
+            for(int j = 0; j < myColSize; j++){
+                myGrid[i][j].setNextState(myGrid[i][j].getCurrentState());
+            }
+        }
+        //apply rules
         for(int i = 0; i < myRowSize; i++){
             for(int j = 0; j < myColSize; j++){
                 Cell currentCell = myGrid[i][j];
                 ArrayList<Cell> neighborList = getNeighbors(currentCell);
                 for (int k = 0; k < numPasses; k++){
-                    currentCell.setNextState(myActiveRule.applyRule(currentCell, neighborList, k));
+                    myActiveRule.applyRule(currentCell, neighborList, k);
                 }
 
             }
