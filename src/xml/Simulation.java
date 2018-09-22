@@ -81,17 +81,6 @@ public class Simulation {
         return result;
     }
 
-    private Color[] StringToColorArray(String colorString) {
-        String[] colorStringArray = colorString.split(",");
-        Color[] result = new Color[colorStringArray.length];
-        int counter = 0;
-        for (String s : colorStringArray) {
-            result[counter] = Color.decode(s);
-            counter++;
-        }
-        return result;
-    }
-
     // provide getters, not setters
     public String getSimulationName () {
         return mySimulationName;
@@ -126,8 +115,8 @@ public class Simulation {
         return resultConfigs;
     }
 
-    public Color[] getColors () {
-        return StringToColorArray(myColors);
+    public String getColors () {
+        return myColors;
     }
 
     /**
