@@ -2,9 +2,9 @@
 <data media="Simulation">
     <simulationName>Segregation</simulationName>
     <title>Version 1</title>
-    <author>Scott McConnell</author>
-    <rows>3</rows>
-    <cols>3</cols>
-    <configs>0,2,1,2,1,0,2,1,0</configs>
+    <author>Christopher Lin</author>
+    <rows>10</rows>
+    <cols>10</cols>
+    <configs>0,1,2,0,0,1,0,0,1,0,0,1,0,0,0,0,2,2,0,2,0,1,2,0,2,1,0,0,2,0,0,1,1,2,0,1,2,1,0,1,0,2,2,0,1,1,2,1,2,0,1,0,1,1,2,2,2,0,2,1,0,2,0,2,2,2,1,2,2,1,1,0,0,0,0,0,2,0,2,1,1,2,0,0,2,0,1,0,1,0,0,0,2,0,0,0,0,0,0,0</configs>
     <colors>ffffff,0000ff,ff0000</colors>
 </data>
