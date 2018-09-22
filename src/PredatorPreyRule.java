@@ -17,8 +17,13 @@ public class PredatorPreyRule implements RuleInterface {
     ArrayList<Cell> openNeighbors = new ArrayList<>();
     ArrayList<Cell> sharkNeighbors = new ArrayList<>();
     ArrayList<Cell> fishNeighbors = new ArrayList<>();
+    public final static int PASSES = 2;
 
-    public int applyRule(Cell cell, ArrayList<Cell> neighborsArray) {
+    public int getPasses(){
+        return PASSES;
+    }
+
+    public int applyRule(Cell cell, ArrayList<Cell> neighborsArray, int passNum) {
         // find states of neighbors
         for (Cell neighbor : neighborsArray) {
             if (neighbor.getCurrentState() == 0) {
@@ -48,5 +53,6 @@ public class PredatorPreyRule implements RuleInterface {
                 return cell.getCurrentState();
             }
         }
+        return 0;
     }
 }

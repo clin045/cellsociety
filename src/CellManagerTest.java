@@ -13,7 +13,7 @@ public class CellManagerTest {
         littleInit[0][1] = 2;
         littleInit[1][0] = 3;
         littleInit[1][1] = 4;
-        littleGrid.initializeGrid(2,2,littleInit);
+        littleGrid.initializeGrid(2,2,littleInit, new GameOfLifeRule());
 
         bigGrid = new CellManager();
         int bigInit[][] = new int[3][3];
@@ -23,7 +23,7 @@ public class CellManagerTest {
             }
         }
         bigInit[1][1] = 1;
-        bigGrid.initializeGrid(3,3,bigInit);
+        bigGrid.initializeGrid(3,3,bigInit,new GameOfLifeRule());
 
     }
     @org.junit.jupiter.api.Test
@@ -34,16 +34,8 @@ public class CellManagerTest {
         assert(littleGrid.getCell(1,1).getCurrentState() == 4);
     }
 
-    @Test
-    void getNeighbors(){
-        ArrayList<Cell> neighbors = bigGrid.getNeighbors(bigGrid.getCell(1,1));
-        System.out.println(neighbors.size());
-        assert(neighbors.size() == 8);
-        assert(!neighbors.contains(bigGrid.getCell(1,1)));
-        for(Cell c: neighbors){
-            assert(c.getCurrentState()==0);
-        }
-    }
+
+
 
     @Test
     void updateCells(){
@@ -56,5 +48,21 @@ public class CellManagerTest {
         assert(bigGrid.getCell(1,1).getCurrentState() == 1);
         bigGrid.nextGeneration();
         assert(bigGrid.getCell(1,1).getCurrentState() == 0);
+    }
+
+    @Test
+    void getNeighbors(){
+        ArrayList<Cell> neighborlist = littleGrid.getNeighbors(littleGrid.getCell(0,0));
+        assert(neighborlist.size()==3);
+        neighborlist = bigGrid.getNeighbors(bigGrid.getCell(1,1));
+        assert(neighborlist.size() == 8);
+        neighborlist = bigGrid.getNeighbors((bigGrid.getCell(0,1)));
+        assert(neighborlist.size() == 8);
+        neighborlist = bigGrid.getNeighbors((bigGrid.getCell(1,0)));
+        assert(neighborlist.size()==8);
+        neighborlist = bigGrid.getNeighbors((bigGrid.getCell(0,0)));
+        assert(neighborlist.size()==8);
+        neighborlist = bigGrid.getNeighbors((bigGrid.getCell(2,2)));
+        assert (neighborlist.size() == 8);
     }
 }
