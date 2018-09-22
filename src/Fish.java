@@ -2,7 +2,7 @@ public class Fish {
 
 
     Cell myCell;
-    int myAge;
+    int myAge = 0;
 
     public int getAge() {
         return myAge;
@@ -11,8 +11,8 @@ public class Fish {
         this.myCell = cell;
     }
 
-    public void incAge(){
-        myAge++;
+    public void setAge(int age){
+        myAge = age;
     }
 
 
@@ -20,8 +20,7 @@ public class Fish {
         return myCell;
     }
 
-    Fish(Cell cell, int age){
+    Fish(Cell cell){
         myCell = cell;
-        myAge = age;
     }
 }
