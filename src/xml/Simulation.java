@@ -1,5 +1,6 @@
 package xml;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,7 +62,7 @@ public class Simulation {
                 dataValues.get(DATA_FIELDS.get(2)),
                 Integer.parseInt(dataValues.get(DATA_FIELDS.get(3))),
                 Integer.parseInt(dataValues.get(DATA_FIELDS.get(4))),
-                );
+                dataValues.get(DATA_FIELDS.get(5)));
         myDataValues = dataValues;
     }
 
@@ -98,11 +99,12 @@ public class Simulation {
     }
 
     public int[][] getConfigs () {
+        int[] configs = StringToIntArray(myConfigs);
         int counter = 0;
         int[][] resultConfigs = new int[myRows][myCols];
         for (int i = 0; i < myRows; i++) {
             for (int j = 0; j < myCols; j++) {
-                resultConfigs[i][j] = myConfigs[counter];
+                resultConfigs[i][j] = configs[counter];
                 counter++;
             }
         }
