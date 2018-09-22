@@ -3,8 +3,8 @@
     <simulationName>Game of Life</simulationName>
     <title>Glider</title>
     <author>Scott McConnell</author>
-    <rows>100</rows>
-    <cols>100</cols>
+    <rows>3</rows>
+    <cols>3</cols>
     <configs>[0,0,0,0,1,0,0,0,0]</configs>
 
 </data>
