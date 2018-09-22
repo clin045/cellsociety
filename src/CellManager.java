@@ -25,23 +25,7 @@ public class CellManager {
         }
     }
 
-    //detects whether or not a cell is an edge cell
-    private boolean isEdge(Cell cell){
-        return (isTop(cell) || isBottom(cell) || isLeft(cell) || isRight(cell));
-    }
 
-    private boolean isTop(Cell cell){
-        return(cell.getRow() == myNeighborhoodSize -1 );
-    }
-    private boolean isBottom(Cell cell){
-        return(cell.getRow() == myRowSize -(this.myNeighborhoodSize));
-    }
-    private boolean isLeft(Cell cell){
-        return(cell.getCol() == myNeighborhoodSize -1);
-    }
-    private boolean isRight(Cell cell){
-        return cell.getCol() == myColSize -(this.myNeighborhoodSize);
-    }
 
     public Cell getCell(int row, int col){
         return myGrid[row][col];
@@ -215,11 +199,10 @@ public class CellManager {
             for(int j = 0; j < myColSize; j++){
                 Cell currentCell = myGrid[i][j];
                 ArrayList<Cell> neighborList = getNeighbors(currentCell);
-                if(!isEdge(currentCell)){
-                    for (int k = 0; k < numPasses; k++){
-                        currentCell.setNextState(myActiveRule.applyRule(currentCell, neighborList, k));
-                    }
+                for (int k = 0; k < numPasses; k++){
+                    currentCell.setNextState(myActiveRule.applyRule(currentCell, neighborList, k));
                 }
+
             }
         }
         updateCells();
