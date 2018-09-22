@@ -28,12 +28,17 @@ public class FireRule implements RuleInterface {
 
     public void applyRule(Cell cell, ArrayList<Cell> neighborsArray,int passNum) {
         boolean nearFire = false;
+        //throw out diagonals
+        for (Cell c : neighborsArray){
+            if(c.getRow() != cell.getRow() && cell.getCol() != cell.getCol()){
+                neighborsArray.remove(c);
+            }
+        }
         for (Cell neighbor : neighborsArray) {
             if (neighbor.getCurrentState() == BURNING) {
                 nearFire = true;
             }
         }
-
         // find next state of tree cells
         if (cell.getCurrentState() == TREE) {
             if (nearFire && new Random().nextDouble() <= probCatch) {
