@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data media="Simulation">
+    <simulationName>Fire</simulationName>
+    <title>Version 1</title>
+    <author>Scott McConnell</author>
+    <rows>10</rows>
+    <cols>10</cols>
+    <configs>0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,0,0,1,1,1,2,1,1,1,1,0,0,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0</configs>
+    <colors>ffff00,00cd00,ff0000</colors>
+</data>
