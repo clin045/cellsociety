@@ -15,7 +15,10 @@ public class GameOfLifeRule implements RuleInterface {
     public int getPasses(){
         return NUM_PASSES;
     }
-    public int applyRule(Cell cell, ArrayList<Cell> neighborsArray,int passNum) {
+    public int getNeighborhoodSize(){
+        return 1;
+    }
+    public void applyRule(Cell cell, ArrayList<Cell> neighborsArray,int passNum) {
         int liveNeighborsCount = 0;
         for (Cell neighbor : neighborsArray) {
             liveNeighborsCount += neighbor.getCurrentState();
@@ -24,16 +27,16 @@ public class GameOfLifeRule implements RuleInterface {
         // find next state of live cells
         if (cell.getCurrentState() == ALIVE) {
             if (liveNeighborsCount < 2 || liveNeighborsCount > 3) {
-                return DEAD;
+                cell.setNextState(DEAD);
             } else {
-                return ALIVE;
+                cell.setNextState(ALIVE);
             }
             // find next state of dead cells
         } else{
             if (liveNeighborsCount == 3) {
-                return ALIVE;
+                cell.setNextState(ALIVE);
             } else {
-                return DEAD;
+                cell.setNextState(DEAD);
             }
         }
     }

@@ -1,6 +1,6 @@
 package xml;
 
-import java.util.Date;
+import java.awt.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +23,8 @@ public class Simulation {
             "author",
             "cols",
             "rows",
-            "configs"
+            "configs",
+            "colors"
     );
 
     // specific data values for this instance
@@ -33,6 +34,7 @@ public class Simulation {
     private int myRows;
     private int myCols;
     private String myConfigs;
+    private String myColors;
     // NOTE: keep just as an example for converting toString(), otherwise not used
     private Map<String, String> myDataValues;
 
@@ -40,13 +42,14 @@ public class Simulation {
     /**
      * Create game data from given data.
      */
-    public Simulation(String simulationName, String title, String author, int rows, int cols, String configs) {
+    public Simulation(String simulationName, String title, String author, int rows, int cols, String configs, String colors) {
         mySimulationName = simulationName;
         myTitle = title;
         myAuthor = author;
         myRows = rows;
         myCols = cols;
         myConfigs = configs;
+        myColors = colors;
         // NOTE: this is useful so our code does not fail due to a NullPointerException
         myDataValues = new HashMap<>();
     }
@@ -62,16 +65,28 @@ public class Simulation {
                 dataValues.get(DATA_FIELDS.get(2)),
                 Integer.parseInt(dataValues.get(DATA_FIELDS.get(3))),
                 Integer.parseInt(dataValues.get(DATA_FIELDS.get(4))),
-                dataValues.get(DATA_FIELDS.get(5)));
+                dataValues.get(DATA_FIELDS.get(5)),
+                dataValues.get(DATA_FIELDS.get(6)));
         myDataValues = dataValues;
     }
 
     private int[] StringToIntArray(String arrayString) {
-        String[] integerString = arrayString.split(",");
-        int [] result = new int[integerString.length];
+        String[] integerStringArray = arrayString.split(",");
+        int[] result = new int[integerStringArray.length];
         int counter = 0;
-        for (String s : integerString) {
+        for (String s : integerStringArray) {
             result[counter] = Integer.parseInt(s);
+            counter++;
+        }
+        return result;
+    }
+
+    private Color[] StringToColorArray(String colorString) {
+        String[] colorStringArray = colorString.split(",");
+        Color[] result = new Color[colorStringArray.length];
+        int counter = 0;
+        for (String s : colorStringArray) {
+            result[counter] = Color.decode(s);
             counter++;
         }
         return result;
@@ -109,6 +124,10 @@ public class Simulation {
             }
         }
         return resultConfigs;
+    }
+
+    public Color[] getColors () {
+        return StringToColorArray(myColors);
     }
 
     /**
