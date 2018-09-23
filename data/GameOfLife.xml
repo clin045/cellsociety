@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <data media="Simulation">
-    <simulationName>Game of Life</simulationName>
+    <simulationName>Game Of Life</simulationName>
+    <simulationRule>GameOfLifeRule</simulationRule>
     <title>Glider</title>
     <author>Scott McConnell</author>
     <rows>10</rows>
