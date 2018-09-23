@@ -1,6 +1,6 @@
 public class Fish {
 
-
+    public static final int ENERGY_YIELD = 2;
     Cell myCell;
     int myAge = 0;
 

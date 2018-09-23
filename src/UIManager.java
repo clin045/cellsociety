@@ -146,7 +146,7 @@ public class UIManager extends Application {
         rootPane.add(simulatorGridPane, 0, 1);
         rootPane.add(controls, 0, 2);
 
-        RuleInterface myRule = new GameOfLifeRule();
+        RuleInterface myRule = new PredatorPreyRule();
         myCellManager.initializeGrid(configs.getRows(), configs.getCols(), initialStates, myRule);
 
         Scene simulatorScene = new Scene(rootPane);

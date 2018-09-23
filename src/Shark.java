@@ -1,6 +1,18 @@
 public class Shark {
     Cell myCell;
     int myAge = 0;
+    int myEnergy = 3;
+
+
+    public int getEnergy() {
+        return myEnergy;
+    }
+
+    public void setEnergy(int myEnergy) {
+        this.myEnergy = myEnergy;
+    }
+
+
 
     public int getAge() {
         return myAge;

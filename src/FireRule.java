@@ -13,14 +13,12 @@ public class FireRule implements RuleInterface {
     final int BURNING = 2;
     final int TREE = 1;
     final int EMPTY = 0;
-    private double probCatch;
+    final double PROB_CATCH = 0.8;
 
     public int getPasses(){
         return NUM_PASSES;
     }
 
-    // Set the chance of a tree catching fire
-    public void setProbCatch(double prob) { probCatch = prob; }
 
     public int getNeighborhoodSize() {
         return 1;
@@ -41,7 +39,7 @@ public class FireRule implements RuleInterface {
         }
         // find next state of tree cells
         if (cell.getCurrentState() == TREE) {
-            if (nearFire && new Random().nextDouble() <= probCatch) {
+            if (nearFire && new Random().nextDouble() <= PROB_CATCH) {
                 cell.setNextState(BURNING);
             }
         }
