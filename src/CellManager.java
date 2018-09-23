@@ -87,14 +87,14 @@ public class CellManager {
             }
         }
         //apply rules
-        for(int i = 0; i < myRowSize; i++){
-            for(int j = 0; j < myColSize; j++){
-                Cell currentCell = myGrid[i][j];
-                ArrayList<Cell> neighborList = getNeighbors(currentCell);
-                for (int k = 0; k < numPasses; k++){
+        for (int k = 0; k < numPasses; k++) {
+            for (int i = 0; i < myRowSize; i++) {
+                for (int j = 0; j < myColSize; j++) {
+                    Cell currentCell = myGrid[i][j];
+                    ArrayList<Cell> neighborList = getNeighbors(currentCell);
                     myActiveRule.applyRule(currentCell, neighborList, k);
-                }
 
+                }
             }
         }
         updateCells();
