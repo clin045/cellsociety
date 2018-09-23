@@ -21,6 +21,10 @@ import xml.XMLParser;
 import java.io.File;
 import java.util.ResourceBundle;
 
+/**
+ * This class manages the UI and interacts with the XML parser and the cell manager.
+ * @author Allen Qiu (asq3)
+ */
 public class UIManager extends Application {
     private static final double MILLISECOND_DELAY = 300;
     private static final String DEFAULT_RESOURCE_PACKAGE = "English";
@@ -36,13 +40,12 @@ public class UIManager extends Application {
 
     public void start(Stage stage){
         myStage = stage;
-        //Setup load screen...this only happens once
 
-        Text label1 = new Text(myResources.getString("ChooseFileLabel"));
-        Text label2 = new Text(myResources.getString("NoFile"));
+        Text chooseFileLabel = new Text(myResources.getString("ChooseFileLabel"));
+        Text fileName = new Text(myResources.getString("NoFile"));
 
-        Button load = new Button(myResources.getString("SelectButton"));
-        load.setOnAction(event -> {
+        Button loadButton = new Button(myResources.getString("SelectButton"));
+        loadButton.setOnAction(event -> {
             FileChooser myFileChooser = new FileChooser();
             myFileChooser.setTitle(myResources.getString("ChooserWindowTitle"));
             FileChooser.ExtensionFilter xmlFilter = new FileChooser.ExtensionFilter("XML files (*.xml)", "*.xml");
@@ -50,12 +53,12 @@ public class UIManager extends Application {
             myFileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
             chosen = myFileChooser.showOpenDialog(myStage);
             if(chosen != null){
-                label2.setText(chosen.getName());
+                fileName.setText(chosen.getName());
             }
         });
 
-        Button starter = new Button(myResources.getString("StartButton"));
-        starter.setOnAction(event -> createSimulator());
+        Button startButton = new Button(myResources.getString("StartButton"));
+        startButton.setOnAction(event -> createSimulator());
 
         GridPane myGridPane = new GridPane();
         myGridPane.setMinSize(600, 600);
@@ -64,10 +67,10 @@ public class UIManager extends Application {
         myGridPane.setHgap(5);
         myGridPane.setAlignment(Pos.CENTER);
 
-        myGridPane.add(label1, 0,0);
-        myGridPane.add(label2, 0, 1);
-        myGridPane.add(load, 1, 1);
-        myGridPane.add(starter, 0, 2);
+        myGridPane.add(chooseFileLabel, 0,0);
+        myGridPane.add(fileName, 0, 1);
+        myGridPane.add(loadButton, 1, 1);
+        myGridPane.add(startButton, 0, 2);
 
         Scene myScene = new Scene(myGridPane);
 
@@ -77,7 +80,6 @@ public class UIManager extends Application {
     }
 
     private void createSimulator(){
-
         initializeWindow();
 
         var frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e -> step());
@@ -85,11 +87,6 @@ public class UIManager extends Application {
         animation.getKeyFrames().add(frame);
         animation.playFromStart();
 
-    }
-
-    private void cleanUp(){
-        animation.stop();
-        createSimulator();
     }
 
     private void initializeWindow(){
@@ -194,7 +191,7 @@ public class UIManager extends Application {
             myFileChooser.getExtensionFilters().add(xmlFilter);
             myFileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
             chosen = myFileChooser.showOpenDialog(myStage);
-            cleanUp();
+            createSimulator();
         });
 
         controls.getChildren().add(play);
