@@ -1,6 +1,8 @@
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -15,6 +17,7 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import xml.Simulation;
 import xml.XMLParser;
 
 import java.io.File;
@@ -29,16 +32,16 @@ public class UIManager extends Application {
     private ResourceBundle myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE);
     private File chosen;
     private CellManager myCellManager = new CellManager();
-    private GridPane simulatorGridPane = new GridPane();
+    private GridPane simulatorGridPane;
     private int rows;
     private int columns;
     private String[] colors;
     private Timeline animation = new Timeline();
-    private Stage myStage;
+    private Simulation configs;
+    RuleInterface myRule;
 
     public void start(Stage stage){
         //create text for XML label
-        myStage = stage;
         Text label1 = new Text(myResources.getString("ChooseFileLabel"));
 
         Text label2 = new Text(myResources.getString("NoFile"));
@@ -61,9 +64,8 @@ public class UIManager extends Application {
         Button starter = new Button(myResources.getString("StartButton"));
         starter.setOnAction(event -> createSimulator(stage));
 
-        //create a gridpane
         GridPane myGridPane = new GridPane();
-        myGridPane.setMinSize(400, 400);
+        myGridPane.setMinSize(600, 600);
         myGridPane.setPadding(new Insets(10, 10, 10, 10));
         myGridPane.setVgap(5);
         myGridPane.setHgap(5);
@@ -85,7 +87,26 @@ public class UIManager extends Application {
     }
 
     private void createSimulator(Stage stage){
-        var configs = new XMLParser("media").getSimulation(chosen);
+
+        initializeWindow(stage);
+
+        var frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e -> step());
+        animation.setCycleCount(Timeline.INDEFINITE);
+        animation.getKeyFrames().add(frame);
+        animation.playFromStart();
+        System.out.println("createSim done");
+
+    }
+
+    public void cleanUp(Stage stage){
+        animation.stop();
+        System.out.println("cleanup done");
+        //stage.close();
+        createSimulator(stage);
+    }
+
+    private void initializeWindow(Stage stage){
+        configs = new XMLParser("media").getSimulation(chosen);
         rows = configs.getRows();
         columns = configs.getCols();
         int[][] initialStates = configs.getConfigs();
@@ -93,7 +114,7 @@ public class UIManager extends Application {
 
         GridPane rootPane = new GridPane();
         rootPane.setPadding(new Insets(10, 10, 10, 10));
-        rootPane.setMinSize(400, 400);
+        rootPane.setMinSize(600, 600);
         rootPane.setAlignment(Pos.CENTER);
 
         Label title = new Label(configs.getTitle());
@@ -110,11 +131,11 @@ public class UIManager extends Application {
         displayInfo.add(simulationName, 0, 2);
         GridPane.setHalignment(simulationName, HPos.CENTER);
 
+        simulatorGridPane = new GridPane();
         simulatorGridPane.setAlignment(Pos.CENTER);
-        //simulatorGridPane.setGridLinesVisible(true);
         for(int i=0;i<rows;i++){
             for(int j=0;j<columns;j++){
-                simulatorGridPane.add(createCell(colors[initialStates[i][j]]), i, j);
+                simulatorGridPane.add(createCell(colors[initialStates[i][j]], rows, columns), i, j);
             }
         }
         FlowPane controls = new FlowPane();
@@ -133,7 +154,21 @@ public class UIManager extends Application {
         Button doubleSpeed = new Button(myResources.getString("DoubleSpeedButton"));
         doubleSpeed.setOnAction(event -> animation.setRate(2));
         Button newSimulation = new Button(myResources.getString("NewSimulation"));
-        //newSimulation.setOnAction(event -> main(null));
+        newSimulation.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                FileChooser myFileChooser = new FileChooser();
+                myFileChooser.setTitle(myResources.getString("ChooserWindowTitle"));
+                FileChooser.ExtensionFilter xmlFilter = new FileChooser.ExtensionFilter("XML files (*.xml)", "*.xml");
+                myFileChooser.getExtensionFilters().add(xmlFilter);
+                myFileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
+                chosen = myFileChooser.showOpenDialog(stage);
+
+                //now reinitialize
+                cleanUp(stage);
+            }
+        });
+        //todo: figure out reset animation logistics
         controls.getChildren().add(play);
         controls.getChildren().add(pause);
         controls.getChildren().add(step);
@@ -146,18 +181,21 @@ public class UIManager extends Application {
         rootPane.add(simulatorGridPane, 0, 1);
         rootPane.add(controls, 0, 2);
 
-        RuleInterface myRule = new PredatorPreyRule();
+        if(configs.getSimulationName().compareToIgnoreCase("Game of Life") == 0){
+            myRule = new GameOfLifeRule();
+        }
+        else if(configs.getSimulationName().compareToIgnoreCase("Predator Prey") == 0){
+            myRule = new PredatorPreyRule();
+        }
+        else if(configs.getSimulationName().compareToIgnoreCase("Fire") == 0){
+            myRule = new FireRule();
+        }
+        else {
+            myRule = new SegregationRule();
+        }
         myCellManager.initializeGrid(configs.getRows(), configs.getCols(), initialStates, myRule);
 
-        Scene simulatorScene = new Scene(rootPane);
-        //simulatorScene.getStylesheets().add(DEFAULT_STYLESHEET);
-        stage.setScene(simulatorScene);
-
-        var frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e -> step());
-        animation.setCycleCount(Timeline.INDEFINITE);
-        animation.getKeyFrames().add(frame);
-        animation.play();
-
+        stage.setScene(new Scene(rootPane));
     }
 
     private Node getNodeFromGridPane(int col, int row) {
@@ -178,8 +216,12 @@ public class UIManager extends Application {
                 if (thisCellPane != null) {
                     updateCellAppearance(colors[thisCell.getCurrentState()], thisCellPane);
                 }
+                else {
+                    System.out.println("null cell");
+                }
             }
         }
+        System.out.println("Step done");
     }
 
     private void updateCellAppearance(String color, BorderPane myCell){
@@ -188,9 +230,10 @@ public class UIManager extends Application {
                 "-fx-border-width: 1;");
     }
 
-    private BorderPane createCell(String color){
+    private BorderPane createCell(String color, int rows, int columns){
         BorderPane cell = new BorderPane();
-        cell.setMinSize(20, 20);
+        int cellSize = 500/Math.max(rows, columns);
+        cell.setMinSize(cellSize, cellSize);
         cell.setStyle("-fx-border-color: #000000;" +
                 "-fx-background-color: #" + color + ";" +
                 "-fx-border-width: 1;");
