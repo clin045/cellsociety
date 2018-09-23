@@ -43,11 +43,7 @@ public class PredatorPreyRule implements RuleInterface {
         }
 
         if(passNum == 1){
-            System.out.print("Fish: ");
-            System.out.print(fishList.size());
-            System.out.print(" Sharks: ");
-            System.out.print(sharkList.size());
-            System.out.print("\n");
+
             //throw out diagonal cells
             for (int i =0; i <  neighborsArray.size(); i ++) {
                 if (neighborsArray.get(i).getCol() != cell.getCol() && neighborsArray.get(i).getRow() != cell.getRow()) {
@@ -60,9 +56,7 @@ public class PredatorPreyRule implements RuleInterface {
                     reproduceFish(currentFish, neighborsArray);
                     moveFish(currentFish, neighborsArray);
                 }
-                else{
-                    System.out.println("fish not found");
-                }
+
             }
             if(cell.getNextState() == SHARK){
                 Shark currentShark = getCurrentShark(cell);
@@ -72,9 +66,7 @@ public class PredatorPreyRule implements RuleInterface {
                         sharkEatFish(currentShark, neighborsArray);
                     }
                 }
-                else{
-                    System.out.println("shark not found");
-                }
+
             }
 
         }
