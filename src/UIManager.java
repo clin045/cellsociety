@@ -1,16 +1,17 @@
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.collections.ObservableList;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.layout.*;
-import javafx.scene.text.Text;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -22,11 +23,9 @@ import java.util.ResourceBundle;
 
 public class UIManager extends Application {
     //public static final int FRAMES_PER_SECOND = 60;
-    public static final int MILLISECOND_DELAY = 1000;
-    public static final double SECOND_DELAY = 1;
+    private static final double MILLISECOND_DELAY = 300;
 
     private static final String DEFAULT_RESOURCE_PACKAGE = "English";
-    //private static final String DEFAULT_STYLESHEET = "style.css";
     private ResourceBundle myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE);
     private File chosen;
     private CellManager myCellManager = new CellManager();
@@ -34,10 +33,12 @@ public class UIManager extends Application {
     private int rows;
     private int columns;
     private String[] colors;
+    private Timeline animation = new Timeline();
+    private Stage myStage;
 
     public void start(Stage stage){
         //create text for XML label
-
+        myStage = stage;
         Text label1 = new Text(myResources.getString("ChooseFileLabel"));
 
         Text label2 = new Text(myResources.getString("NoFile"));
@@ -120,12 +121,19 @@ public class UIManager extends Application {
         controls.setPadding(new Insets(10, 10, 10, 10));
         controls.setAlignment(Pos.CENTER);
         Button play = new Button(myResources.getString("PlayButton"));
+        play.setOnAction(event -> animation.play());
         Button pause = new Button(myResources.getString("PauseButton"));
+        pause.setOnAction(event -> animation.pause());
         Button step = new Button(myResources.getString("StepButton"));
+        step.setOnAction(event -> step());
         Button halfSpeed = new Button(myResources.getString("HalfSpeedButton"));
+        halfSpeed.setOnAction(event -> animation.setRate(.5));
         Button normalSpeed = new Button(myResources.getString("NormalSpeedButton"));
+        normalSpeed.setOnAction(event -> animation.setRate(1));
         Button doubleSpeed = new Button(myResources.getString("DoubleSpeedButton"));
+        doubleSpeed.setOnAction(event -> animation.setRate(2));
         Button newSimulation = new Button(myResources.getString("NewSimulation"));
+        //newSimulation.setOnAction(event -> main(null));
         controls.getChildren().add(play);
         controls.getChildren().add(pause);
         controls.getChildren().add(step);
@@ -145,8 +153,7 @@ public class UIManager extends Application {
         //simulatorScene.getStylesheets().add(DEFAULT_STYLESHEET);
         stage.setScene(simulatorScene);
 
-        var frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e -> step(SECOND_DELAY));
-        var animation = new Timeline();
+        var frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e -> step());
         animation.setCycleCount(Timeline.INDEFINITE);
         animation.getKeyFrames().add(frame);
         animation.play();
@@ -162,13 +169,15 @@ public class UIManager extends Application {
         return null;
     }
 
-    private void step(double elapsedTime){
+    private void step(){
         myCellManager.nextGeneration();
         for(int i=0;i<rows;i++){
             for(int j=0;j<columns;j++){
                 BorderPane thisCellPane = (BorderPane) getNodeFromGridPane(i, j);
                 Cell thisCell = myCellManager.getCell(i, j);
-                updateCellAppearance(colors[thisCell.getCurrentState()], thisCellPane);
+                if (thisCellPane != null) {
+                    updateCellAppearance(colors[thisCell.getCurrentState()], thisCellPane);
+                }
             }
         }
     }
@@ -179,7 +188,7 @@ public class UIManager extends Application {
                 "-fx-border-width: 1;");
     }
 
-    public BorderPane createCell(String color){
+    private BorderPane createCell(String color){
         BorderPane cell = new BorderPane();
         cell.setMinSize(20, 20);
         cell.setStyle("-fx-border-color: #000000;" +
