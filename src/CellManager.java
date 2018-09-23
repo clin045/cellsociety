@@ -1,3 +1,4 @@
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -29,159 +30,43 @@ public class CellManager {
 
 
     public Cell getCell(int row, int col){
-        return myGrid[row][col];
+        int adjustedRow;
+        int adjustedCol;
+        if (row < 0){
+            adjustedRow = (myRowSize) + row;
+        }
+        else if(row > myRowSize-1){
+            adjustedRow = row-myRowSize;
+        }
+        else{
+            adjustedRow = row;
+        }
+        if (col < 0){
+            adjustedCol = (myColSize) + col;
+        }
+        else if(col > myColSize-1){
+            adjustedCol = col-myColSize;
+        }
+        else{
+            adjustedCol = col;
+        }
+
+        return myGrid[adjustedRow][adjustedCol];
     }
 
 
     public ArrayList<Cell> getNeighbors(Cell cell) {
-        var myNeighbors = new ArrayList<Cell>();
-        int upperBound;
-        int lowerBound;
-        int leftBound;
-        int rightBound;
-
-        if(cell.getRow()-myNeighborhoodSize > 0){
-            upperBound = cell.getRow()-myNeighborhoodSize;
-        }
-        else{
-            upperBound = 0;
-        }
-        if(cell.getRow() + myNeighborhoodSize < myRowSize-1){
-            lowerBound = cell.getRow() + myNeighborhoodSize;
-        }
-        else{
-            lowerBound = myRowSize-1;
-        }
-        if(cell.getCol() - myNeighborhoodSize > 0){
-            leftBound = cell.getCol() - myNeighborhoodSize;
-        }
-        else{
-            leftBound = 0;
-        }
-        if(cell.getCol() + myNeighborhoodSize < myColSize-1){
-            rightBound = cell.getCol() + myNeighborhoodSize;
-        }
-        else{
-            rightBound = myColSize-1;
-        }
-
-        //add all non-wrapping neighbors
-        for(int i = upperBound; i <= lowerBound; i++){
-            for(int j = leftBound; j <= rightBound; j++){
-                if(myGrid[i][j] != cell){
-                    myNeighbors.add(myGrid[i][j]);
+        ArrayList<Cell> neighbors = new ArrayList<>();
+        for(int i = cell.getRow()-myNeighborhoodSize; i <= cell.getRow() + myNeighborhoodSize; i ++){
+            for(int j = cell.getCol()-myNeighborhoodSize; j <= cell.getCol() + myNeighborhoodSize; j++){
+                if(getCell(i,j) != cell){
+                    neighbors.add(getCell(i,j));
                 }
             }
         }
-        //add all wrapping neighbors
-        int upperExceeded = myNeighborhoodSize - cell.getRow();
-        int lowerExceeded = (cell.getRow()+myNeighborhoodSize) - (myRowSize-1);
-        int leftExceeded = myNeighborhoodSize - cell.getCol();
-        int rightExceeded = (cell.getCol()+myNeighborhoodSize) - (myColSize-1);
-
-        if(upperExceeded > 0){
-            for(int i = (myRowSize)-upperExceeded; i <= myRowSize-1; i ++){
-                for(int j = leftBound; j <= rightBound; j++){
-                    if(!myNeighbors.contains(myGrid[i][j]) && myGrid[i][j] != cell){
-                        myNeighbors.add(myGrid[i][j]);
-                    }
-                }
-                if(leftExceeded > 0 ){
-                    for(int j = (myColSize)-leftExceeded; j <= myColSize-1; j ++){
-                        if(!myNeighbors.contains(myGrid[i][j]) && myGrid[i][j] != cell){
-                            myNeighbors.add(myGrid[i][j]);
-                        }
-                    }
-                }
-                if(rightExceeded > 0){
-                    for(int j = 0; j <= rightExceeded-1; j++){
-                        if(!myNeighbors.contains(myGrid[i][j]) && myGrid[i][j] != cell){
-                            myNeighbors.add(myGrid[i][j]);
-                        }
-                    }
-                }
-            }
-        }
-        if(lowerExceeded > 0){
-            for(int i = 0; i <= lowerExceeded-1; i++){
-                for(int j = leftBound; j <= rightBound; j++){
-                    if(!myNeighbors.contains(myGrid[i][j]) && myGrid[i][j] != cell){
-                        myNeighbors.add(myGrid[i][j]);
-                    }
-                }
-                if(leftExceeded > 0 ){
-                    for(int j = (myColSize)-leftExceeded; j <= myColSize-1; j ++){
-                        if(!myNeighbors.contains(myGrid[i][j]) && myGrid[i][j] != cell){
-                            myNeighbors.add(myGrid[i][j]);
-                        }
-                    }
-                }
-                if(rightExceeded > 0){
-                    for(int j = 0; j <= rightExceeded-1; j++){
-                        if(!myNeighbors.contains(myGrid[i][j]) && myGrid[i][j] != cell){
-                            myNeighbors.add(myGrid[i][j]);
-                        }
-                    }
-                }
-            }
-        }
-        if(leftExceeded > 0){
-            for(int j = (myColSize)-leftExceeded; j <= myColSize-1; j ++){
-                for(int i = upperBound; i <= lowerBound; i++){
-                    if(!myNeighbors.contains(myGrid[i][j]) && myGrid[i][j] != cell){
-                        myNeighbors.add(myGrid[i][j]);
-                    }
-                }
-                if(upperExceeded > 0){
-                    for(int i = (myRowSize)-upperExceeded; i <= myRowSize-1; i ++){
-                        if(!myNeighbors.contains(myGrid[i][j]) && myGrid[i][j] != cell){
-                            myNeighbors.add(myGrid[i][j]);
-                        }
-                    }
-                }
-                if(lowerExceeded > 0) {
-                    for (int i = 0; i <= lowerExceeded - 1; i++) {
-                        if (!myNeighbors.contains(myGrid[i][j]) && myGrid[i][j] != cell) {
-                            myNeighbors.add(myGrid[i][j]);
-                        }
-                    }
-                }
-            }
-        }
-        if(rightExceeded > 0){
-            for(int j = 0; j <= rightExceeded-1; j++){
-                for(int i = upperBound; i <= lowerBound; i++){
-                    if(!myNeighbors.contains(myGrid[i][j]) && myGrid[i][j] != cell){
-                        myNeighbors.add(myGrid[i][j]);
-                    }
-                }
-                if(upperExceeded > 0){
-                    for(int i = (myRowSize)-upperExceeded; i <= myRowSize-1; i ++){
-                        if(!myNeighbors.contains(myGrid[i][j]) && myGrid[i][j] != cell){
-                            myNeighbors.add(myGrid[i][j]);
-                        }
-                    }
-                }
-                if(lowerExceeded > 0) {
-                    for (int i = 0; i <= lowerExceeded - 1; i++) {
-                        if (!myNeighbors.contains(myGrid[i][j]) && myGrid[i][j] != cell) {
-                            myNeighbors.add(myGrid[i][j]);
-                        }
-                    }
-                }
-            }
-        }
-        //wrap corners
-        if(upperExceeded > 0 && rightExceeded > 0){
-
-        }
-        return myNeighbors;
+        return neighbors;
     }
 
-    //TODO: REMOVE THIS METHOD. IT IS FOR TESTING PURPOSES ONLY
-    public void setNextState(Cell cell, int state){
-        cell.setNextState(state);
-    }
 
     //Second pass sets currentState to nextState
     public void updateCells() {
