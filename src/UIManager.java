@@ -1,8 +1,6 @@
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -23,11 +21,8 @@ import xml.XMLParser;
 import java.io.File;
 import java.util.ResourceBundle;
 
-
 public class UIManager extends Application {
-    //public static final int FRAMES_PER_SECOND = 60;
     private static final double MILLISECOND_DELAY = 300;
-
     private static final String DEFAULT_RESOURCE_PACKAGE = "English";
     private ResourceBundle myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE);
     private File chosen;
@@ -37,32 +32,30 @@ public class UIManager extends Application {
     private int columns;
     private String[] colors;
     private Timeline animation = new Timeline();
-    private Simulation configs;
-    RuleInterface myRule;
+    private Stage myStage;
 
     public void start(Stage stage){
-        //create text for XML label
-        Text label1 = new Text(myResources.getString("ChooseFileLabel"));
+        myStage = stage;
+        //Setup load screen...this only happens once
 
+        Text label1 = new Text(myResources.getString("ChooseFileLabel"));
         Text label2 = new Text(myResources.getString("NoFile"));
 
-        //setup load button
         Button load = new Button(myResources.getString("SelectButton"));
         load.setOnAction(event -> {
-            //load file chooser
             FileChooser myFileChooser = new FileChooser();
             myFileChooser.setTitle(myResources.getString("ChooserWindowTitle"));
             FileChooser.ExtensionFilter xmlFilter = new FileChooser.ExtensionFilter("XML files (*.xml)", "*.xml");
             myFileChooser.getExtensionFilters().add(xmlFilter);
             myFileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
-            chosen = myFileChooser.showOpenDialog(stage);
+            chosen = myFileChooser.showOpenDialog(myStage);
             if(chosen != null){
                 label2.setText(chosen.getName());
             }
         });
 
         Button starter = new Button(myResources.getString("StartButton"));
-        starter.setOnAction(event -> createSimulator(stage));
+        starter.setOnAction(event -> createSimulator());
 
         GridPane myGridPane = new GridPane();
         myGridPane.setMinSize(600, 600);
@@ -76,37 +69,31 @@ public class UIManager extends Application {
         myGridPane.add(load, 1, 1);
         myGridPane.add(starter, 0, 2);
 
-        //create scene
         Scene myScene = new Scene(myGridPane);
 
-        stage.setTitle(myResources.getString("WindowTitle"));
-
-        stage.setScene(myScene);
-
-        stage.show();
+        myStage.setTitle(myResources.getString("WindowTitle"));
+        myStage.setScene(myScene);
+        myStage.show();
     }
 
-    private void createSimulator(Stage stage){
+    private void createSimulator(){
 
-        initializeWindow(stage);
+        initializeWindow();
 
         var frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e -> step());
         animation.setCycleCount(Timeline.INDEFINITE);
         animation.getKeyFrames().add(frame);
         animation.playFromStart();
-        System.out.println("createSim done");
 
     }
 
-    public void cleanUp(Stage stage){
+    private void cleanUp(){
         animation.stop();
-        System.out.println("cleanup done");
-        //stage.close();
-        createSimulator(stage);
+        createSimulator();
     }
 
-    private void initializeWindow(Stage stage){
-        configs = new XMLParser("media").getSimulation(chosen);
+    private void initializeWindow(){
+        Simulation configs = new XMLParser("media").getSimulation(chosen);
         rows = configs.getRows();
         columns = configs.getCols();
         int[][] initialStates = configs.getConfigs();
@@ -117,6 +104,38 @@ public class UIManager extends Application {
         rootPane.setMinSize(600, 600);
         rootPane.setAlignment(Pos.CENTER);
 
+        GridPane titleBlock = createTitleBlock(configs);
+        createAnimationBlock(initialStates);
+        FlowPane controls = createControlsBlock();
+
+        rootPane.add(titleBlock, 0, 0);
+        rootPane.add(simulatorGridPane, 0, 1);
+        rootPane.add(controls, 0, 2);
+
+        RuleInterface myRule = findSimulationType(configs.getSimulationName());
+        myCellManager.initializeGrid(rows, columns, initialStates, myRule);
+
+        myStage.setScene(new Scene(rootPane));
+    }
+
+    private RuleInterface findSimulationType(String name){
+        RuleInterface myRule;
+        if(name.compareToIgnoreCase("Game of Life") == 0){
+            myRule = new GameOfLifeRule();
+        }
+        else if(name.compareToIgnoreCase("Predator Prey") == 0){
+            myRule = new PredatorPreyRule();
+        }
+        else if(name.compareToIgnoreCase("Fire") == 0){
+            myRule = new FireRule();
+        }
+        else {
+            myRule = new SegregationRule();
+        }
+        return myRule;
+    }
+
+    private GridPane createTitleBlock(Simulation configs){
         Label title = new Label(configs.getTitle());
         Label author = new Label(configs.getAuthor());
         Label simulationName = new Label(configs.getSimulationName());
@@ -131,6 +150,10 @@ public class UIManager extends Application {
         displayInfo.add(simulationName, 0, 2);
         GridPane.setHalignment(simulationName, HPos.CENTER);
 
+        return displayInfo;
+    }
+
+    private void createAnimationBlock(int[][] initialStates){
         simulatorGridPane = new GridPane();
         simulatorGridPane.setAlignment(Pos.CENTER);
         for(int i=0;i<rows;i++){
@@ -138,37 +161,42 @@ public class UIManager extends Application {
                 simulatorGridPane.add(createCell(colors[initialStates[i][j]], rows, columns), i, j);
             }
         }
+    }
+
+    private FlowPane createControlsBlock(){
         FlowPane controls = new FlowPane();
         controls.setPadding(new Insets(10, 10, 10, 10));
         controls.setAlignment(Pos.CENTER);
+
         Button play = new Button(myResources.getString("PlayButton"));
         play.setOnAction(event -> animation.play());
+
         Button pause = new Button(myResources.getString("PauseButton"));
         pause.setOnAction(event -> animation.pause());
+
         Button step = new Button(myResources.getString("StepButton"));
         step.setOnAction(event -> step());
+
         Button halfSpeed = new Button(myResources.getString("HalfSpeedButton"));
         halfSpeed.setOnAction(event -> animation.setRate(.5));
+
         Button normalSpeed = new Button(myResources.getString("NormalSpeedButton"));
         normalSpeed.setOnAction(event -> animation.setRate(1));
+
         Button doubleSpeed = new Button(myResources.getString("DoubleSpeedButton"));
         doubleSpeed.setOnAction(event -> animation.setRate(2));
-        Button newSimulation = new Button(myResources.getString("NewSimulation"));
-        newSimulation.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                FileChooser myFileChooser = new FileChooser();
-                myFileChooser.setTitle(myResources.getString("ChooserWindowTitle"));
-                FileChooser.ExtensionFilter xmlFilter = new FileChooser.ExtensionFilter("XML files (*.xml)", "*.xml");
-                myFileChooser.getExtensionFilters().add(xmlFilter);
-                myFileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
-                chosen = myFileChooser.showOpenDialog(stage);
 
-                //now reinitialize
-                cleanUp(stage);
-            }
+        Button newSimulation = new Button(myResources.getString("NewSimulation"));
+        newSimulation.setOnAction(event -> {
+            FileChooser myFileChooser = new FileChooser();
+            myFileChooser.setTitle(myResources.getString("ChooserWindowTitle"));
+            FileChooser.ExtensionFilter xmlFilter = new FileChooser.ExtensionFilter("XML files (*.xml)", "*.xml");
+            myFileChooser.getExtensionFilters().add(xmlFilter);
+            myFileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
+            chosen = myFileChooser.showOpenDialog(myStage);
+            cleanUp();
         });
-        //todo: figure out reset animation logistics
+
         controls.getChildren().add(play);
         controls.getChildren().add(pause);
         controls.getChildren().add(step);
@@ -177,25 +205,7 @@ public class UIManager extends Application {
         controls.getChildren().add(doubleSpeed);
         controls.getChildren().add(newSimulation);
 
-        rootPane.add(displayInfo, 0, 0);
-        rootPane.add(simulatorGridPane, 0, 1);
-        rootPane.add(controls, 0, 2);
-
-        if(configs.getSimulationName().compareToIgnoreCase("Game of Life") == 0){
-            myRule = new GameOfLifeRule();
-        }
-        else if(configs.getSimulationName().compareToIgnoreCase("Predator Prey") == 0){
-            myRule = new PredatorPreyRule();
-        }
-        else if(configs.getSimulationName().compareToIgnoreCase("Fire") == 0){
-            myRule = new FireRule();
-        }
-        else {
-            myRule = new SegregationRule();
-        }
-        myCellManager.initializeGrid(configs.getRows(), configs.getCols(), initialStates, myRule);
-
-        stage.setScene(new Scene(rootPane));
+        return controls;
     }
 
     private Node getNodeFromGridPane(int col, int row) {
@@ -216,12 +226,8 @@ public class UIManager extends Application {
                 if (thisCellPane != null) {
                     updateCellAppearance(colors[thisCell.getCurrentState()], thisCellPane);
                 }
-                else {
-                    System.out.println("null cell");
-                }
             }
         }
-        System.out.println("Step done");
     }
 
     private void updateCellAppearance(String color, BorderPane myCell){
