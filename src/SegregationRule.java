@@ -15,6 +15,7 @@ public class SegregationRule implements RuleInterface {
     final int BLUE = 1;
     final int RED = 2;
     final int UNSATISFIED = 3;
+    final double PERCENT_SIMILAR_TOLERANCE = 0.3;
 
     private int unallocated_blue = 0;
     private int unallocated_red = 0;
@@ -23,16 +24,13 @@ public class SegregationRule implements RuleInterface {
         return NUM_PASSES;
     }
     // percent of neighbors that must be similar for happiness
-    private double percentSimilarTolerance;
+
 
     public int getNeighborhoodSize(){
         return 1;
     }
 
-    // set percentSimilarTolerance based on user input
-    public void setPercentSimilarTolerance(int percent) {
-        percentSimilarTolerance = percent;
-    }
+
 
     public void applyRule(Cell cell, ArrayList<Cell> neighborsArray, int passNum) {
         int similarNeighborsCount = 0;
@@ -43,12 +41,12 @@ public class SegregationRule implements RuleInterface {
         }
 
         // percent of neighbors that are similar
-        int percentSimilarNeighbors = similarNeighborsCount / neighborsArray.size();
+        double percentSimilarNeighbors = similarNeighborsCount / neighborsArray.size();
 
         // find next state of occupied cells
         if(passNum == 0){
             if (cell.getCurrentState() == RED || cell.getCurrentState() == BLUE) {
-                if (percentSimilarNeighbors < percentSimilarTolerance) {
+                if (percentSimilarNeighbors < PERCENT_SIMILAR_TOLERANCE) {
                     if(cell.getCurrentState() == RED){
                         unallocated_red ++;
                     }

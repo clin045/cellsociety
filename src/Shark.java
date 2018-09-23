@@ -1,21 +1,36 @@
 public class Shark {
     Cell myCell;
-    int myAge;
+    int myAge = 0;
+    int myEnergy = 3;
 
-    public int getMyAge() {
+
+    public int getEnergy() {
+        return myEnergy;
+    }
+
+    public void setEnergy(int myEnergy) {
+        this.myEnergy = myEnergy;
+    }
+
+
+
+    public int getAge() {
         return myAge;
     }
+    public void setCell(Cell cell) {
+        this.myCell = cell;
+    }
+
+    public void setAge(int age){
+        myAge = age;
+    }
+
 
     public Cell getCell() {
         return myCell;
     }
 
-    public void setMyAge(int myAge) {
-        this.myAge = myAge;
-    }
-
-    Shark(Cell cell, int age){
+    Shark(Cell cell){
         myCell = cell;
-        myAge = age;
     }
 }
