@@ -1,8 +1,10 @@
+package model;
+
 import java.util.ArrayList;
 
 /**
  *
- * Extension of main.RuleInterface to apply rules specifically for Conway's Game Of Life
+ * Extension of main.model.RuleInterface to apply rules specifically for Conway's Game Of Life
  * Returns nextState for myCell
  *
  * @author Scott McConnell skm44
@@ -18,7 +20,7 @@ public class GameOfLifeRule implements RuleInterface {
     public int getNeighborhoodSize(){
         return 1;
     }
-    public void applyRule(Cell cell, ArrayList<Cell> neighborsArray,int passNum) {
+    public void applyRule(Cell cell, ArrayList<Cell> neighborsArray, int passNum) {
         int liveNeighborsCount = 0;
         for (Cell neighbor : neighborsArray) {
             liveNeighborsCount += neighbor.getCurrentState();

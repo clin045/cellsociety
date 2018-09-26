@@ -1,9 +1,11 @@
+package model;
+
 import java.util.ArrayList;
 import java.util.Random;
 
 /**
  *
- * Extension of main.RuleInterface to apply rules specifically for Conway's Game Of Life
+ * Extension of main.model.RuleInterface to apply rules specifically for Conway's Game Of Life
  * Returns nextState for myCell
  *
  * @author Scott McConnell skm44

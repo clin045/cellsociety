@@ -1,3 +1,7 @@
+package model;
+
+import model.Cell;
+
 public class Fish {
 
     public static final int ENERGY_YIELD = 2;

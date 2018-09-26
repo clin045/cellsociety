@@ -1,3 +1,7 @@
+package model;
+
+import model.Cell;
+
 public class Shark {
     Cell myCell;
     int myAge = 0;
