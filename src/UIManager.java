@@ -1,6 +1,7 @@
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -8,6 +9,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
@@ -241,7 +243,30 @@ public class UIManager extends Application {
         cell.setStyle("-fx-border-color: #000000;" +
                 "-fx-background-color: #" + color + ";" +
                 "-fx-border-width: 1;");
+        cell.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                toggleNextState(cell);
+            }
+        });
         return cell;
+    }
+
+    private void toggleNextState(BorderPane cell){
+        int numStates = colors.length;
+        System.out.println(numStates);
+        Cell thisCell = myCellManager.getCell(GridPane.getColumnIndex(cell), GridPane.getRowIndex(cell));
+        System.out.println(thisCell.getCurrentState());
+        if(thisCell.getCurrentState() ==  numStates-1){
+            //recircle
+            thisCell.setCurrentState(0);
+            thisCell.setNextState(0);
+        }
+        else {
+            thisCell.setNextState(thisCell.getCurrentState()+1);
+            thisCell.setCurrentState(thisCell.getCurrentState()+1);
+        }
+        updateCellAppearance(colors[thisCell.getNextState()], cell);
     }
 
     public static void main(String args[]){
