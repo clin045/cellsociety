@@ -1,9 +1,11 @@
+package model;
+
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
  *
- * Extension of main.RuleInterface to apply rules specifically for SegregationLife
+ * Extension of main.model.RuleInterface to apply rules specifically for SegregationLife
  * Returns nextState for myCell
  *
  * @author Scott McConnell skm44
@@ -31,7 +33,7 @@ public class PredatorPreyRule implements RuleInterface {
     public int getNeighborhoodSize(){
         return 1;
     }
-    PredatorPreyRule(){
+    public PredatorPreyRule(){
         fishList = new ArrayList<>();
         sharkList = new ArrayList<>();
     }

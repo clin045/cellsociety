@@ -1,8 +1,10 @@
+package model;
+
 import java.util.ArrayList;
 
 /**
  *
- * Extension of main.RuleInterface to apply rules specifically for SegregationLife
+ * Extension of main.model.RuleInterface to apply rules specifically for SegregationLife
  * Returns nextState for myCell
  *
  * @author Scott McConnell skm44

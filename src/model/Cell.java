@@ -1,3 +1,5 @@
+package model;
+
 /*
 The basic unit of a CA.
 
