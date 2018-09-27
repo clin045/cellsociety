@@ -4,13 +4,13 @@ import java.util.ArrayList;
 
 /**
  *
- * Extension of main.model.RuleInterface to apply rules specifically for SegregationLife
+ * Extension of main.model.Rule to apply rules specifically for SegregationLife
  * Returns nextState for myCell
  *
  * @author Scott McConnell skm44
  **/
 
-public class SegregationRule implements RuleInterface {
+public class SegregationRule extends Rule {
     final int NUM_PASSES = 2;
 
     final int VACANT = 0;

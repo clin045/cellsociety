@@ -22,7 +22,6 @@ import xml.Simulation;
 import xml.XMLParser;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.ResourceBundle;
 
 /**
@@ -113,14 +112,14 @@ public class UIManager extends Application {
         rootPane.add(simulatorGridPane, 0, 1);
         rootPane.add(controls, 0, 2);
 
-        RuleInterface myRule = findSimulationType(configs.getSimulationName());
+        Rule myRule = findSimulationType(configs.getSimulationName());
         myCellManager.initializeGrid(rows, columns, initialStates, myRule, CellManager.SQUARE_GRID);
 
         myStage.setScene(new Scene(rootPane));
     }
 
-    private RuleInterface findSimulationType(String name){
-        RuleInterface myRule;
+    private Rule findSimulationType(String name){
+        Rule myRule;
         if(name.compareToIgnoreCase("Game of Life") == 0){
             myRule = new GameOfLifeRule();
         }

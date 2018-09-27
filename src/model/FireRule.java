@@ -5,12 +5,12 @@ import java.util.Random;
 
 /**
  *
- * Extension of main.model.RuleInterface to apply rules specifically for Conway's Game Of Life
+ * Extension of main.model.Rule to apply rules specifically for Conway's Game Of Life
  * Returns nextState for myCell
  *
  * @author Scott McConnell skm44
  **/
-public class FireRule implements RuleInterface {
+public class FireRule extends Rule {
     final int NUM_PASSES = 1;
     final int BURNING = 2;
     final int TREE = 1;

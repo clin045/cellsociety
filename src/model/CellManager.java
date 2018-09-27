@@ -14,22 +14,20 @@ public class CellManager {
     private Grid myGrid;
     private int myRowSize;
     private int myColSize;
-    private int myNeighborhoodSize;
-    RuleInterface myActiveRule;
+    Rule myActiveRule;
 
 
     //Constants
     public static final int SQUARE_GRID = 0;
 
     //Initializes the myGrid of cells
-    public void initializeGrid(int rows, int cols, int[][] initConditions, RuleInterface activeRule, int gridType){
+    public void initializeGrid(int rows, int cols, int[][] initConditions, Rule activeRule, int gridType){
         myRowSize = rows;
         myColSize = cols;
         if(gridType == SQUARE_GRID){
             myGrid = new SquareGrid(rows, cols, initConditions, Grid.TOROIDAL, 2);
         }
         myActiveRule = activeRule;
-        myNeighborhoodSize = activeRule.getNeighborhoodSize();
     }
 
 

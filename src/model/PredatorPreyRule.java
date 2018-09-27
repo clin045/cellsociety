@@ -5,7 +5,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 /**
  *
- * Extension of main.model.RuleInterface to apply rules specifically for SegregationLife
+ * Extension of main.model.Rule to apply rules specifically for SegregationLife
  * Returns nextState for myCell
  *
  * @author Scott McConnell skm44
@@ -13,7 +13,7 @@ import java.util.concurrent.ThreadLocalRandom;
  **/
 
 
-public class PredatorPreyRule implements RuleInterface {
+public class PredatorPreyRule extends Rule {
 
     public final int EMPTY = 0;
     public final int SHARK = 1;

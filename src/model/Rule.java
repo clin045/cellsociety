@@ -11,9 +11,8 @@ import java.util.ArrayList;
 
  ** @author Scott McConnell skm44
  **/
-public interface RuleInterface {
-    void applyRule(Cell myCell, ArrayList<Cell> myNeighbors, int passNum);
-    int getNeighborhoodSize();
-    int getPasses();
-
+public abstract class Rule {
+    public abstract void applyRule(Cell myCell, ArrayList<Cell> myNeighbors, int passNum);
+    public abstract int getNeighborhoodSize();
+    public abstract int getPasses();
 }

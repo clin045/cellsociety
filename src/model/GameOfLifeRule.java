@@ -4,12 +4,12 @@ import java.util.ArrayList;
 
 /**
  *
- * Extension of main.model.RuleInterface to apply rules specifically for Conway's Game Of Life
+ * Extension of main.model.Rule to apply rules specifically for Conway's Game Of Life
  * Returns nextState for myCell
  *
  * @author Scott McConnell skm44
  **/
-public class GameOfLifeRule implements RuleInterface {
+public class GameOfLifeRule extends Rule {
     final int NUM_PASSES = 1;
     final int ALIVE = 1;
     final int DEAD = 0;
