@@ -26,7 +26,14 @@ public class Simulation {
             "neighbors",
             "colors"
     );
-
+    static private final int SIM_NAME = 0;
+    static private final int SIM_TITLE = 1;
+    static private final int SIM_AUTHOR = 2;
+    static private final int COLS = 3;
+    static private final int ROWS = 4;
+    static private final int CONFIGS = 5;
+    static private final int NEIGHBORS = 6;
+    static private final int COLORS = 7;
     // specific data values for this instance
     private String mySimulationName;
     private String myTitle;
@@ -38,15 +45,6 @@ public class Simulation {
     private String myColors;
     // NOTE: keep just as an example for converting toString(), otherwise not used
     private Map<String, String> myDataValues;
-
-    static private final int SIM_NAME = 0;
-    static private final int SIM_TITLE = 1;
-    static private final int SIM_AUTHOR = 2;
-    static private final int COLS = 3;
-    static private final int ROWS = 4;
-    static private final int CONFIGS = 5;
-    static private final int NEIGHBORS = 6;
-    static private final int COLORS = 7;
 
 
     /**
@@ -102,7 +100,7 @@ public class Simulation {
     }
 
     private boolean isValidSimName(String name) {
-        String[] validSimulationNames = new String[] {"Game of Life", "Segregation", "Predator Prey", "Fire", "Rock, Paper, Scissors", "Foraging Ants", "Langton's Loop", "SugarScape"};
+        String[] validSimulationNames = new String[]{"Game of Life", "Segregation", "Predator Prey", "Fire", "Rock, Paper, Scissors", "Foraging Ants", "Langton's Loop", "SugarScape"};
 
         for (String validName : validSimulationNames) {
             if (name.equals(validName)) {

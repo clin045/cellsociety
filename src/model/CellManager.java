@@ -16,12 +16,6 @@ public class CellManager {
     private int myColSize;
 
 
-
-
-    public Grid getGrid() {
-        return myGrid;
-    }
-
     //Initializes the myGrid of cells
     public CellManager(int rows, int cols, int[][] initConditions, Rule activeRule, int gridType) {
         myRowSize = rows;
@@ -32,6 +26,9 @@ public class CellManager {
         myActiveRule = activeRule;
     }
 
+    public Grid getGrid() {
+        return myGrid;
+    }
 
     //Second pass sets currentState to nextState
     public void updateCells() {

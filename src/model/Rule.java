@@ -15,6 +15,7 @@ import java.util.List;
  **/
 public abstract class Rule {
     static final int NUM_STATES = 0;
+
     public abstract void applyRule(Cell myCell, List<Cell> myNeighbors, int passNum);
 
     public abstract int getNeighborhoodSize();
