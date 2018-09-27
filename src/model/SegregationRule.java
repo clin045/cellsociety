@@ -44,34 +44,42 @@ public class SegregationRule extends Rule {
 
         // find next state of occupied cells
         if (passNum == 0) {
-            if (cell.getCurrentState() == RED || cell.getCurrentState() == BLUE) {
-                if (percentSimilarNeighbors < PERCENT_SIMILAR_TOLERANCE) {
-                    if (cell.getCurrentState() == RED) {
-                        unallocated_red++;
-                    } else {
-                        unallocated_blue++;
-                    }
-                    cell.setNextState(UNSATISFIED);
+            markUnsatisfied(cell, percentSimilarNeighbors);
+        } else {
+            moveCells(cell);
+
+        }
+    }
+
+    private void moveCells(Cell cell) {
+        if (cell.getNextState() == VACANT) {
+            if (unallocated_blue > 0) {
+                unallocated_blue--;
+                cell.setNextState(BLUE);
+            } else if (unallocated_red > 0) {
+                unallocated_red--;
+                cell.setNextState(RED);
+            }
+        } else if (cell.getNextState() == UNSATISFIED) {
+            cell.setNextState(VACANT);
+        }
+        cell.setNextState(cell.getNextState());
+    }
+
+    private void markUnsatisfied(Cell cell, double percentSimilarNeighbors) {
+        if (cell.getCurrentState() == RED || cell.getCurrentState() == BLUE) {
+            if (percentSimilarNeighbors < PERCENT_SIMILAR_TOLERANCE) {
+                if (cell.getCurrentState() == RED) {
+                    unallocated_red++;
                 } else {
-                    cell.setNextState(cell.getCurrentState());
+                    unallocated_blue++;
                 }
+                cell.setNextState(UNSATISFIED);
             } else {
-                cell.setNextState(VACANT);
+                cell.setNextState(cell.getCurrentState());
             }
         } else {
-            if (cell.getNextState() == VACANT) {
-                if (unallocated_blue > 0) {
-                    unallocated_blue--;
-                    cell.setNextState(BLUE);
-                } else if (unallocated_red > 0) {
-                    unallocated_red--;
-                    cell.setNextState(RED);
-                }
-            } else if (cell.getNextState() == UNSATISFIED) {
-                cell.setNextState(VACANT);
-            }
-            cell.setNextState(cell.getNextState());
-
+            cell.setNextState(VACANT);
         }
     }
 }
