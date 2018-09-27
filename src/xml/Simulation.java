@@ -1,6 +1,5 @@
 package xml;
 
-import java.awt.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -93,9 +92,31 @@ public class Simulation {
         return resultArray;
     }
 
+    private boolean isValidSimName(String name) {
+        String[] validSimulationNames = new String[8];
+        validSimulationNames[0] = "Game of Life";
+        validSimulationNames[1] = "Segregation";
+        validSimulationNames[2] = "Predator Prey";
+        validSimulationNames[3] = "Fire";
+        validSimulationNames[4] = "Rock, Paper, Scissors";
+        validSimulationNames[5] = "Foraging Ants";
+        validSimulationNames[6] = "Langton's Loop";
+        validSimulationNames[7] = "SugarScape";
+
+        for (String validName : validSimulationNames) {
+            if (name.equals(validName)) { return true; }
+        }
+        return false;
+    }
+
     // provide getters, not setters
-    public String getSimulationName () {
-        return mySimulationName;
+    public String getSimulationName () throws XMLException {
+
+        if (isValidSimName(mySimulationName)) {
+            return mySimulationName;
+        } else {
+            throw new XMLException("Invalid Simulation Name");
+        }
     }
 
     public String getTitle () {
@@ -117,7 +138,7 @@ public class Simulation {
     public int[][] getConfigs () {
         return stringToIntArray(myConfigs);
     }
-    
+
     public int[][] getNeighborCoordinates () {
         return stringToIntArray(myNeighbors);
     }
