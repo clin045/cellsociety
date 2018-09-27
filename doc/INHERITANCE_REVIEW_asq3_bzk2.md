@@ -1,4 +1,4 @@
-Cell Society: Inheritance Review
+model.Cell Society: Inheritance Review
 ===
 
 Allen Qiu (asq3), Brooke Keene (bzk2)
@@ -20,9 +20,9 @@ Part 1
 Part 2
 ===
 1. How is your area linked to/dependent on other areas of the project?
-    * The GUI must update the display of the cells based off of our CellManager, which updates the status of the cells based on the simulation that is being run. It must also interact with the XML parser during initialization so that it can check if the XML code that the user has loaded is valid.
+    * The GUI must update the display of the cells based off of our model.CellManager, which updates the status of the cells based on the simulation that is being run. It must also interact with the XML parser during initialization so that it can check if the XML code that the user has loaded is valid.
 2. Are these dependencies based on the other class's behavior or implementation?
-    * These dependencies are based off of the other class's behavior. At the end of the day, for the GUI, no matter how the XML parser or CellManager is implemented, as long as it is functional, the GUI will also be able to functional.
+    * These dependencies are based off of the other class's behavior. At the end of the day, for the GUI, no matter how the XML parser or model.CellManager is implemented, as long as it is functional, the GUI will also be able to functional.
 3. How can you minimize these dependencies?
     * The GUI is the link between the backend code and the user so these dependencies are necessary for it to serve its purpose.
 4. Go over one pair of super/sub classes in detail to see if there is room for improvement. Focus on what things they have in common (these go in the superclass) and what about them varies (these go in the subclass).
@@ -32,10 +32,10 @@ Part 3
 ===
 1. Come up with at least five use cases for your part (most likely these will be useful for both teams).
     * The user will input a local XML file and the GUI will call the XML parser, which will check it for validity and return an error if it is not valid
-    * The user will be able to press pause and the GUI will interact with CellManager to pause the simulation
-    * The user will be able to press play and the GUI will interact with CellManager to resume the simulation after it has been paused
-    * The user will be able to press the next frame button after the game has been paused and the GUI will interact with the CellManager to move on to the next frame but keep the simulation pused
-    * The user will be able to press the reset button and this will interact with the CellManager to restart the simulation
+    * The user will be able to press pause and the GUI will interact with model.CellManager to pause the simulation
+    * The user will be able to press play and the GUI will interact with model.CellManager to resume the simulation after it has been paused
+    * The user will be able to press the next frame button after the game has been paused and the GUI will interact with the model.CellManager to move on to the next frame but keep the simulation pused
+    * The user will be able to press the reset button and this will interact with the model.CellManager to restart the simulation
 2. What feature/design problem are you most excited to work on?
     * I am excited to use CSS to style the GUI. I have worked with CSS in the past for webpages and would like to use it to create an aesthetically pleasing GUI, and my familiarity with CSS will certainly help.
 3. What feature/design problem are you most worried about working on?
