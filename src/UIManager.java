@@ -16,7 +16,6 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import xml.Simulation;
-import xml.XMLException;
 import xml.XMLParser;
 
 import java.io.File;
