@@ -19,7 +19,7 @@ public class SquareGrid extends Grid {
         ArrayList<Cell> neighbors = new ArrayList<>();
         for(int i = cell.getRow()-1; i <= cell.getRow() + 1; i ++){
             for(int j = cell.getCol()-1; j <= cell.getCol() + 1; j++){
-                if(getCell(i,j) != cell){
+                if(getCell(i,j) != cell && getCell(i,j) != null){
                     neighbors.add(getCell(i,j));
                 }
             }
@@ -33,8 +33,20 @@ public class SquareGrid extends Grid {
         if(getEdgeType() == Grid.TOROIDAL){
             return(getWrappingCell(row, col));
         }
+        else if(getEdgeType() == Grid.STATIC){
+            return(getStaticCell(row, col));
+        }
         else{
             return null;
+        }
+    }
+
+    private Cell getStaticCell(int row, int col){
+        if(row == 0 || col == 0 || row == myGrid.length-1 || col == myGrid[0].length-1){
+            return null;
+        }
+        else{
+            return myGrid[row][col];
         }
     }
 

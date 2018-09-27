@@ -3,6 +3,7 @@ package model;
 import java.util.ArrayList;
 
 public abstract class Grid {
+    public final static int STATIC = 0;
     public final static int TOROIDAL = 1;
 
     protected Cell[][] myGrid;

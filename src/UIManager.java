@@ -255,7 +255,7 @@ public class UIManager extends Application {
     private void toggleNextState(BorderPane cell){
         int numStates = colors.length;
         System.out.println(numStates);
-        Cell thisCell = myCellManager.getCell(GridPane.getColumnIndex(cell), GridPane.getRowIndex(cell));
+        Cell thisCell = myCellManager.getGrid().getCell(GridPane.getColumnIndex(cell), GridPane.getRowIndex(cell));
         System.out.println(thisCell.getCurrentState());
         if(thisCell.getCurrentState() ==  numStates-1){
             //recircle
