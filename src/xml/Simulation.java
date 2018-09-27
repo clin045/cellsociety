@@ -39,6 +39,15 @@ public class Simulation {
     // NOTE: keep just as an example for converting toString(), otherwise not used
     private Map<String, String> myDataValues;
 
+    static private final int SIM_NAME = 0;
+    static private final int SIM_TITLE = 1;
+    static private final int SIM_AUTHOR = 2;
+    static private final int COLS = 3;
+    static private final int ROWS = 4;
+    static private final int CONFIGS = 5;
+    static private final int NEIGHBORS = 6;
+    static private final int COLORS = 7;
+
 
     /**
      * Create game data from given data.
@@ -62,14 +71,14 @@ public class Simulation {
      * @param dataValues map of field names to their values
      */
     public Simulation(Map<String, String> dataValues) {
-        this(dataValues.get(DATA_FIELDS.get(0)),
-                dataValues.get(DATA_FIELDS.get(1)),
-                dataValues.get(DATA_FIELDS.get(2)),
-                Integer.parseInt(dataValues.get(DATA_FIELDS.get(3))),
-                Integer.parseInt(dataValues.get(DATA_FIELDS.get(4))),
-                dataValues.get(DATA_FIELDS.get(5)),
-                dataValues.get(DATA_FIELDS.get(6)),
-                dataValues.get(DATA_FIELDS.get(7)));
+        this(dataValues.get(DATA_FIELDS.get(SIM_NAME)),
+                dataValues.get(DATA_FIELDS.get(SIM_TITLE)),
+                dataValues.get(DATA_FIELDS.get(SIM_AUTHOR)),
+                Integer.parseInt(dataValues.get(DATA_FIELDS.get(COLS))),
+                Integer.parseInt(dataValues.get(DATA_FIELDS.get(ROWS))),
+                dataValues.get(DATA_FIELDS.get(CONFIGS)),
+                dataValues.get(DATA_FIELDS.get(NEIGHBORS)),
+                dataValues.get(DATA_FIELDS.get(COLORS)));
         myDataValues = dataValues;
     }
 
@@ -93,15 +102,7 @@ public class Simulation {
     }
 
     private boolean isValidSimName(String name) {
-        String[] validSimulationNames = new String[8];
-        validSimulationNames[0] = "Game of Life";
-        validSimulationNames[1] = "Segregation";
-        validSimulationNames[2] = "Predator Prey";
-        validSimulationNames[3] = "Fire";
-        validSimulationNames[4] = "Rock, Paper, Scissors";
-        validSimulationNames[5] = "Foraging Ants";
-        validSimulationNames[6] = "Langton's Loop";
-        validSimulationNames[7] = "SugarScape";
+        String[] validSimulationNames = new String[] {"Game of Life", "Segregation", "Predator Prey", "Fire", "Rock, Paper, Scissors", "Foraging Ants", "Langton's Loop", "SugarScape"};
 
         for (String validName : validSimulationNames) {
             if (name.equals(validName)) {
