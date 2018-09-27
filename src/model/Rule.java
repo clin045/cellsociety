@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.List;
 
 //TODO: change documentation
 
@@ -14,7 +15,7 @@ import java.util.ArrayList;
  **/
 public abstract class Rule {
 
-    public abstract void applyRule(Cell myCell, ArrayList<Cell> myNeighbors, int passNum);
+    public abstract void applyRule(Cell myCell, List<Cell> myNeighbors, int passNum);
 
     public abstract int getNeighborhoodSize();
 

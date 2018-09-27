@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Extension of main.model.Rule to apply rules specifically for SegregationLife
@@ -31,7 +32,7 @@ public class SegregationRule extends Rule {
     }
 
 
-    public void applyRule(Cell cell, ArrayList<Cell> neighborsArray, int passNum) {
+    public void applyRule(Cell cell, List<Cell> neighborsArray, int passNum) {
         int similarNeighborsCount = 0;
         for (Cell neighbor : neighborsArray) {
             if (cell.getCurrentState() == neighbor.getCurrentState()) {
