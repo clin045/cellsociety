@@ -39,14 +39,14 @@ public class Simulation {
     // NOTE: keep just as an example for converting toString(), otherwise not used
     private Map<String, String> myDataValues;
 
-    static final int SIM_NAME = 0;
-    static final int SIM_TITLE = 1;
-    static final int SIM_AUTHOR = 2;
-    static final int COLS = 3;
-    static final int ROWS = 4;
-    static final int CONFIGS = 5;
-    static final int NEIGHBORS = 6;
-    static final int COLORS = 7;
+    static private final int SIM_NAME = 0;
+    static private final int SIM_TITLE = 1;
+    static private final int SIM_AUTHOR = 2;
+    static private final int COLS = 3;
+    static private final int ROWS = 4;
+    static private final int CONFIGS = 5;
+    static private final int NEIGHBORS = 6;
+    static private final int COLORS = 7;
 
 
     /**
