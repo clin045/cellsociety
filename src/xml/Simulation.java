@@ -129,7 +129,7 @@ public class Simulation {
         return myAuthor;
     }
 
-    public int getCols() {
+    public int getCols() throws XMLException {
         if (myCols != 0) {
             return Math.abs(myCols);
         } else {
@@ -137,7 +137,7 @@ public class Simulation {
         }
     }
 
-    public int getRows() {
+    public int getRows() throws XMLException {
         if (myRows != 0) {
             return Math.abs(myRows);
         } else {
@@ -145,7 +145,7 @@ public class Simulation {
         }
     }
 
-    public int[][] getConfigs() {
+    public int[][] getConfigs() throws XMLException {
         if (myConfigs.length() + 1 == 2 * getCols() * getRows()) {
             return stringToIntArray(myConfigs);
         } else {
