@@ -34,7 +34,7 @@ public class UIManager extends Application {
     private static final String DEFAULT_RESOURCE_PACKAGE = "English";
     private ResourceBundle myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE);
     private File chosen;
-    private CellManager myCellManager = new CellManager();
+    private CellManager myCellManager;
     private GridPane simulatorGridPane;
     private int rows;
     private int columns;
@@ -118,7 +118,7 @@ public class UIManager extends Application {
         rootPane.add(controls, 0, 2);
 
         Rule myRule = findSimulationType(configs.getSimulationName());
-        myCellManager.initializeGrid(rows, columns, initialStates, myRule, CellManager.SQUARE_GRID);
+        myCellManager = new CellManager(rows, columns, initialStates, myRule, CellManager.SQUARE_GRID);
 
         myStage.setScene(new Scene(rootPane));
     }

@@ -15,12 +15,15 @@ public class CellManager {
     private int myRowSize;
     private int myColSize;
 
+
+
+
     public Grid getGrid() {
         return myGrid;
     }
 
     //Initializes the myGrid of cells
-    public void initializeGrid(int rows, int cols, int[][] initConditions, Rule activeRule, int gridType) {
+    public CellManager(int rows, int cols, int[][] initConditions, Rule activeRule, int gridType) {
         myRowSize = rows;
         myColSize = cols;
         if (gridType == SQUARE_GRID) {
