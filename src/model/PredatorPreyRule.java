@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- *
  * Extension of main.model.Rule to apply rules specifically for SegregationLife
  * Returns nextState for myCell
  *
@@ -15,55 +14,55 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class PredatorPreyRule extends Rule {
 
+    public final static int PASSES = 2;
     public final int EMPTY = 0;
     public final int SHARK = 1;
     public final int FISH = 2;
-
     public final int FISH_REPRODUCTION_TIME = 4;
     public final int SHARK_REPRODUCTION_TIME = 12;
-
-    public final static int PASSES = 2;
-
     private ArrayList<Fish> fishList;
     private ArrayList<Shark> sharkList;
 
-    public int getPasses(){
-        return PASSES;
-    }
-    public int getNeighborhoodSize(){
-        return 1;
-    }
-    public PredatorPreyRule(){
+    public PredatorPreyRule() {
         fishList = new ArrayList<>();
         sharkList = new ArrayList<>();
     }
+
+    public int getPasses() {
+        return PASSES;
+    }
+
+    public int getNeighborhoodSize() {
+        return 1;
+    }
+
     public void applyRule(Cell cell, ArrayList<Cell> neighborsArray, int passNum) {
-        if(passNum == 0){
+        if (passNum == 0) {
             //maintain parity between cells and list of sharks/fish
             updateLists(cell);
 
         }
 
-        if(passNum == 1){
+        if (passNum == 1) {
 
             //throw out diagonal cells
-            for (int i =0; i <  neighborsArray.size(); i ++) {
+            for (int i = 0; i < neighborsArray.size(); i++) {
                 if (neighborsArray.get(i).getCol() != cell.getCol() && neighborsArray.get(i).getRow() != cell.getRow()) {
                     neighborsArray.remove(neighborsArray.get(i));
                 }
             }
-            if(cell.getNextState() == FISH){
+            if (cell.getNextState() == FISH) {
                 Fish currentFish = getCurrentFish(cell);
-                if(currentFish != null){
+                if (currentFish != null) {
                     reproduceFish(currentFish, neighborsArray);
                     moveFish(currentFish, neighborsArray);
                 }
 
             }
-            if(cell.getNextState() == SHARK){
+            if (cell.getNextState() == SHARK) {
                 Shark currentShark = getCurrentShark(cell);
-                if(currentShark != null){
-                    if(!killShark(currentShark)){
+                if (currentShark != null) {
+                    if (!killShark(currentShark)) {
                         reproduceShark(currentShark, neighborsArray);
                         sharkEatFish(currentShark, neighborsArray);
                     }
@@ -74,30 +73,30 @@ public class PredatorPreyRule extends Rule {
         }
 
 
-
     }
 
-    private boolean killShark(Shark shark){
-        shark.setEnergy(shark.getEnergy()-1);
-        if(shark.getEnergy() <= 0){
+    private boolean killShark(Shark shark) {
+        shark.setEnergy(shark.getEnergy() - 1);
+        if (shark.getEnergy() <= 0) {
             shark.getCell().setNextState(EMPTY);
             sharkList.remove(shark);
             return true;
         }
         return false;
     }
-    private void updateLists(Cell cell){
-        if(cell.getCurrentState()==FISH){
-            for(Fish f : fishList){
-                if(f.getCell() == cell){
+
+    private void updateLists(Cell cell) {
+        if (cell.getCurrentState() == FISH) {
+            for (Fish f : fishList) {
+                if (f.getCell() == cell) {
                     return;
                 }
             }
             fishList.add(new Fish(cell));
         }
-        if(cell.getCurrentState()==SHARK){
-            for(Shark s : sharkList){
-                if(s.getCell() == cell){
+        if (cell.getCurrentState() == SHARK) {
+            for (Shark s : sharkList) {
+                if (s.getCell() == cell) {
                     return;
                 }
             }
@@ -106,15 +105,14 @@ public class PredatorPreyRule extends Rule {
     }
 
 
-
-    private void moveFish(Fish fish, ArrayList<Cell> neighbors){
+    private void moveFish(Fish fish, ArrayList<Cell> neighbors) {
         var emptyAdjacent = new ArrayList<Cell>();
-        for(Cell c : neighbors){
-            if (c.getNextState()==EMPTY){
+        for (Cell c : neighbors) {
+            if (c.getNextState() == EMPTY) {
                 emptyAdjacent.add(c);
             }
         }
-        if(emptyAdjacent.size()>0){
+        if (emptyAdjacent.size() > 0) {
             fish.getCell().setNextState(EMPTY);
             Cell destinationCell = emptyAdjacent.get(ThreadLocalRandom.current().nextInt(0, emptyAdjacent.size()));
             destinationCell.setNextState(FISH);
@@ -132,51 +130,52 @@ public class PredatorPreyRule extends Rule {
         return currentFish;
     }
 
-    private void reproduceFish(Fish fish, ArrayList<Cell> neighbors){
-        fish.setAge(fish.getAge()+1);
+    private void reproduceFish(Fish fish, ArrayList<Cell> neighbors) {
+        fish.setAge(fish.getAge() + 1);
         var emptyAdjacent = new ArrayList<Cell>();
-        for(Cell c : neighbors){
-            if (c.getNextState()==EMPTY){
+        for (Cell c : neighbors) {
+            if (c.getNextState() == EMPTY) {
                 emptyAdjacent.add(c);
             }
         }
 
-        if(fish.getAge() > FISH_REPRODUCTION_TIME && emptyAdjacent.size()>0){
+        if (fish.getAge() > FISH_REPRODUCTION_TIME && emptyAdjacent.size() > 0) {
             Cell destinationCell = emptyAdjacent.get(ThreadLocalRandom.current().nextInt(0, emptyAdjacent.size()));
             fishList.add(new Fish(destinationCell));
             destinationCell.setNextState(FISH);
             fish.setAge(0);
         }
     }
-    private void sharkEatFish(Shark shark, ArrayList<Cell> neighbors){
+
+    private void sharkEatFish(Shark shark, ArrayList<Cell> neighbors) {
         var fishNeighbors = new ArrayList<Cell>();
-        for(Cell c : neighbors){
-            if(c.getNextState() == FISH){
+        for (Cell c : neighbors) {
+            if (c.getNextState() == FISH) {
                 fishNeighbors.add(c);
             }
         }
-        if(fishNeighbors.size() > 0){
+        if (fishNeighbors.size() > 0) {
             Cell fishToEat = fishNeighbors.get(ThreadLocalRandom.current().nextInt(0, fishNeighbors.size()));
-            for(int i = 0; i < fishList.size(); i++){
-                if(fishList.get(i).getCell() == fishToEat){
+            for (int i = 0; i < fishList.size(); i++) {
+                if (fishList.get(i).getCell() == fishToEat) {
                     fishList.remove(fishList.get(i));
                 }
             }
             fishToEat.setNextState(EMPTY);
-            shark.setEnergy(shark.getEnergy()+Fish.ENERGY_YIELD);
-        }
-        else{
+            shark.setEnergy(shark.getEnergy() + Fish.ENERGY_YIELD);
+        } else {
             moveShark(shark, neighbors);
         }
     }
-    private void moveShark(Shark shark, ArrayList<Cell> neighbors){
+
+    private void moveShark(Shark shark, ArrayList<Cell> neighbors) {
         var emptyAdjacent = new ArrayList<Cell>();
-        for(Cell c : neighbors){
-            if (c.getNextState()==EMPTY){
+        for (Cell c : neighbors) {
+            if (c.getNextState() == EMPTY) {
                 emptyAdjacent.add(c);
             }
         }
-        if(emptyAdjacent.size()>0){
+        if (emptyAdjacent.size() > 0) {
             shark.getCell().setNextState(EMPTY);
             Cell destinationCell = emptyAdjacent.get(ThreadLocalRandom.current().nextInt(0, emptyAdjacent.size()));
             destinationCell.setNextState(SHARK);
@@ -184,15 +183,15 @@ public class PredatorPreyRule extends Rule {
         }
     }
 
-    private void reproduceShark(Shark shark, ArrayList<Cell> neighbors){
-        shark.setAge(shark.getAge()+1);
+    private void reproduceShark(Shark shark, ArrayList<Cell> neighbors) {
+        shark.setAge(shark.getAge() + 1);
         var emptyAdjacent = new ArrayList<Cell>();
-        for(Cell c : neighbors){
-            if (c.getNextState()==EMPTY){
+        for (Cell c : neighbors) {
+            if (c.getNextState() == EMPTY) {
                 emptyAdjacent.add(c);
             }
         }
-        if(shark.getAge() > SHARK_REPRODUCTION_TIME && emptyAdjacent.size()>0){
+        if (shark.getAge() > SHARK_REPRODUCTION_TIME && emptyAdjacent.size() > 0) {
             Cell destinationCell = emptyAdjacent.get(ThreadLocalRandom.current().nextInt(0, emptyAdjacent.size()));
             sharkList.add(new Shark(destinationCell));
             shark.setAge(0);

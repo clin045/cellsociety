@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Random;
 
 /**
- *
  * Extension of main.model.Rule to apply rules specifically for Conway's Game Of Life
  * Returns nextState for myCell
  *
@@ -17,7 +16,7 @@ public class FireRule extends Rule {
     final int EMPTY = 0;
     final double PROB_CATCH = 0.8;
 
-    public int getPasses(){
+    public int getPasses() {
         return NUM_PASSES;
     }
 
@@ -26,11 +25,11 @@ public class FireRule extends Rule {
         return 1;
     }
 
-    public void applyRule(Cell cell, ArrayList<Cell> neighborsArray,int passNum) {
+    public void applyRule(Cell cell, ArrayList<Cell> neighborsArray, int passNum) {
         boolean nearFire = false;
         //throw out diagonals
-        for (Cell c : neighborsArray){
-            if(c.getRow() != cell.getRow() && cell.getCol() != cell.getCol()){
+        for (Cell c : neighborsArray) {
+            if (c.getRow() != cell.getRow() && cell.getCol() != cell.getCol()) {
                 neighborsArray.remove(c);
             }
         }

@@ -2,6 +2,7 @@ package xml;
 
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -28,7 +29,7 @@ public class XMLParser {
     /**
      * Create a parser for XML files of given type.
      */
-    public XMLParser (String type) {
+    public XMLParser(String type) {
         DOCUMENT_BUILDER = getDocumentBuilder();
         TYPE_ATTRIBUTE = type;
     }
@@ -38,7 +39,7 @@ public class XMLParser {
      */
     public Simulation getSimulation(File dataFile) {
         var root = getRootElement(dataFile);
-        if (! isValidFile(root, Simulation.DATA_TYPE)) {
+        if (!isValidFile(root, Simulation.DATA_TYPE)) {
             throw new XMLException(ERROR_MESSAGE, Simulation.DATA_TYPE);
         }
         // read data associated with the fields given by the object
@@ -50,44 +51,41 @@ public class XMLParser {
     }
 
     // Get root element of an XML file
-    private Element getRootElement (File xmlFile) {
+    private Element getRootElement(File xmlFile) {
         try {
             DOCUMENT_BUILDER.reset();
             var xmlDocument = DOCUMENT_BUILDER.parse(xmlFile);
             return xmlDocument.getDocumentElement();
-        }
-        catch (SAXException | IOException e) {
+        } catch (SAXException | IOException e) {
             throw new XMLException(e);
         }
     }
 
     // Returns if this is a valid XML file for the specified object type
-    private boolean isValidFile (Element root, String type) {
+    private boolean isValidFile(Element root, String type) {
         return getAttribute(root, TYPE_ATTRIBUTE).equals(type);
     }
 
     // Get value of Element's attribute
-    private String getAttribute (Element e, String attributeName) {
+    private String getAttribute(Element e, String attributeName) {
         return e.getAttribute(attributeName);
     }
 
     // Get value of Element's text
-    private String getTextValue (Element e, String tagName) throws XMLException {
+    private String getTextValue(Element e, String tagName) throws XMLException {
         var nodeList = e.getElementsByTagName(tagName);
         if (nodeList != null && nodeList.getLength() > 0) {
             return nodeList.item(0).getTextContent();
-        }
-        else {
+        } else {
             return "";
         }
     }
 
     // Boilerplate code needed to make a documentBuilder
-    private DocumentBuilder getDocumentBuilder () {
+    private DocumentBuilder getDocumentBuilder() {
         try {
             return DocumentBuilderFactory.newInstance().newDocumentBuilder();
-        }
-        catch (ParserConfigurationException e) {
+        } catch (ParserConfigurationException e) {
             throw new XMLException(e);
         }
     }

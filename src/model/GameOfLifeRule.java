@@ -3,7 +3,6 @@ package model;
 import java.util.ArrayList;
 
 /**
- *
  * Extension of main.model.Rule to apply rules specifically for Conway's Game Of Life
  * Returns nextState for myCell
  *
@@ -14,12 +13,14 @@ public class GameOfLifeRule extends Rule {
     final int ALIVE = 1;
     final int DEAD = 0;
 
-    public int getPasses(){
+    public int getPasses() {
         return NUM_PASSES;
     }
-    public int getNeighborhoodSize(){
+
+    public int getNeighborhoodSize() {
         return 1;
     }
+
     public void applyRule(Cell cell, ArrayList<Cell> neighborsArray, int passNum) {
         int liveNeighborsCount = 0;
         for (Cell neighbor : neighborsArray) {
@@ -34,7 +35,7 @@ public class GameOfLifeRule extends Rule {
                 cell.setNextState(ALIVE);
             }
             // find next state of dead cells
-        } else{
+        } else {
             if (liveNeighborsCount == 3) {
                 cell.setNextState(ALIVE);
             } else {

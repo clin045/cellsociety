@@ -104,13 +104,15 @@ public class Simulation {
         validSimulationNames[7] = "SugarScape";
 
         for (String validName : validSimulationNames) {
-            if (name.equals(validName)) { return true; }
+            if (name.equals(validName)) {
+                return true;
+            }
         }
         return false;
     }
 
     // provide getters, not setters
-    public String getSimulationName () throws XMLException {
+    public String getSimulationName() throws XMLException {
         if (isValidSimName(mySimulationName)) {
             return mySimulationName;
         } else {
@@ -118,15 +120,15 @@ public class Simulation {
         }
     }
 
-    public String getTitle () {
+    public String getTitle() {
         return myTitle;
     }
 
-    public String getAuthor () {
+    public String getAuthor() {
         return myAuthor;
     }
 
-    public int getCols () {
+    public int getCols() {
         if (myCols != 0) {
             return Math.abs(myCols);
         } else {
@@ -134,7 +136,7 @@ public class Simulation {
         }
     }
 
-    public int getRows () {
+    public int getRows() {
         if (myRows != 0) {
             return Math.abs(myRows);
         } else {
@@ -142,7 +144,7 @@ public class Simulation {
         }
     }
 
-    public int[][] getConfigs () {
+    public int[][] getConfigs() {
         if (myConfigs.length() + 1 == 2 * getCols() * getRows()) {
             return stringToIntArray(myConfigs);
         } else {
@@ -150,11 +152,11 @@ public class Simulation {
         }
     }
 
-    public int[][] getNeighborCoordinates () {
+    public int[][] getNeighborCoordinates() {
         return stringToIntArray(myNeighbors);
     }
 
-    public String getColors () {
+    public String getColors() {
         return myColors;
     }
 
@@ -162,7 +164,7 @@ public class Simulation {
      * @see Object#toString()
      */
     @Override
-    public String toString () {
+    public String toString() {
         var result = new StringBuilder();
         result.append(DATA_TYPE + " {\n");
         for (var e : myDataValues.entrySet()) {
