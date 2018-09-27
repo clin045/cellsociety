@@ -72,13 +72,12 @@ public class XMLParser {
     }
 
     // Get value of Element's text
-    private String getTextValue (Element e, String tagName) {
+    private String getTextValue (Element e, String tagName) throws XMLException {
         var nodeList = e.getElementsByTagName(tagName);
         if (nodeList != null && nodeList.getLength() > 0) {
             return nodeList.item(0).getTextContent();
         }
         else {
-            // FIXME: empty string or null, is it an error to not find the text value?
             return "";
         }
     }

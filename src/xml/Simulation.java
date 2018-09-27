@@ -1,6 +1,5 @@
 package xml;
 
-import java.awt.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +23,7 @@ public class Simulation {
             "cols",
             "rows",
             "configs",
+            "neighbors",
             "colors"
     );
 
@@ -34,6 +34,7 @@ public class Simulation {
     private int myRows;
     private int myCols;
     private String myConfigs;
+    private String myNeighbors;
     private String myColors;
     // NOTE: keep just as an example for converting toString(), otherwise not used
     private Map<String, String> myDataValues;
@@ -42,12 +43,13 @@ public class Simulation {
     /**
      * Create game data from given data.
      */
-    public Simulation(String simulationName, String title, String author, int rows, int cols, String configs, String colors) {
+    public Simulation(String simulationName, String title, String author, int rows, int cols, String configs, String neighbors, String colors) {
         mySimulationName = simulationName;
         myTitle = title;
         myAuthor = author;
         myRows = rows;
         myCols = cols;
+        myNeighbors = neighbors;
         myConfigs = configs;
         myColors = colors;
         // NOTE: this is useful so our code does not fail due to a NullPointerException
@@ -66,24 +68,54 @@ public class Simulation {
                 Integer.parseInt(dataValues.get(DATA_FIELDS.get(3))),
                 Integer.parseInt(dataValues.get(DATA_FIELDS.get(4))),
                 dataValues.get(DATA_FIELDS.get(5)),
-                dataValues.get(DATA_FIELDS.get(6)));
+                dataValues.get(DATA_FIELDS.get(6)),
+                dataValues.get(DATA_FIELDS.get(7)));
         myDataValues = dataValues;
     }
 
-    private int[] StringToIntArray(String arrayString) {
+    private int[][] stringToIntArray(String arrayString) {
         String[] integerStringArray = arrayString.split(",");
-        int[] result = new int[integerStringArray.length];
+        int[] oneDimArray = new int[integerStringArray.length];
         int counter = 0;
         for (String s : integerStringArray) {
-            result[counter] = Integer.parseInt(s);
+            oneDimArray[counter] = Integer.parseInt(s);
             counter++;
         }
-        return result;
+        counter = 0;
+        int[][] resultArray = new int[myRows][myCols];
+        for (int i = 0; i < myRows; i++) {
+            for (int j = 0; j < myCols; j++) {
+                resultArray[i][j] = oneDimArray[counter];
+                counter++;
+            }
+        }
+        return resultArray;
+    }
+
+    private boolean isValidSimName(String name) {
+        String[] validSimulationNames = new String[8];
+        validSimulationNames[0] = "Game of Life";
+        validSimulationNames[1] = "Segregation";
+        validSimulationNames[2] = "Predator Prey";
+        validSimulationNames[3] = "Fire";
+        validSimulationNames[4] = "Rock, Paper, Scissors";
+        validSimulationNames[5] = "Foraging Ants";
+        validSimulationNames[6] = "Langton's Loop";
+        validSimulationNames[7] = "SugarScape";
+
+        for (String validName : validSimulationNames) {
+            if (name.equals(validName)) { return true; }
+        }
+        return false;
     }
 
     // provide getters, not setters
-    public String getSimulationName () {
-        return mySimulationName;
+    public String getSimulationName () throws XMLException {
+        if (isValidSimName(mySimulationName)) {
+            return mySimulationName;
+        } else {
+            throw new XMLException("Invalid Simulation Name");
+        }
     }
 
     public String getTitle () {
@@ -95,24 +127,31 @@ public class Simulation {
     }
 
     public int getCols () {
-        return myCols;
+        if (myCols != 0) {
+            return Math.abs(myCols);
+        } else {
+            throw new XMLException("Number of Columns must be nonzero");
+        }
     }
 
     public int getRows () {
-        return myRows;
+        if (myRows != 0) {
+            return Math.abs(myRows);
+        } else {
+            throw new XMLException("Number of Rows must be nonzero");
+        }
     }
 
     public int[][] getConfigs () {
-        int[] configs = StringToIntArray(myConfigs);
-        int counter = 0;
-        int[][] resultConfigs = new int[myRows][myCols];
-        for (int i = 0; i < myRows; i++) {
-            for (int j = 0; j < myCols; j++) {
-                resultConfigs[i][j] = configs[counter];
-                counter++;
-            }
+        if (myConfigs.length() + 1 == 2 * getCols() * getRows()) {
+            return stringToIntArray(myConfigs);
+        } else {
+            throw new XMLException("Coordinates do not match row/column input size");
         }
-        return resultConfigs;
+    }
+
+    public int[][] getNeighborCoordinates () {
+        return stringToIntArray(myNeighbors);
     }
 
     public String getColors () {
