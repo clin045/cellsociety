@@ -10,11 +10,11 @@ import java.util.Random;
  * @author Scott McConnell skm44
  **/
 public class FireRule extends Rule {
-    final int NUM_PASSES = 1;
-    final int BURNING = 2;
-    final int TREE = 1;
-    final int EMPTY = 0;
-    final double PROB_CATCH = 0.8;
+    static final int NUM_PASSES = 1;
+    static final int BURNING = 2;
+    static final int TREE = 1;
+    static final int EMPTY = 0;
+    static final double PROB_CATCH = 0.8;
 
     public int getPasses() {
         return NUM_PASSES;

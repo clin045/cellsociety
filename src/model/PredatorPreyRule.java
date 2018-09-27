@@ -14,12 +14,12 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class PredatorPreyRule extends Rule {
 
-    public final static int PASSES = 2;
-    public final int EMPTY = 0;
-    public final int SHARK = 1;
-    public final int FISH = 2;
-    public final int FISH_REPRODUCTION_TIME = 4;
-    public final int SHARK_REPRODUCTION_TIME = 12;
+    final static int PASSES = 2;
+    final int EMPTY = 0;
+    final int SHARK = 1;
+    final int FISH = 2;
+    final int FISH_REPRODUCTION_TIME = 4;
+    final int SHARK_REPRODUCTION_TIME = 12;
     private ArrayList<Fish> fishList;
     private ArrayList<Shark> sharkList;
 

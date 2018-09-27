@@ -10,13 +10,12 @@ import java.util.ArrayList;
  **/
 
 public class SegregationRule extends Rule {
-    final int NUM_PASSES = 2;
-
-    final int VACANT = 0;
-    final int BLUE = 1;
-    final int RED = 2;
-    final int UNSATISFIED = 3;
-    final double PERCENT_SIMILAR_TOLERANCE = 0.3;
+    static final int NUM_PASSES = 2;
+    static final int VACANT = 0;
+    static final int BLUE = 1;
+    static final int RED = 2;
+    static final int UNSATISFIED = 3;
+    static final double PERCENT_SIMILAR_TOLERANCE = 0.3;
 
     private int unallocated_blue = 0;
     private int unallocated_red = 0;

@@ -9,9 +9,9 @@ import java.util.ArrayList;
  * @author Scott McConnell skm44
  **/
 public class GameOfLifeRule extends Rule {
-    final int NUM_PASSES = 1;
-    final int ALIVE = 1;
-    final int DEAD = 0;
+    static final int NUM_PASSES = 1;
+    static final int ALIVE = 1;
+    static final int DEAD = 0;
 
     public int getPasses() {
         return NUM_PASSES;
