@@ -91,33 +91,29 @@ public class UIManager extends Application {
     }
 
     private void initializeWindow(){
-        try {
-            Simulation configs = new XMLParser("media").getSimulation(chosen);
-            rows = configs.getRows();
-            columns = configs.getCols();
-            int[][] initialStates = configs.getConfigs();
-            colors = configs.getColors().split(",");
+        Simulation configs = new XMLParser("media").getSimulation(chosen);
+        rows = configs.getRows();
+        columns = configs.getCols();
+        int[][] initialStates = configs.getConfigs();
+        colors = configs.getColors().split(",");
 
-            GridPane rootPane = new GridPane();
-            rootPane.setPadding(new Insets(10, 10, 10, 10));
-            rootPane.setMinSize(600, 600);
-            rootPane.setAlignment(Pos.CENTER);
+        GridPane rootPane = new GridPane();
+        rootPane.setPadding(new Insets(10, 10, 10, 10));
+        rootPane.setMinSize(600, 600);
+        rootPane.setAlignment(Pos.CENTER);
 
-            GridPane titleBlock = createTitleBlock(configs);
-            createAnimationBlock(initialStates);
-            FlowPane controls = createControlsBlock();
+        GridPane titleBlock = createTitleBlock(configs);
+        createAnimationBlock(initialStates);
+        FlowPane controls = createControlsBlock();
 
-            rootPane.add(titleBlock, 0, 0);
-            rootPane.add(simulatorGridPane, 0, 1);
-            rootPane.add(controls, 0, 2);
+        rootPane.add(titleBlock, 0, 0);
+        rootPane.add(simulatorGridPane, 0, 1);
+        rootPane.add(controls, 0, 2);
 
-            RuleInterface myRule = findSimulationType(configs.getSimulationName());
-            myCellManager.initializeGrid(rows, columns, initialStates, myRule);
+        RuleInterface myRule = findSimulationType(configs.getSimulationName());
+        myCellManager.initializeGrid(rows, columns, initialStates, myRule);
 
-            myStage.setScene(new Scene(rootPane));
-        } catch (XMLException e) {
-            throw e;
-        }
+        myStage.setScene(new Scene(rootPane));
     }
 
     private RuleInterface findSimulationType(String name){
