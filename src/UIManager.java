@@ -26,6 +26,7 @@ import java.util.ResourceBundle;
 
 /**
  * This class manages the UI and interacts with the XML parser and the cell manager.
+ *
  * @author Allen Qiu (asq3)
  */
 public class UIManager extends Application {
@@ -41,7 +42,11 @@ public class UIManager extends Application {
     private Timeline animation = new Timeline();
     private Stage myStage;
 
-    public void start(Stage stage){
+    public static void main(String args[]) {
+        launch(args);
+    }
+
+    public void start(Stage stage) {
         myStage = stage;
 
         Text chooseFileLabel = new Text(myResources.getString("ChooseFileLabel"));
@@ -55,7 +60,7 @@ public class UIManager extends Application {
             myFileChooser.getExtensionFilters().add(xmlFilter);
             myFileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
             chosen = myFileChooser.showOpenDialog(myStage);
-            if(chosen != null){
+            if (chosen != null) {
                 fileName.setText(chosen.getName());
             }
         });
@@ -70,7 +75,7 @@ public class UIManager extends Application {
         myGridPane.setHgap(5);
         myGridPane.setAlignment(Pos.CENTER);
 
-        myGridPane.add(chooseFileLabel, 0,0);
+        myGridPane.add(chooseFileLabel, 0, 0);
         myGridPane.add(fileName, 0, 1);
         myGridPane.add(loadButton, 1, 1);
         myGridPane.add(startButton, 0, 2);
@@ -82,7 +87,7 @@ public class UIManager extends Application {
         myStage.show();
     }
 
-    private void createSimulator(){
+    private void createSimulator() {
         initializeWindow();
 
         var frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e -> step());
@@ -92,7 +97,7 @@ public class UIManager extends Application {
 
     }
 
-    private void initializeWindow(){
+    private void initializeWindow() {
         Simulation configs = new XMLParser("media").getSimulation(chosen);
         rows = configs.getRows();
         columns = configs.getCols();
@@ -118,24 +123,21 @@ public class UIManager extends Application {
         myStage.setScene(new Scene(rootPane));
     }
 
-    private Rule findSimulationType(String name){
+    private Rule findSimulationType(String name) {
         Rule myRule;
-        if(name.compareToIgnoreCase("Game of Life") == 0){
+        if (name.compareToIgnoreCase("Game of Life") == 0) {
             myRule = new GameOfLifeRule();
-        }
-        else if(name.compareToIgnoreCase("Predator Prey") == 0){
+        } else if (name.compareToIgnoreCase("Predator Prey") == 0) {
             myRule = new PredatorPreyRule();
-        }
-        else if(name.compareToIgnoreCase("Fire") == 0){
+        } else if (name.compareToIgnoreCase("Fire") == 0) {
             myRule = new FireRule();
-        }
-        else {
+        } else {
             myRule = new SegregationRule();
         }
         return myRule;
     }
 
-    private GridPane createTitleBlock(Simulation configs){
+    private GridPane createTitleBlock(Simulation configs) {
         Label title = new Label(configs.getTitle());
         Label author = new Label(configs.getAuthor());
         Label simulationName = new Label(configs.getSimulationName());
@@ -153,17 +155,17 @@ public class UIManager extends Application {
         return displayInfo;
     }
 
-    private void createAnimationBlock(int[][] initialStates){
+    private void createAnimationBlock(int[][] initialStates) {
         simulatorGridPane = new GridPane();
         simulatorGridPane.setAlignment(Pos.CENTER);
-        for(int i=0;i<rows;i++){
-            for(int j=0;j<columns;j++){
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++) {
                 simulatorGridPane.add(createCell(colors[initialStates[i][j]], rows, columns), i, j);
             }
         }
     }
 
-    private FlowPane createControlsBlock(){
+    private FlowPane createControlsBlock() {
         FlowPane controls = new FlowPane();
         controls.setPadding(new Insets(10, 10, 10, 10));
         controls.setAlignment(Pos.CENTER);
@@ -217,10 +219,10 @@ public class UIManager extends Application {
         return null;
     }
 
-    private void step(){
+    private void step() {
         myCellManager.nextGeneration();
-        for(int i=0;i<rows;i++){
-            for(int j=0;j<columns;j++){
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++) {
                 BorderPane thisCellPane = (BorderPane) getNodeFromGridPane(i, j);
                 Cell thisCell = myCellManager.getGrid().getCell(i, j);
                 if (thisCellPane != null) {
@@ -230,15 +232,15 @@ public class UIManager extends Application {
         }
     }
 
-    private void updateCellAppearance(String color, BorderPane myCell){
+    private void updateCellAppearance(String color, BorderPane myCell) {
         myCell.setStyle("-fx-border-color: #000000;" +
                 "-fx-background-color: #" + color + ";" +
                 "-fx-border-width: 1;");
     }
 
-    private BorderPane createCell(String color, int rows, int columns){
+    private BorderPane createCell(String color, int rows, int columns) {
         BorderPane cell = new BorderPane();
-        int cellSize = 500/Math.max(rows, columns);
+        int cellSize = 500 / Math.max(rows, columns);
         cell.setMinSize(cellSize, cellSize);
         cell.setStyle("-fx-border-color: #000000;" +
                 "-fx-background-color: #" + color + ";" +
@@ -252,24 +254,19 @@ public class UIManager extends Application {
         return cell;
     }
 
-    private void toggleNextState(BorderPane cell){
+    private void toggleNextState(BorderPane cell) {
         int numStates = colors.length;
         System.out.println(numStates);
         Cell thisCell = myCellManager.getGrid().getCell(GridPane.getColumnIndex(cell), GridPane.getRowIndex(cell));
         System.out.println(thisCell.getCurrentState());
-        if(thisCell.getCurrentState() ==  numStates-1){
+        if (thisCell.getCurrentState() == numStates - 1) {
             //recircle
             thisCell.setCurrentState(0);
             thisCell.setNextState(0);
-        }
-        else {
-            thisCell.setNextState(thisCell.getCurrentState()+1);
-            thisCell.setCurrentState(thisCell.getCurrentState()+1);
+        } else {
+            thisCell.setNextState(thisCell.getCurrentState() + 1);
+            thisCell.setCurrentState(thisCell.getCurrentState() + 1);
         }
         updateCellAppearance(colors[thisCell.getNextState()], cell);
-    }
-
-    public static void main(String args[]){
-        launch(args);
     }
 }
