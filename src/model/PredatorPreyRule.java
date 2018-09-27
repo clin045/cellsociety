@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -36,7 +37,7 @@ public class PredatorPreyRule extends Rule {
         return 1;
     }
 
-    public void applyRule(Cell cell, ArrayList<Cell> neighborsArray, int passNum) {
+    public void applyRule(Cell cell, List<Cell> neighborsArray, int passNum) {
         if (passNum == 0) {
             //maintain parity between cells and list of sharks/fish
             updateLists(cell);
@@ -54,7 +55,7 @@ public class PredatorPreyRule extends Rule {
         }
     }
 
-    private void handleShark(Cell cell, ArrayList<Cell> neighborsArray) {
+    private void handleShark(Cell cell, List<Cell> neighborsArray) {
         Shark currentShark = getCurrentShark(cell);
         if (currentShark != null && !killShark(currentShark)) {
                 reproduceShark(currentShark, neighborsArray);
@@ -62,7 +63,7 @@ public class PredatorPreyRule extends Rule {
         }
     }
 
-    private void handleFish(Cell cell, ArrayList<Cell> neighborsArray) {
+    private void handleFish(Cell cell, List<Cell> neighborsArray) {
         Fish currentFish = getCurrentFish(cell);
         if (currentFish != null) {
             reproduceFish(currentFish, neighborsArray);
@@ -70,7 +71,7 @@ public class PredatorPreyRule extends Rule {
         }
     }
 
-    private void throwOutDiagonals(Cell cell, ArrayList<Cell> neighborsArray) {
+    private void throwOutDiagonals(Cell cell, List<Cell> neighborsArray) {
         for (int i = 0; i < neighborsArray.size(); i++) {
             if (neighborsArray.get(i).getCol() != cell.getCol() && neighborsArray.get(i).getRow() != cell.getRow()) {
                 neighborsArray.remove(neighborsArray.get(i));
@@ -108,7 +109,7 @@ public class PredatorPreyRule extends Rule {
     }
 
 
-    private void moveFish(Fish fish, ArrayList<Cell> neighbors) {
+    private void moveFish(Fish fish, List<Cell> neighbors) {
         var emptyAdjacent = new ArrayList<Cell>();
         for (Cell c : neighbors) {
             if (c.getNextState() == EMPTY) {
@@ -133,7 +134,7 @@ public class PredatorPreyRule extends Rule {
         return currentFish;
     }
 
-    private void reproduceFish(Fish fish, ArrayList<Cell> neighbors) {
+    private void reproduceFish(Fish fish, List<Cell> neighbors) {
         fish.setAge(fish.getAge() + 1);
         var emptyAdjacent = new ArrayList<Cell>();
         for (Cell c : neighbors) {
@@ -150,7 +151,7 @@ public class PredatorPreyRule extends Rule {
         }
     }
 
-    private void sharkEatFish(Shark shark, ArrayList<Cell> neighbors) {
+    private void sharkEatFish(Shark shark, List<Cell> neighbors) {
         var fishNeighbors = new ArrayList<Cell>();
         for (Cell c : neighbors) {
             if (c.getNextState() == FISH) {
@@ -171,7 +172,7 @@ public class PredatorPreyRule extends Rule {
         }
     }
 
-    private void moveShark(Shark shark, ArrayList<Cell> neighbors) {
+    private void moveShark(Shark shark, List<Cell> neighbors) {
         var emptyAdjacent = new ArrayList<Cell>();
         for (Cell c : neighbors) {
             if (c.getNextState() == EMPTY) {
@@ -186,7 +187,7 @@ public class PredatorPreyRule extends Rule {
         }
     }
 
-    private void reproduceShark(Shark shark, ArrayList<Cell> neighbors) {
+    private void reproduceShark(Shark shark, List<Cell> neighbors) {
         shark.setAge(shark.getAge() + 1);
         var emptyAdjacent = new ArrayList<Cell>();
         for (Cell c : neighbors) {

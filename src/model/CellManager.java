@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class is responsible for managing the myGrid and editing cell states
@@ -56,7 +57,7 @@ public class CellManager {
             for (int i = 0; i < myRowSize; i++) {
                 for (int j = 0; j < myColSize; j++) {
                     Cell currentCell = myGrid.getCell(i, j);
-                    ArrayList<Cell> neighborList = myGrid.getNeighbors(currentCell);
+                    List neighborList = myGrid.getNeighbors(currentCell);
                     myActiveRule.applyRule(currentCell, neighborList, k);
 
                 }

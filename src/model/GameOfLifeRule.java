@@ -1,6 +1,6 @@
 package model;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Extension of main.model.Rule to apply rules specifically for Conway's Game Of Life
@@ -24,7 +24,7 @@ public class GameOfLifeRule extends Rule {
         return 1;
     }
 
-    public void applyRule(Cell cell, ArrayList<Cell> neighborsArray, int passNum) {
+    public void applyRule(Cell cell, List<Cell> neighborsArray, int passNum) {
         int liveNeighborsCount = 0;
         for (Cell neighbor : neighborsArray) {
             liveNeighborsCount += neighbor.getCurrentState();

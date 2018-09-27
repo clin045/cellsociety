@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public abstract class Grid {
     public final static int STATIC = 0;
@@ -34,7 +35,7 @@ public abstract class Grid {
         return myStateList;
     }
 
-    public abstract ArrayList<Cell> getNeighbors(Cell cell);
+    public abstract List getNeighbors(Cell cell);
 
     public abstract Cell getCell(int row, int col);
 

@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -25,7 +26,7 @@ public class FireRule extends Rule {
         return 1;
     }
 
-    public void applyRule(Cell cell, ArrayList<Cell> neighborsArray, int passNum) {
+    public void applyRule(Cell cell, List<Cell> neighborsArray, int passNum) {
         boolean nearFire = false;
         //throw out diagonals
         for (Cell c : neighborsArray) {

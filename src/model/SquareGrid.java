@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class SquareGrid extends Grid {
 
@@ -16,7 +17,7 @@ public class SquareGrid extends Grid {
     }
 
     @Override
-    public ArrayList<Cell> getNeighbors(Cell cell) {
+    public List getNeighbors(Cell cell) {
         ArrayList<Cell> neighbors = new ArrayList<>();
         for (int i = cell.getRow() - 1; i <= cell.getRow() + 1; i++) {
             for (int j = cell.getCol() - 1; j <= cell.getCol() + 1; j++) {
