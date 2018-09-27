@@ -1,7 +1,7 @@
 package model;
 
 public class Shark {
-    public static int STARTING_ENERGY = 3;
+    final static int STARTING_ENERGY = 3;
     Cell myCell;
     int myAge = 0;
     int myEnergy;
