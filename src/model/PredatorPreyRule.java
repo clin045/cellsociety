@@ -15,11 +15,11 @@ import java.util.concurrent.ThreadLocalRandom;
 public class PredatorPreyRule extends Rule {
 
     final static int PASSES = 2;
-    final int EMPTY = 0;
-    final int SHARK = 1;
-    final int FISH = 2;
-    final int FISH_REPRODUCTION_TIME = 4;
-    final int SHARK_REPRODUCTION_TIME = 12;
+    static final int EMPTY = 0;
+    static final int SHARK = 1;
+    static final int FISH = 2;
+    static final int FISH_REPRODUCTION_TIME = 4;
+    static final int SHARK_REPRODUCTION_TIME = 12;
     private ArrayList<Fish> fishList;
     private ArrayList<Shark> sharkList;
 
@@ -40,37 +40,42 @@ public class PredatorPreyRule extends Rule {
         if (passNum == 0) {
             //maintain parity between cells and list of sharks/fish
             updateLists(cell);
-
         }
-
         if (passNum == 1) {
-
             //throw out diagonal cells
-            for (int i = 0; i < neighborsArray.size(); i++) {
-                if (neighborsArray.get(i).getCol() != cell.getCol() && neighborsArray.get(i).getRow() != cell.getRow()) {
-                    neighborsArray.remove(neighborsArray.get(i));
-                }
-            }
+            throwOutDiagonals(cell, neighborsArray);
             if (cell.getNextState() == FISH) {
-                Fish currentFish = getCurrentFish(cell);
-                if (currentFish != null) {
-                    reproduceFish(currentFish, neighborsArray);
-                    moveFish(currentFish, neighborsArray);
-                }
+                handleFish(cell, neighborsArray);
 
             }
             if (cell.getNextState() == SHARK) {
-                Shark currentShark = getCurrentShark(cell);
-                if (currentShark != null && !killShark(currentShark)) {
-                        reproduceShark(currentShark, neighborsArray);
-                        sharkEatFish(currentShark, neighborsArray);
-                }
-
+                handleShark(cell, neighborsArray);
             }
-
         }
+    }
 
+    private void handleShark(Cell cell, ArrayList<Cell> neighborsArray) {
+        Shark currentShark = getCurrentShark(cell);
+        if (currentShark != null && !killShark(currentShark)) {
+                reproduceShark(currentShark, neighborsArray);
+                sharkEatFish(currentShark, neighborsArray);
+        }
+    }
 
+    private void handleFish(Cell cell, ArrayList<Cell> neighborsArray) {
+        Fish currentFish = getCurrentFish(cell);
+        if (currentFish != null) {
+            reproduceFish(currentFish, neighborsArray);
+            moveFish(currentFish, neighborsArray);
+        }
+    }
+
+    private void throwOutDiagonals(Cell cell, ArrayList<Cell> neighborsArray) {
+        for (int i = 0; i < neighborsArray.size(); i++) {
+            if (neighborsArray.get(i).getCol() != cell.getCol() && neighborsArray.get(i).getRow() != cell.getRow()) {
+                neighborsArray.remove(neighborsArray.get(i));
+            }
+        }
     }
 
     private boolean killShark(Shark shark) {
