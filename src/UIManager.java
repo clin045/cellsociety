@@ -22,6 +22,7 @@ import xml.Simulation;
 import xml.XMLParser;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.ResourceBundle;
 
 /**

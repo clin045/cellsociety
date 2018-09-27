@@ -8,6 +8,8 @@ public abstract class Grid {
 
     protected Cell[][] myGrid;
 
+
+
     public int getRowSize() {
         return myRowSize;
     }
@@ -23,11 +25,17 @@ public abstract class Grid {
     private int myRowSize;
     private int myColSize;
     private int myEdgeType;
+    protected int[] myStateList;
 
-    Grid(int rowSize, int colSize, int edgeType){
+    Grid(int rowSize, int colSize, int edgeType, int numStates){
         myRowSize = rowSize;
         myColSize = colSize;
         myEdgeType = edgeType;
+        myStateList = new int[numStates];
+    }
+
+    public int[] getStateList(){
+        return myStateList;
     }
 
     public abstract ArrayList<Cell> getNeighbors(Cell cell);

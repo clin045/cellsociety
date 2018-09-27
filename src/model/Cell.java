@@ -6,39 +6,43 @@ The basic unit of a CA.
 @author Christopher Lin cl349
  */
 public class Cell {
-    private int currentState;
-    private int nextState;
-    private int row;
-    private int col;
+    private int myCurrentState;
+    private int myNextState;
+    private int myRow;
+    private int myCol;
+    private int myGridStateList[];
 
 
     public int getRow() {
-        return row;
+        return myRow;
     }
 
     public int getCol() {
-        return col;
+        return myCol;
     }
 
     public int getCurrentState() {
-        return currentState;
+        return myCurrentState;
     }
 
     public void setCurrentState(int currentState) {
-        this.currentState = currentState;
+        this.myCurrentState = currentState;
     }
 
     public int getNextState() {
-        return nextState;
+        return myNextState;
     }
 
     public void setNextState(int nextState) {
-        this.nextState = nextState;
+        myGridStateList[myNextState] --;
+        myNextState = nextState;
+        myGridStateList[nextState] ++;
     }
 
-    Cell(int row, int col, int initState){
-        this.row = row;
-        this.col = col;
-        this.currentState = initState;
+    Cell(int row, int col, int initState, int[] gridStateList){
+        myRow = row;
+        myCol = col;
+        myCurrentState = initState;
+        myGridStateList = gridStateList;
     }
 }

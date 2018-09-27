@@ -4,12 +4,13 @@ import java.util.ArrayList;
 
 public class SquareGrid extends Grid {
 
-    SquareGrid(int rowSize, int colSize, int[][] initialConditions, int edgeType){
-        super(rowSize, colSize, edgeType);
+    SquareGrid(int rowSize, int colSize, int[][] initialConditions, int edgeType, int numStates){
+        super(rowSize, colSize, edgeType, numStates);
         myGrid = new Cell[rowSize][colSize];
         for(int i = 0; i < rowSize; i ++){
             for(int j = 0; j < colSize; j++){
-                myGrid[i][j] = new Cell(i,j,initialConditions[i][j]);
+                myGrid[i][j] = new Cell(i,j,initialConditions[i][j], myStateList);
+                myStateList[initialConditions[i][j]] += 1;
             }
         }
     }
