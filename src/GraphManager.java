@@ -1,6 +1,6 @@
 public class GraphManager {
 
-    GraphManager(){
+    GraphManager() {
 
     }
 }

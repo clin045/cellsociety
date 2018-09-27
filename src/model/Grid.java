@@ -11,6 +11,7 @@ public abstract class Grid {
     private int myRowSize;
     private int myColSize;
     private int myEdgeType;
+
     Grid(int rowSize, int colSize, int edgeType, int numStates) {
         myRowSize = rowSize;
         myColSize = colSize;

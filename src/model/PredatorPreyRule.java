@@ -58,8 +58,8 @@ public class PredatorPreyRule extends Rule {
     private void handleShark(Cell cell, List<Cell> neighborsArray) {
         Shark currentShark = getCurrentShark(cell);
         if (currentShark != null && !killShark(currentShark)) {
-                reproduceShark(currentShark, neighborsArray);
-                sharkEatFish(currentShark, neighborsArray);
+            reproduceShark(currentShark, neighborsArray);
+            sharkEatFish(currentShark, neighborsArray);
         }
     }
 
