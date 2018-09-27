@@ -1,16 +1,16 @@
 Part 1
 ===
 1. What is an implementation decision that your design is encapsulating (i.e., hiding) for other areas of the program?
-    - CellManager is solely responsible for editing cell states; it passes the Rule object a cell and a list of its neighbors, and recieves
+    - model.CellManager is solely responsible for editing cell states; it passes the Rule object a cell and a list of its neighbors, and recieves
     the next state as an output, which it then passes to the cell.
 2. What inheritance hierarchies are you intending to build within your area and what behavior are they based around?
-    - Rule objects implement the RuleInterface, since they all have the same method of taking in a cell and its neighbors
+    - Rule objects implement the model.Rule, since they all have the same method of taking in a cell and its neighbors
     and producing a next state. 
 3. What parts within your area are you trying to make closed and what parts open to take advantage of this polymorphism you are creating?
     - By implementing rules as an interface, the simulation rules are open for extension, but the interaction with
-    CellManager remain the same.
+    model.CellManager remain the same.
 4. What exceptions (error cases) might occur in your area and how will you handle them (or not, by throwing)?
-    - There is the isEdge() function in CellManager, which detects when a cell's neighborhood runs off
+    - There is the isEdge() function in model.CellManager, which detects when a cell's neighborhood runs off
     the edge of the grid. Before applying rules, isEdge() is checked so that these edge cases can be
     easily handled. 
 5. Why do you think your design is good (also define what your measure of good is)?
@@ -25,9 +25,9 @@ Part 2
     - They're dependent on other classes passing in the right parameters. Otherwise, no. 
 3. How can you minimize these dependencies?
     - The messiest interaction is with the implementation of each specific simulation, and these interactions 
-    are simplified by CellManager interacting with an interface. 
+    are simplified by model.CellManager interacting with an interface. 
 4. Go over one pair of super/sub classes in detail to see if there is room for improvement. 
-    - GameOfLifeRule implements RuleInterface. The biggest weakness of this design is that the rule is only aware of 
+    - model.GameOfLifeRule implements model.Rule. The biggest weakness of this design is that the rule is only aware of 
     its local neighborhood, making rulesets like Segregation inelegant to implement. 
 5. Focus on what things they have in common (these go in the superclass) and what about them varies (these go in the subclass).
     - Rules basically have nothing in common except that they generate a nextState for each cell. 

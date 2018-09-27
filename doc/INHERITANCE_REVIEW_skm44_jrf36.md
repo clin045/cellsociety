@@ -1,4 +1,4 @@
-# Cell Society: Inheritance Review Questions/Answers (skm44, jrf36)
+# model.Cell Society: Inheritance Review Questions/Answers (skm44, jrf36)
 
 Part 1
 =======
