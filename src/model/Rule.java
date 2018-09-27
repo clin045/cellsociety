@@ -1,6 +1,6 @@
 package model;
 
-import java.util.ArrayList;
+
 import java.util.List;
 
 //TODO: change documentation
@@ -14,7 +14,7 @@ import java.util.List;
  * * @author Christopher Lin cl349
  **/
 public abstract class Rule {
-
+    final int NUM_STATES = 0;
     public abstract void applyRule(Cell myCell, List<Cell> myNeighbors, int passNum);
 
     public abstract int getNeighborhoodSize();

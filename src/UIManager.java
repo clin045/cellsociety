@@ -17,13 +17,18 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-import model.*;
+import model.CellManager;
+import model.GameOfLifeRule;
+import model.PredatorPreyRule;
+import model.Rule;
+import model.SegregationRule;
+import model.FireRule;
+import model.Cell;
 import xml.Simulation;
 import xml.XMLException;
 import xml.XMLParser;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.ResourceBundle;
 
 /**
@@ -33,6 +38,7 @@ import java.util.ResourceBundle;
 public class UIManager extends Application {
     private static final double MILLISECOND_DELAY = 300;
     private static final int WINDOW_SIZE = 600;
+    private static final int USABLE_WINDOW_SIZE = 500;
     private static final int PADDING_SIZE = 10;
     private static final int HORIZONTAL_GUI_GAP = 5;
     private static final int VERTICAAL_GUI_GAP = 5;
@@ -263,7 +269,7 @@ public class UIManager extends Application {
 
     private BorderPane createCell(String color, int rows, int columns){
         BorderPane cell = new BorderPane();
-        int cellSize = (WINDOW_SIZE-100)/Math.max(rows, columns);
+        int cellSize = USABLE_WINDOW_SIZE/Math.max(rows, columns);
         cell.setMinSize(cellSize, cellSize);
         cell.setStyle("-fx-border-color: #000000;" +
                 "-fx-background-color: #" + color + ";" +
