@@ -1,12 +1,16 @@
 package model;
 
-import model.Cell;
-
 public class Shark {
+    public static int STARTING_ENERGY = 3;
     Cell myCell;
     int myAge = 0;
-    int myEnergy = 3;
+    int myEnergy;
 
+
+    Shark(Cell cell) {
+        myCell = cell;
+        myEnergy = STARTING_ENERGY;
+    }
 
     public int getEnergy() {
         return myEnergy;
@@ -16,16 +20,11 @@ public class Shark {
         this.myEnergy = myEnergy;
     }
 
-
-
     public int getAge() {
         return myAge;
     }
-    public void setCell(Cell cell) {
-        this.myCell = cell;
-    }
 
-    public void setAge(int age){
+    public void setAge(int age) {
         myAge = age;
     }
 
@@ -34,7 +33,7 @@ public class Shark {
         return myCell;
     }
 
-    Shark(Cell cell){
-        myCell = cell;
+    public void setCell(Cell cell) {
+        this.myCell = cell;
     }
 }

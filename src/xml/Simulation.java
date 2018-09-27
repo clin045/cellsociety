@@ -39,6 +39,15 @@ public class Simulation {
     // NOTE: keep just as an example for converting toString(), otherwise not used
     private Map<String, String> myDataValues;
 
+    static private final int SIM_NAME = 0;
+    static private final int SIM_TITLE = 1;
+    static private final int SIM_AUTHOR = 2;
+    static private final int COLS = 3;
+    static private final int ROWS = 4;
+    static private final int CONFIGS = 5;
+    static private final int NEIGHBORS = 6;
+    static private final int COLORS = 7;
+
 
     /**
      * Create game data from given data.
@@ -62,14 +71,14 @@ public class Simulation {
      * @param dataValues map of field names to their values
      */
     public Simulation(Map<String, String> dataValues) {
-        this(dataValues.get(DATA_FIELDS.get(0)),
-                dataValues.get(DATA_FIELDS.get(1)),
-                dataValues.get(DATA_FIELDS.get(2)),
-                Integer.parseInt(dataValues.get(DATA_FIELDS.get(3))),
-                Integer.parseInt(dataValues.get(DATA_FIELDS.get(4))),
-                dataValues.get(DATA_FIELDS.get(5)),
-                dataValues.get(DATA_FIELDS.get(6)),
-                dataValues.get(DATA_FIELDS.get(7)));
+        this(dataValues.get(DATA_FIELDS.get(SIM_NAME)),
+                dataValues.get(DATA_FIELDS.get(SIM_TITLE)),
+                dataValues.get(DATA_FIELDS.get(SIM_AUTHOR)),
+                Integer.parseInt(dataValues.get(DATA_FIELDS.get(COLS))),
+                Integer.parseInt(dataValues.get(DATA_FIELDS.get(ROWS))),
+                dataValues.get(DATA_FIELDS.get(CONFIGS)),
+                dataValues.get(DATA_FIELDS.get(NEIGHBORS)),
+                dataValues.get(DATA_FIELDS.get(COLORS)));
         myDataValues = dataValues;
     }
 
@@ -93,24 +102,18 @@ public class Simulation {
     }
 
     private boolean isValidSimName(String name) {
-        String[] validSimulationNames = new String[8];
-        validSimulationNames[0] = "Game of Life";
-        validSimulationNames[1] = "Segregation";
-        validSimulationNames[2] = "Predator Prey";
-        validSimulationNames[3] = "Fire";
-        validSimulationNames[4] = "Rock, Paper, Scissors";
-        validSimulationNames[5] = "Foraging Ants";
-        validSimulationNames[6] = "Langton's Loop";
-        validSimulationNames[7] = "SugarScape";
+        String[] validSimulationNames = new String[] {"Game of Life", "Segregation", "Predator Prey", "Fire", "Rock, Paper, Scissors", "Foraging Ants", "Langton's Loop", "SugarScape"};
 
         for (String validName : validSimulationNames) {
-            if (name.equals(validName)) { return true; }
+            if (name.equals(validName)) {
+                return true;
+            }
         }
         return false;
     }
 
     // provide getters, not setters
-    public String getSimulationName () throws XMLException {
+    public String getSimulationName() throws XMLException {
         if (isValidSimName(mySimulationName)) {
             return mySimulationName;
         } else {
@@ -118,15 +121,15 @@ public class Simulation {
         }
     }
 
-    public String getTitle () {
+    public String getTitle() {
         return myTitle;
     }
 
-    public String getAuthor () {
+    public String getAuthor() {
         return myAuthor;
     }
 
-    public int getCols () {
+    public int getCols() throws XMLException {
         if (myCols != 0) {
             return Math.abs(myCols);
         } else {
@@ -134,7 +137,7 @@ public class Simulation {
         }
     }
 
-    public int getRows () {
+    public int getRows() throws XMLException {
         if (myRows != 0) {
             return Math.abs(myRows);
         } else {
@@ -142,7 +145,7 @@ public class Simulation {
         }
     }
 
-    public int[][] getConfigs () {
+    public int[][] getConfigs() throws XMLException {
         if (myConfigs.length() + 1 == 2 * getCols() * getRows()) {
             return stringToIntArray(myConfigs);
         } else {
@@ -150,11 +153,11 @@ public class Simulation {
         }
     }
 
-    public int[][] getNeighborCoordinates () {
+    public int[][] getNeighborCoordinates() {
         return stringToIntArray(myNeighbors);
     }
 
-    public String getColors () {
+    public String getColors() {
         return myColors;
     }
 
@@ -162,7 +165,7 @@ public class Simulation {
      * @see Object#toString()
      */
     @Override
-    public String toString () {
+    public String toString() {
         var result = new StringBuilder();
         result.append(DATA_TYPE + " {\n");
         for (var e : myDataValues.entrySet()) {

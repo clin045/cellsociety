@@ -1,15 +1,14 @@
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
@@ -17,8 +16,10 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+
 import model.*;
 import xml.Simulation;
+import xml.XMLException;
 import xml.XMLParser;
 
 import java.io.File;
@@ -31,13 +32,20 @@ import java.util.ResourceBundle;
  */
 public class UIManager extends Application {
     private static final double MILLISECOND_DELAY = 300;
+    private static final int WINDOW_SIZE = 600;
+    private static final int PADDING_SIZE = 10;
+    private static final int HORIZONTAL_GUI_GAP = 5;
+    private static final int VERTICAAL_GUI_GAP = 5;
     private static final String DEFAULT_RESOURCE_PACKAGE = "English";
     private ResourceBundle myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE);
     private File chosen;
-    private CellManager myCellManager = new CellManager();
+    private CellManager myCellManager;
     private GridPane simulatorGridPane;
     private int rows;
     private int columns;
+    private String title;
+    private String author;
+    private String simulationName;
     private String[] colors;
     private Timeline animation = new Timeline();
     private Stage myStage;
@@ -50,12 +58,7 @@ public class UIManager extends Application {
 
         Button loadButton = new Button(myResources.getString("SelectButton"));
         loadButton.setOnAction(event -> {
-            FileChooser myFileChooser = new FileChooser();
-            myFileChooser.setTitle(myResources.getString("ChooserWindowTitle"));
-            FileChooser.ExtensionFilter xmlFilter = new FileChooser.ExtensionFilter("XML files (*.xml)", "*.xml");
-            myFileChooser.getExtensionFilters().add(xmlFilter);
-            myFileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
-            chosen = myFileChooser.showOpenDialog(myStage);
+            chooseFile();
             if(chosen != null){
                 fileName.setText(chosen.getName());
             }
@@ -65,10 +68,10 @@ public class UIManager extends Application {
         startButton.setOnAction(event -> createSimulator());
 
         GridPane myGridPane = new GridPane();
-        myGridPane.setMinSize(600, 600);
-        myGridPane.setPadding(new Insets(10, 10, 10, 10));
-        myGridPane.setVgap(5);
-        myGridPane.setHgap(5);
+        myGridPane.setMinSize(WINDOW_SIZE, WINDOW_SIZE);
+        myGridPane.setPadding(new Insets(PADDING_SIZE, PADDING_SIZE, PADDING_SIZE, PADDING_SIZE));
+        myGridPane.setVgap(VERTICAAL_GUI_GAP);
+        myGridPane.setHgap(HORIZONTAL_GUI_GAP);
         myGridPane.setAlignment(Pos.CENTER);
 
         myGridPane.add(chooseFileLabel, 0,0);
@@ -94,33 +97,59 @@ public class UIManager extends Application {
     }
 
     private void initializeWindow(){
+        try{
+            int[][] initialStates = readConfiguration();
+
+            GridPane rootPane = new GridPane();
+            rootPane.setPadding(new Insets(PADDING_SIZE, PADDING_SIZE, PADDING_SIZE, PADDING_SIZE));
+            rootPane.setMinSize(WINDOW_SIZE, WINDOW_SIZE);
+            rootPane.setAlignment(Pos.CENTER);
+
+            createAnimationBlock(initialStates);
+
+            rootPane.add(createTitleBlock(), 0, 0);
+            rootPane.add(simulatorGridPane, 0, 1);
+            rootPane.add(createControlsBlock(), 0, 2);
+
+            Rule myRule = findSimulationType(simulationName);
+            myCellManager = new CellManager(rows, columns, initialStates, myRule, CellManager.SQUARE_GRID);
+
+            myStage.setScene(new Scene(rootPane));
+        }
+        catch (XMLException e) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("XML File Error");
+            alert.setHeaderText(null);
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+            chooseFile();
+            initializeWindow();
+        }
+    }
+
+    private void chooseFile(){
+        FileChooser myFileChooser = new FileChooser();
+        myFileChooser.setTitle(myResources.getString("ChooserWindowTitle"));
+        FileChooser.ExtensionFilter xmlFilter = new FileChooser.ExtensionFilter("XML files (*.xml)", "*.xml");
+        myFileChooser.getExtensionFilters().add(xmlFilter);
+        myFileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
+        chosen = myFileChooser.showOpenDialog(myStage);
+    }
+
+    private int[][] readConfiguration(){
         Simulation configs = new XMLParser("media").getSimulation(chosen);
         rows = configs.getRows();
         columns = configs.getCols();
+        title = configs.getTitle();
+        author = configs.getAuthor();
+        simulationName = configs.getSimulationName();
         int[][] initialStates = configs.getConfigs();
         colors = configs.getColors().split(",");
-
-        GridPane rootPane = new GridPane();
-        rootPane.setPadding(new Insets(10, 10, 10, 10));
-        rootPane.setMinSize(600, 600);
-        rootPane.setAlignment(Pos.CENTER);
-
-        GridPane titleBlock = createTitleBlock(configs);
-        createAnimationBlock(initialStates);
-        FlowPane controls = createControlsBlock();
-
-        rootPane.add(titleBlock, 0, 0);
-        rootPane.add(simulatorGridPane, 0, 1);
-        rootPane.add(controls, 0, 2);
-
-        RuleInterface myRule = findSimulationType(configs.getSimulationName());
-        myCellManager.initializeGrid(rows, columns, initialStates, myRule, CellManager.SQUARE_GRID);
-
-        myStage.setScene(new Scene(rootPane));
+        return initialStates;
     }
 
-    private RuleInterface findSimulationType(String name){
-        RuleInterface myRule;
+    private Rule findSimulationType(String name){
+        Rule myRule;
         if(name.compareToIgnoreCase("Game of Life") == 0){
             myRule = new GameOfLifeRule();
         }
@@ -136,20 +165,20 @@ public class UIManager extends Application {
         return myRule;
     }
 
-    private GridPane createTitleBlock(Simulation configs){
-        Label title = new Label(configs.getTitle());
-        Label author = new Label(configs.getAuthor());
-        Label simulationName = new Label(configs.getSimulationName());
+    private GridPane createTitleBlock(){
+        Label myTitle = new Label(title);
+        Label myAuthor = new Label(author);
+        Label mySimulationName = new Label(simulationName);
 
         GridPane displayInfo = new GridPane();
         displayInfo.setAlignment(Pos.CENTER);
-        displayInfo.setPadding(new Insets(10, 10, 10, 10));
-        displayInfo.add(title, 0, 0);
-        GridPane.setHalignment(title, HPos.CENTER);
-        displayInfo.add(author, 0, 1);
-        GridPane.setHalignment(author, HPos.CENTER);
-        displayInfo.add(simulationName, 0, 2);
-        GridPane.setHalignment(simulationName, HPos.CENTER);
+        displayInfo.setPadding(new Insets(PADDING_SIZE, PADDING_SIZE, PADDING_SIZE, PADDING_SIZE));
+        displayInfo.add(myTitle, 0, 0);
+        GridPane.setHalignment(myTitle, HPos.CENTER);
+        displayInfo.add(myAuthor, 0, 1);
+        GridPane.setHalignment(myAuthor, HPos.CENTER);
+        displayInfo.add(mySimulationName, 0, 2);
+        GridPane.setHalignment(mySimulationName, HPos.CENTER);
 
         return displayInfo;
     }
@@ -166,7 +195,7 @@ public class UIManager extends Application {
 
     private FlowPane createControlsBlock(){
         FlowPane controls = new FlowPane();
-        controls.setPadding(new Insets(10, 10, 10, 10));
+        controls.setPadding(new Insets(PADDING_SIZE, PADDING_SIZE, PADDING_SIZE, PADDING_SIZE));
         controls.setAlignment(Pos.CENTER);
 
         Button play = new Button(myResources.getString("PlayButton"));
@@ -189,12 +218,7 @@ public class UIManager extends Application {
 
         Button newSimulation = new Button(myResources.getString("NewSimulation"));
         newSimulation.setOnAction(event -> {
-            FileChooser myFileChooser = new FileChooser();
-            myFileChooser.setTitle(myResources.getString("ChooserWindowTitle"));
-            FileChooser.ExtensionFilter xmlFilter = new FileChooser.ExtensionFilter("XML files (*.xml)", "*.xml");
-            myFileChooser.getExtensionFilters().add(xmlFilter);
-            myFileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
-            chosen = myFileChooser.showOpenDialog(myStage);
+            chooseFile();
             createSimulator();
         });
 
@@ -239,27 +263,19 @@ public class UIManager extends Application {
 
     private BorderPane createCell(String color, int rows, int columns){
         BorderPane cell = new BorderPane();
-        int cellSize = 500/Math.max(rows, columns);
+        int cellSize = (WINDOW_SIZE-100)/Math.max(rows, columns);
         cell.setMinSize(cellSize, cellSize);
         cell.setStyle("-fx-border-color: #000000;" +
                 "-fx-background-color: #" + color + ";" +
                 "-fx-border-width: 1;");
-        cell.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                toggleNextState(cell);
-            }
-        });
+        cell.setOnMouseClicked(event -> toggleNextState(cell));
         return cell;
     }
 
     private void toggleNextState(BorderPane cell){
         int numStates = colors.length;
-        System.out.println(numStates);
         Cell thisCell = myCellManager.getGrid().getCell(GridPane.getColumnIndex(cell), GridPane.getRowIndex(cell));
-        System.out.println(thisCell.getCurrentState());
         if(thisCell.getCurrentState() ==  numStates-1){
-            //recircle
             thisCell.setCurrentState(0);
             thisCell.setNextState(0);
         }
