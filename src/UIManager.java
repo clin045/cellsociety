@@ -6,6 +6,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
@@ -18,9 +19,11 @@ import javafx.util.Duration;
 
 import model.*;
 import xml.Simulation;
+import xml.XMLException;
 import xml.XMLParser;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.ResourceBundle;
 
 /**
@@ -55,12 +58,7 @@ public class UIManager extends Application {
 
         Button loadButton = new Button(myResources.getString("SelectButton"));
         loadButton.setOnAction(event -> {
-            FileChooser myFileChooser = new FileChooser();
-            myFileChooser.setTitle(myResources.getString("ChooserWindowTitle"));
-            FileChooser.ExtensionFilter xmlFilter = new FileChooser.ExtensionFilter("XML files (*.xml)", "*.xml");
-            myFileChooser.getExtensionFilters().add(xmlFilter);
-            myFileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
-            chosen = myFileChooser.showOpenDialog(myStage);
+            chooseFile();
             if(chosen != null){
                 fileName.setText(chosen.getName());
             }
@@ -99,23 +97,43 @@ public class UIManager extends Application {
     }
 
     private void initializeWindow(){
-        int[][] initialStates = readConfiguration();
+        try{
+            int[][] initialStates = readConfiguration();
 
-        GridPane rootPane = new GridPane();
-        rootPane.setPadding(new Insets(PADDING_SIZE, PADDING_SIZE, PADDING_SIZE, PADDING_SIZE));
-        rootPane.setMinSize(WINDOW_SIZE, WINDOW_SIZE);
-        rootPane.setAlignment(Pos.CENTER);
+            GridPane rootPane = new GridPane();
+            rootPane.setPadding(new Insets(PADDING_SIZE, PADDING_SIZE, PADDING_SIZE, PADDING_SIZE));
+            rootPane.setMinSize(WINDOW_SIZE, WINDOW_SIZE);
+            rootPane.setAlignment(Pos.CENTER);
 
-        createAnimationBlock(initialStates);
+            createAnimationBlock(initialStates);
 
-        rootPane.add(createTitleBlock(), 0, 0);
-        rootPane.add(simulatorGridPane, 0, 1);
-        rootPane.add(createControlsBlock(), 0, 2);
+            rootPane.add(createTitleBlock(), 0, 0);
+            rootPane.add(simulatorGridPane, 0, 1);
+            rootPane.add(createControlsBlock(), 0, 2);
 
-        Rule myRule = findSimulationType(simulationName);
-        myCellManager = new CellManager(rows, columns, initialStates, myRule, CellManager.SQUARE_GRID);
+            Rule myRule = findSimulationType(simulationName);
+            myCellManager = new CellManager(rows, columns, initialStates, myRule, CellManager.SQUARE_GRID);
 
-        myStage.setScene(new Scene(rootPane));
+            myStage.setScene(new Scene(rootPane));
+        }
+        catch (XMLException e) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("XML File Error");
+            alert.setHeaderText(null);
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+            chooseFile();
+            initializeWindow();
+        }
+    }
+
+    private void chooseFile(){
+        FileChooser myFileChooser = new FileChooser();
+        myFileChooser.setTitle(myResources.getString("ChooserWindowTitle"));
+        FileChooser.ExtensionFilter xmlFilter = new FileChooser.ExtensionFilter("XML files (*.xml)", "*.xml");
+        myFileChooser.getExtensionFilters().add(xmlFilter);
+        myFileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
+        chosen = myFileChooser.showOpenDialog(myStage);
     }
 
     private int[][] readConfiguration(){
@@ -200,12 +218,7 @@ public class UIManager extends Application {
 
         Button newSimulation = new Button(myResources.getString("NewSimulation"));
         newSimulation.setOnAction(event -> {
-            FileChooser myFileChooser = new FileChooser();
-            myFileChooser.setTitle(myResources.getString("ChooserWindowTitle"));
-            FileChooser.ExtensionFilter xmlFilter = new FileChooser.ExtensionFilter("XML files (*.xml)", "*.xml");
-            myFileChooser.getExtensionFilters().add(xmlFilter);
-            myFileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
-            chosen = myFileChooser.showOpenDialog(myStage);
+            chooseFile();
             createSimulator();
         });
 
