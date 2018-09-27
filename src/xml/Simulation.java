@@ -143,7 +143,11 @@ public class Simulation {
     }
 
     public int[][] getConfigs () {
-        return stringToIntArray(myConfigs);
+        if (myConfigs.length() + 1 == 2 * getCols() * getRows()) {
+            return stringToIntArray(myConfigs);
+        } else {
+            throw new XMLException("Coordinates do not match row/column input size");
+        }
     }
 
     public int[][] getNeighborCoordinates () {

@@ -78,7 +78,7 @@ public class XMLParser {
             return nodeList.item(0).getTextContent();
         }
         else {
-            throw new XMLException("XML Text String is Empty or Null");
+            return "";
         }
     }
 
