@@ -113,7 +113,7 @@ public class UIManager extends Application {
         rootPane.add(controls, 0, 2);
 
         RuleInterface myRule = findSimulationType(configs.getSimulationName());
-        myCellManager.initializeGrid(rows, columns, initialStates, myRule);
+        myCellManager.initializeGrid(rows, columns, initialStates, myRule, CellManager.SQUARE_GRID);
 
         myStage.setScene(new Scene(rootPane));
     }
@@ -222,7 +222,7 @@ public class UIManager extends Application {
         for(int i=0;i<rows;i++){
             for(int j=0;j<columns;j++){
                 BorderPane thisCellPane = (BorderPane) getNodeFromGridPane(i, j);
-                Cell thisCell = myCellManager.getCell(i, j);
+                Cell thisCell = myCellManager.getGrid().getCell(i, j);
                 if (thisCellPane != null) {
                     updateCellAppearance(colors[thisCell.getCurrentState()], thisCellPane);
                 }
