@@ -111,7 +111,6 @@ public class Simulation {
 
     // provide getters, not setters
     public String getSimulationName () throws XMLException {
-
         if (isValidSimName(mySimulationName)) {
             return mySimulationName;
         } else {
@@ -128,11 +127,19 @@ public class Simulation {
     }
 
     public int getCols () {
-        return myCols;
+        if (myCols != 0) {
+            return Math.abs(myCols);
+        } else {
+            throw new XMLException("Number of Columns must be nonzero");
+        }
     }
 
     public int getRows () {
-        return myRows;
+        if (myRows != 0) {
+            return Math.abs(myRows);
+        } else {
+            throw new XMLException("Number of Rows must be nonzero");
+        }
     }
 
     public int[][] getConfigs () {
