@@ -26,7 +26,7 @@ public class CellManager {
         myRowSize = rows;
         myColSize = cols;
         if(gridType == SQUARE_GRID){
-            myGrid = new SquareGrid(rows, cols, initConditions, Grid.TOROIDAL);
+            myGrid = new SquareGrid(rows, cols, initConditions, Grid.TOROIDAL, 2);
         }
         myActiveRule = activeRule;
         myNeighborhoodSize = activeRule.getNeighborhoodSize();
@@ -65,4 +65,6 @@ public class CellManager {
         }
         updateCells();
     }
+
+
 }
