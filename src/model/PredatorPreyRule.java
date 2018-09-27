@@ -61,11 +61,9 @@ public class PredatorPreyRule extends Rule {
             }
             if (cell.getNextState() == SHARK) {
                 Shark currentShark = getCurrentShark(cell);
-                if (currentShark != null) {
-                    if (!killShark(currentShark)) {
+                if (currentShark != null && !killShark(currentShark)) {
                         reproduceShark(currentShark, neighborsArray);
                         sharkEatFish(currentShark, neighborsArray);
-                    }
                 }
 
             }
