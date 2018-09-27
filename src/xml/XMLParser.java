@@ -72,7 +72,7 @@ public class XMLParser {
     }
 
     // Get value of Element's text
-    private String getTextValue(Element e, String tagName) throws XMLException {
+    private String getTextValue(Element e, String tagName) {
         var nodeList = e.getElementsByTagName(tagName);
         if (nodeList != null && nodeList.getLength() > 0) {
             return nodeList.item(0).getTextContent();
