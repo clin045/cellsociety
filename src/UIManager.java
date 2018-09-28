@@ -49,6 +49,7 @@ public class UIManager extends Application {
     private String[] colors;
     private Timeline animation = new Timeline();
     private Stage myStage;
+    private GraphManager myGraph;
 
     public static void main(String args[]) {
         launch(args);
@@ -103,6 +104,9 @@ public class UIManager extends Application {
     private void initializeWindow() {
         try {
             int[][] initialStates = readConfiguration();
+
+            myGraph = new GraphManager(colors.length, colors);
+            myGraph.showChart();
 
             GridPane rootPane = new GridPane();
             rootPane.setPadding(new Insets(PADDING_SIZE, PADDING_SIZE, PADDING_SIZE, PADDING_SIZE));
@@ -222,13 +226,7 @@ public class UIManager extends Application {
             createSimulator();
         });
 
-        controls.getChildren().add(play);
-        controls.getChildren().add(pause);
-        controls.getChildren().add(step);
-        controls.getChildren().add(halfSpeed);
-        controls.getChildren().add(normalSpeed);
-        controls.getChildren().add(doubleSpeed);
-        controls.getChildren().add(newSimulation);
+        controls.getChildren().addAll(play, pause, step, halfSpeed, normalSpeed, doubleSpeed, newSimulation);
 
         return controls;
     }
@@ -253,6 +251,7 @@ public class UIManager extends Application {
                 }
             }
         }
+        myGraph.updateGraph(myCellManager.getGrid().getStateList());
     }
 
     private void updateCellAppearance(String color, BorderPane myCell) {
