@@ -13,6 +13,8 @@ public class GraphManager {
     private LineChart<Number,Number> lineChart;
     private int time = 0;
     private String[] myColors;
+    private Stage myStage;
+    private boolean stageVisible = false;
 
     GraphManager(int numSeries, String[] colors) {
         myColors = colors;
@@ -26,6 +28,17 @@ public class GraphManager {
         for(int i=0;i<numSeries;i++){
             mySeries.add(new XYChart.Series());
         }
+        Scene scene  = new Scene(lineChart, WINDOW_WIDTH, WINDOW_HEIGHT);
+        for(int i=0;i<mySeries.size();i++){
+            XYChart.Series myCurrentSeries = mySeries.get(i);
+            lineChart.getData().add(myCurrentSeries);
+            myCurrentSeries.getNode().lookup(".chart-series-line").setStyle("-fx-stroke: #" + myColors[i] + ";");
+        }
+        myStage = new Stage();
+        myStage.setTitle("CA Simulator");
+        myStage.setX(0);
+        myStage.setY(0);
+        myStage.setScene(scene);
     }
 
     public void updateGraph(int[] values){
@@ -35,18 +48,14 @@ public class GraphManager {
         time++;
     }
 
-    public void showChart(){
-        Scene scene  = new Scene(lineChart, WINDOW_WIDTH, WINDOW_HEIGHT);
-        for(int i=0;i<mySeries.size();i++){
-            XYChart.Series myCurrentSeries = mySeries.get(i);
-            lineChart.getData().add(myCurrentSeries);
-            myCurrentSeries.getNode().lookup(".chart-series-line").setStyle("-fx-stroke: #" + myColors[i] + ";");
+    public void toggleChart(){
+        if(stageVisible){
+            stageVisible = false;
+            myStage.hide();
         }
-        Stage stage = new Stage();
-        stage.setTitle("CA Simulator");
-        stage.setX(0);
-        stage.setY(0);
-        stage.setScene(scene);
-        stage.show();
+        else {
+            stageVisible = true;
+            myStage.show();
+        }
     }
 }
