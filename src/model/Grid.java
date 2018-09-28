@@ -35,7 +35,7 @@ public abstract class Grid {
         return myStateList;
     }
 
-    public abstract List getNeighbors(Cell cell);
+    public abstract List<Cell> getNeighbors(Cell cell);
 
     public Cell getCell(int row, int col) {
         if (getEdgeType() == Grid.TOROIDAL) {
