@@ -10,7 +10,7 @@ public class SquareGrid extends Grid {
         myGrid = new Cell[rowSize][colSize];
         for (int i = 0; i < rowSize; i++) {
             for (int j = 0; j < colSize; j++) {
-                myGrid[i][j] = new Cell(i, j, initialConditions[i][j], myStateList);
+                myGrid[i][j] = new Cell(i, j, initialConditions[i][j]);
                 myStateList[initialConditions[i][j]] += 1;
             }
         }
@@ -30,18 +30,9 @@ public class SquareGrid extends Grid {
     }
 
 
-    @Override
-    public Cell getCell(int row, int col) {
-        if (getEdgeType() == Grid.TOROIDAL) {
-            return (getWrappingCell(row, col));
-        } else if (getEdgeType() == Grid.STATIC) {
-            return (getStaticCell(row, col));
-        } else {
-            return null;
-        }
-    }
 
-    private Cell getStaticCell(int row, int col) {
+
+    protected Cell getStaticCell(int row, int col) {
         if (row == 0 || col == 0 || row == myGrid.length - 1 || col == myGrid[0].length - 1) {
             return null;
         } else {
@@ -49,7 +40,7 @@ public class SquareGrid extends Grid {
         }
     }
 
-    private Cell getWrappingCell(int row, int col) {
+    protected Cell getWrappingCell(int row, int col) {
         int adjustedRow;
         int adjustedCol;
         if (row < 0) {
@@ -68,5 +59,9 @@ public class SquareGrid extends Grid {
         }
 
         return myGrid[adjustedRow][adjustedCol];
+    }
+
+    protected Cell getSmallCell(int row, int col){
+        return null;
     }
 }
