@@ -10,14 +10,12 @@ public class Cell {
     private int myNextState;
     private int myRow;
     private int myCol;
-    private int myGridStateList[];
 
 
-    Cell(int row, int col, int initState, int[] gridStateList) {
+    Cell(int row, int col, int initState) {
         myRow = row;
         myCol = col;
         myCurrentState = initState;
-        myGridStateList = gridStateList;
     }
 
     public int getRow() {
@@ -41,8 +39,6 @@ public class Cell {
     }
 
     public void setNextState(int nextState) {
-        myGridStateList[myNextState]--;
         myNextState = nextState;
-        myGridStateList[nextState]++;
     }
 }

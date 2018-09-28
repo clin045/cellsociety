@@ -35,7 +35,9 @@ public class CellManager {
         for (int i = 0; i < myRowSize; i++) {
             for (int j = 0; j < myColSize; j++) {
                 Cell myCurrentCell = myGrid.getCell(i, j);
+                myGrid.myStateList[myCurrentCell.getCurrentState()]--;
                 myCurrentCell.setCurrentState(myCurrentCell.getNextState());
+                myGrid.myStateList[myCurrentCell.getCurrentState()]++;
             }
         }
     }
