@@ -6,9 +6,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
@@ -17,11 +15,14 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.*;
+import model.Cell;
 import xml.Simulation;
 import xml.XMLException;
 import xml.XMLParser;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 /**
@@ -48,7 +49,7 @@ public class UIManager extends Application {
     private String simulationName;
     private String[] colors;
     private Timeline animation = new Timeline();
-    private Stage myStage;
+    private ArrayList<Stage> myStages = new ArrayList();
     private GraphManager myGraph;
 
     public static void main(String args[]) {
@@ -56,21 +57,21 @@ public class UIManager extends Application {
     }
 
     public void start(Stage stage) {
-        myStage = stage;
+        myStages.add(stage);
 
         Text chooseFileLabel = new Text(myResources.getString("ChooseFileLabel"));
         Text fileName = new Text(myResources.getString("NoFile"));
 
         Button loadButton = new Button(myResources.getString("SelectButton"));
         loadButton.setOnAction(event -> {
-            chooseFile();
+            chooseFile(myStages.get(0));
             if (chosen != null) {
                 fileName.setText(chosen.getName());
             }
         });
 
         Button startButton = new Button(myResources.getString("StartButton"));
-        startButton.setOnAction(event -> createSimulator());
+        startButton.setOnAction(event -> createSimulator(myStages.get(0)));
 
         GridPane myGridPane = new GridPane();
         myGridPane.setMinSize(WINDOW_SIZE, WINDOW_SIZE);
@@ -86,13 +87,13 @@ public class UIManager extends Application {
 
         Scene myScene = new Scene(myGridPane);
 
-        myStage.setTitle(myResources.getString("WindowTitle"));
-        myStage.setScene(myScene);
-        myStage.show();
+        myStages.get(0).setTitle(myResources.getString("WindowTitle"));
+        myStages.get(0).setScene(myScene);
+        myStages.get(0).show();
     }
 
-    private void createSimulator() {
-        initializeWindow();
+    private void createSimulator(Stage stageToUse) {
+        initializeWindow(stageToUse);
 
         var frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e -> step());
         animation.setCycleCount(Timeline.INDEFINITE);
@@ -101,12 +102,11 @@ public class UIManager extends Application {
 
     }
 
-    private void initializeWindow() {
+    private void initializeWindow(Stage stageToUse) {
         try {
             int[][] initialStates = readConfiguration();
 
             myGraph = new GraphManager(colors.length, colors);
-            myGraph.showChart();
 
             GridPane rootPane = new GridPane();
             rootPane.setPadding(new Insets(PADDING_SIZE, PADDING_SIZE, PADDING_SIZE, PADDING_SIZE));
@@ -122,25 +122,25 @@ public class UIManager extends Application {
             Rule myRule = findSimulationType(simulationName);
             myCellManager = new CellManager(rows, columns, initialStates, myRule, CellManager.SQUARE_GRID);
 
-            myStage.setScene(new Scene(rootPane));
+            stageToUse.setScene(new Scene(rootPane));
         } catch (XMLException e) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("XML File Error");
             alert.setHeaderText(null);
             alert.setContentText(e.getMessage());
             alert.showAndWait();
-            chooseFile();
-            initializeWindow();
+            chooseFile((Stage)simulatorGridPane.getScene().getWindow());
+            initializeWindow(stageToUse);
         }
     }
 
-    private void chooseFile() {
+    private void chooseFile(Stage stageToUse) {
         FileChooser myFileChooser = new FileChooser();
         myFileChooser.setTitle(myResources.getString("ChooserWindowTitle"));
         FileChooser.ExtensionFilter xmlFilter = new FileChooser.ExtensionFilter("XML files (*.xml)", "*.xml");
         myFileChooser.getExtensionFilters().add(xmlFilter);
         myFileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
-        chosen = myFileChooser.showOpenDialog(myStage);
+        chosen = myFileChooser.showOpenDialog(stageToUse);
     }
 
     private int[][] readConfiguration() {
@@ -221,14 +221,40 @@ public class UIManager extends Application {
         doubleSpeed.setOnAction(event -> animation.setRate(2));
 
         Button newSimulation = new Button(myResources.getString("NewSimulation"));
-        newSimulation.setOnAction(event -> {
-            chooseFile();
-            createSimulator();
-        });
+        newSimulation.setOnAction(event -> newSimulation());
 
-        controls.getChildren().addAll(play, pause, step, halfSpeed, normalSpeed, doubleSpeed, newSimulation);
+        Button toggleChart = new Button(myResources.getString("ToggleChart"));
+        toggleChart.setOnAction(event -> myGraph.toggleChart());
+
+        controls.getChildren().addAll(play, pause, step, halfSpeed, normalSpeed, doubleSpeed, newSimulation, toggleChart);
 
         return controls;
+    }
+
+    private void newSimulation(){
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("New Simulation");
+        alert.setHeaderText("New Simulation");
+        alert.setContentText("Open the new simulation in this window or a new window?");
+
+        ButtonType thisWindow = new ButtonType("This Window");
+        ButtonType newWindow = new ButtonType("New Window");
+        ButtonType cancel = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+
+        alert.getButtonTypes().setAll(thisWindow, newWindow, cancel);
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == thisWindow){
+            chooseFile((Stage)simulatorGridPane.getScene().getWindow());
+            createSimulator((Stage)simulatorGridPane.getScene().getWindow());
+        }
+        else if (result.get() == newWindow) {
+            Stage newStage = new Stage();
+            newStage.setTitle(myResources.getString("WindowTitle"));
+            chooseFile(newStage);
+            newStage.show();
+            createSimulator(newStage);
+        }
     }
 
     private Node getNodeFromGridPane(int col, int row) {
