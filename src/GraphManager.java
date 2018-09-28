@@ -7,7 +7,8 @@ import javafx.stage.Stage;
 import java.util.ArrayList;
 
 public class GraphManager {
-    private static final int WINDOW_SIZE = 300;
+    private static final int WINDOW_HEIGHT = 300;
+    private static final int WINDOW_WIDTH = 1000;
     private ArrayList<XYChart.Series> mySeries = new ArrayList<>();
     private LineChart<Number,Number> lineChart;
     private int time = 0;
@@ -35,7 +36,7 @@ public class GraphManager {
     }
 
     public void showChart(){
-        Scene scene  = new Scene(lineChart, 600, WINDOW_SIZE);
+        Scene scene  = new Scene(lineChart, WINDOW_WIDTH, WINDOW_HEIGHT);
         for(int i=0;i<mySeries.size();i++){
             XYChart.Series myCurrentSeries = mySeries.get(i);
             lineChart.getData().add(myCurrentSeries);
