@@ -32,7 +32,7 @@ public class SquareGrid extends Grid {
 
 
 
-    protected Cell getStaticCell(int row, int col) {
+    protected Cell getFiniteCell(int row, int col) {
         if (row == 0 || col == 0 || row == myGrid.length - 1 || col == myGrid[0].length - 1) {
             return null;
         } else {
@@ -59,9 +59,5 @@ public class SquareGrid extends Grid {
         }
 
         return myGrid[adjustedRow][adjustedCol];
-    }
-
-    protected Cell getSmallCell(int row, int col){
-        return null;
     }
 }
