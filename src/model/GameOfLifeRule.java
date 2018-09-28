@@ -20,6 +20,10 @@ public class GameOfLifeRule extends Rule {
         return NUM_PASSES;
     }
 
+    public GameOfLifeRule(){
+        myNumStates = 2;
+    }
+
     public int getNeighborhoodSize() {
         return 1;
     }

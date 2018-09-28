@@ -14,11 +14,15 @@ import java.util.List;
  * * @author Christopher Lin cl349
  **/
 public abstract class Rule {
-    static final int NUM_STATES = 0;
+    protected int myNumStates;
+    public int getNumStates(){
+        return myNumStates;
+    }
 
     public abstract void applyRule(Cell myCell, List<Cell> myNeighbors, int passNum);
 
     public abstract int getNeighborhoodSize();
+
 
     public abstract int getPasses();
 }
