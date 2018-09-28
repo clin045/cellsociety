@@ -27,6 +27,7 @@ public class PredatorPreyRule extends Rule {
     public PredatorPreyRule() {
         fishList = new ArrayList<>();
         sharkList = new ArrayList<>();
+        myNumStates = 3;
     }
 
     public int getPasses() {

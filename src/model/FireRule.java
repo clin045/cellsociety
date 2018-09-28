@@ -16,6 +16,10 @@ public class FireRule extends Rule {
     static final int EMPTY = 0;
     static final double PROB_CATCH = 0.8;
 
+    public FireRule(){
+        myNumStates = 3;
+    }
+
     public int getPasses() {
         return NUM_PASSES;
     }
