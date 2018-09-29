@@ -38,15 +38,18 @@ public class RPSRule extends Rule {
         reproduceBacteria((RPSCell) cell, neighbors);
         emitAIParticles((RPSCell) cell, neighbors);
         if(((RPSCell) cell).getBacteria() == null){
-            ((RPSCell) cell).getBacteria().incAge();
             cell.setNextState(EMPTY);
         }
         else{
+            ((RPSCell) cell).getBacteria().incAge();
             cell.setNextState(((RPSCell) cell).getBacteria().getType());
         }
     }
 
     private void emitAIParticles(RPSCell cell, List<Cell> neighbors) {
+        if(cell.getBacteria() == null){
+            return;
+        }
         for(Cell c : neighbors){
             if(cell.getBacteria().getType() == ROCK){
                 ((RPSCell) c).setRock_level(((RPSCell) c).getRock_level()+EMISSION_AMT);
