@@ -5,8 +5,8 @@ import java.util.List;
 
 public class TriangleGrid extends Grid {
 
-    TriangleGrid(int rowSize, int colSize, int[][] initialConditions, int edgeType, int numStates) {
-        super(rowSize, colSize, edgeType, numStates);
+    TriangleGrid(int rowSize, int colSize, int[][] initialConditions, int edgeType, int numStates, Class<Cell> cellType) {
+        super(rowSize, colSize, edgeType, numStates, cellType);
         if(rowSize % 2 != 0){
             throw new IllegalArgumentException("    Must have even rows!");
         }

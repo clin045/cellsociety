@@ -1,16 +1,23 @@
 package model;
 
+import java.lang.reflect.Array;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class SquareGrid extends Grid {
 
-    SquareGrid(int rowSize, int colSize, int[][] initialConditions, int edgeType, int numStates) {
-        super(rowSize, colSize, edgeType, numStates);
+    SquareGrid(int rowSize, int colSize, int[][] initialConditions, int edgeType, int numStates, Class<Cell> cellType) {
+        super(rowSize, colSize, edgeType, numStates, cellType);
+
         myGrid = new Cell[rowSize][colSize];
         for (int i = 0; i < rowSize; i++) {
             for (int j = 0; j < colSize; j++) {
-                myGrid[i][j] = new Cell(i, j, initialConditions[i][j]);
+                try {
+                    myGrid[i][j] = cellType.getDeclaredConstructor(int.class, int.class, int.class).newInstance(i, j, initialConditions[i][j]);
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
                 myStateList[initialConditions[i][j]] += 1;
             }
         }

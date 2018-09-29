@@ -1,5 +1,7 @@
 package model;
 
+import model.rule.Rule;
+
 import java.util.List;
 
 /**
@@ -22,10 +24,10 @@ public class CellManager {
         myRowSize = rows;
         myColSize = cols;
         if (gridType == SQUARE_GRID) {
-            myGrid = new SquareGrid(rows, cols, initConditions, Grid.TOROIDAL, activeRule.getNumStates());
+            myGrid = new SquareGrid(rows, cols, initConditions, Grid.TOROIDAL, activeRule.getNumStates(), Cell.class);
         }
         else if (gridType == TRIANGLE_GRID){
-            myGrid = new TriangleGrid(rows, cols, initConditions, Grid.TOROIDAL, activeRule.getNumStates());
+            myGrid = new TriangleGrid(rows, cols, initConditions, Grid.TOROIDAL, activeRule.getNumStates(), Cell.class);
         }
         myActiveRule = activeRule;
     }

@@ -1,4 +1,7 @@
-package model;
+package model.rule.rps;
+
+import model.Cell;
+import model.rule.Rule;
 
 import java.util.List;
 

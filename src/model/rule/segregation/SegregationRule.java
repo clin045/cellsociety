@@ -1,10 +1,13 @@
-package model;
+package model.rule.segregation;
 
+
+import model.Cell;
+import model.rule.Rule;
 
 import java.util.List;
 
 /**
- * Extension of main.model.Rule to apply rules specifically for SegregationLife
+ * Extension of main.model.rule.Rule to apply rules specifically for SegregationLife
  * Returns nextState for myCell
  *
  * @author Scott McConnell skm44
