@@ -25,7 +25,7 @@ public class SegregationRule extends Rule {
     private int unallocated_red = 0;
 
     public SegregationRule(){
-        myNumStates = 4;
+        myNumStates = 3;
     }
 
     public int getPasses() {

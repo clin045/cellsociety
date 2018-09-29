@@ -1,11 +1,11 @@
 package xml;
 
 import model.rule.Rule;
-//import UI.UIManager;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
 
 
 /**
@@ -46,6 +46,7 @@ public class Simulation {
     private String myConfigs;
     private String myNeighbors;
     private String myColors;
+    private Rule myRule;
     // NOTE: keep just as an example for converting toString(), otherwise not used
     private Map<String, String> myDataValues;
 
@@ -62,6 +63,7 @@ public class Simulation {
         myNeighbors = configs.getNeighbors();
         myConfigs = configs.getConfigs();
         myColors = configs.getColors();
+        myRule = UI.UIManager.findSimulationType(mySimulationName);
         // NOTE: this is useful so our code does not fail due to a NullPointerException
         myDataValues = new HashMap<>();
     }
@@ -102,17 +104,15 @@ public class Simulation {
         return resultArray;
     }
 
-//    private int getNumStates() {
-//        Rule currentRule = UI.UIManager.findSimulationType(mySimulationName);
-//        return currentRule.getNumStates();
-//    }
+    private int[][] generateRandomStates() {
+        StringBuilder s = new StringBuilder();
+        for (int i = 0; i < (2 * getCols() * getRows() - 1); i++) {
+            s.append(ThreadLocalRandom.current().nextInt(0, myRule.getNumStates())).append(",");
+        }
+        String resultString = s.toString();
+        return stringToIntArray(resultString);
+    }
 
-//    private int[][] generateRandomStates() {
-//        String randomStatesString = "";
-//        for (int i = 0; i < (2 * getCols() * getRows() - 1); i++) {
-//            //addRandomState();
-//        }
-//    }
 
     private boolean isValidSimName(String name) {
         String[] validSimulationNames = new String[]{"Game of Life", "Segregation", "Predator Prey", "Fire", "Rock, Paper, Scissors", "Foraging Ants", "Langton's Loop", "SugarScape"};
@@ -126,10 +126,9 @@ public class Simulation {
     }
     
     private boolean hasValidStates(int[][] cellStates) {
-        int maxStateAllowed = 3;
         for (int[] i : cellStates) {
             for (int j : i) {
-                if (j < 0 || j > maxStateAllowed) {
+                if (j < 0 || j > myRule.getNumStates()) {
                     return false;
                 }
             }
@@ -173,7 +172,7 @@ public class Simulation {
     public int[][] getConfigs() throws XMLException {
 //        if (myConfigs.length() == 0) {
 //            return generateRandomStates();
-//        } else
+        //} else
         if (myConfigs.length() + 1 == 2 * getCols() * getRows()) {
             int[][] result = stringToIntArray(myConfigs);
             if (hasValidStates(result)) {
@@ -191,10 +190,10 @@ public class Simulation {
     }
 
     public String getColors() {
-        int maxStateAllowed = 3;
-        if (myColors.split(",").length == maxStateAllowed) {
+        System.out.println(myRule.getNumStates());
+        if (myColors.split(",").length == myRule.getNumStates()) {
                 return myColors;
-            } else if (myColors.split(",").length > maxStateAllowed){
+            } else if (myColors.split(",").length > myRule.getNumStates()){
                 throw new XMLException("Too many colors provided in XML file: Number of colors must equal number of states");
             } else {
             throw new XMLException("Not enough colors provided in XML file: Number of colors must equal number of states");
