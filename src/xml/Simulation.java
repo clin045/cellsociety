@@ -175,7 +175,16 @@ public class Simulation {
     }
 
     public String getColors() {
-        return myColors;
+        int maxStateAllowed = 3;
+        if (!(myColors.length() < maxStateAllowed)) {
+            if (!(myColors.length() > maxStateAllowed)) {
+                return myColors;
+            } else {
+                throw new XMLException("Too many colors provided in XML file: Number of colors must equal number of states");
+            }
+        } else {
+            throw new XMLException("Not enough colors provided in XML file: Number of colors must equal number of states");
+        }
     }
 
     /**
