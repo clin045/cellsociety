@@ -1,3 +1,5 @@
+package UI;
+
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -160,7 +162,7 @@ public class UIManager extends Application {
         return initialStates;
     }
 
-    private Rule findSimulationType(String name) {
+    public static Rule findSimulationType(String name) {
         Rule myRule;
         if (name.compareToIgnoreCase("Game of Life") == 0) {
             myRule = new GameOfLifeRule();

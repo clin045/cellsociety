@@ -10,9 +10,9 @@ Checklist Refactoring
 - Minor coding style changes were made
 - applyRule() was refactored in SegregationRule and PredatorPreyRule by pulling out sections of code into seperate methods
     - This makes the code less complex and more readable
-- In UIManager, the dimensions of the window and the padding/inset were changed to constants to avoid magic numbers
-- Removed unused imports in UIManager and imported specific classes from inside the model folder instead of all
-- Created a new readConfiguration method in UIManager to shorten the initializeWindow method
+- In UI.UIManager, the dimensions of the window and the padding/inset were changed to constants to avoid magic numbers
+- Removed unused imports in UI.UIManager and imported specific classes from inside the model folder instead of all
+- Created a new readConfiguration method in UI.UIManager to shorten the initializeWindow method
 - Removed magic values in:
     - Simulation.java
     - GameOfLifeRule.java
