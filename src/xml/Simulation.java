@@ -166,7 +166,7 @@ public class Simulation {
                 throw new XMLException("Cell configuration contains states that are not allowed for this rule");
             }
         } else {
-            throw new XMLException("Cell configuration does not match row/column size");
+            throw new XMLException("Cell configuration contains cell locations that are outside the bounds of the grid size");
         }
     }
 
