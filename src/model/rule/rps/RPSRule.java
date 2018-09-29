@@ -13,6 +13,7 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 
 public class RPSRule extends Rule {
+
     public static final int EMPTY = 0;
     public static final int ROCK = 1;
     public static final int PAPER = 2;
@@ -21,6 +22,11 @@ public class RPSRule extends Rule {
     public static final int INHIBITION_THRESHOLD = 20;
     public static final double DIFFUSION_RATE = 0.3;
     public static final double EMISSION_AMT = 5;
+
+    RPSRule(){
+        myNumStates = 4;
+    }
+
     @Override
     public void applyRule(Cell cell, List<Cell> neighbors, int passNum) {
         //Update RPSCell bacteria given cell states. Should only run once on initialization
@@ -32,6 +38,7 @@ public class RPSRule extends Rule {
         reproduceBacteria((RPSCell) cell, neighbors);
         emitAIParticles((RPSCell) cell, neighbors);
         if(((RPSCell) cell).getBacteria() == null){
+            ((RPSCell) cell).getBacteria().incAge();
             cell.setNextState(EMPTY);
         }
         else{
@@ -109,6 +116,6 @@ public class RPSRule extends Rule {
 
     @Override
     public int getPasses() {
-        return 0;
+        return 1;
     }
 }
