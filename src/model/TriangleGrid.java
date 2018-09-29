@@ -5,21 +5,25 @@ import java.util.List;
 
 public class TriangleGrid extends Grid {
 
-    TriangleGrid(int rowSize, int colSize, int[][] initialConditions, int edgeType, int numStates) {
-        super(rowSize, colSize, edgeType, numStates);
+    TriangleGrid(int rowSize, int colSize, int[][] initialConditions, int edgeType, int numStates, Class<Cell> cellType) {
+        super(rowSize, colSize, edgeType, numStates, cellType);
         if(rowSize % 2 != 0){
-            throw new IllegalArgumentException("    Must have even rows!");
+            throw new IllegalArgumentException("Must have even rows!");
         }
         myGrid = new Cell[rowSize][colSize];
         for (int i = 0; i < rowSize; i++) {
             for (int j = 0; j < colSize; j++) {
-                myGrid[i][j] = new Cell(i, j, initialConditions[i][j]);
+                try {
+                    myGrid[i][j] = cellType.getDeclaredConstructor(int.class, int.class, int.class).newInstance(i, j, initialConditions[i][j]);
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
                 myStateList[initialConditions[i][j]] += 1;
             }
         }
     }
     @Override
-    public List<Cell> getNeighbors(Cell cell) {
+    public List<Cell> getNeighbors(Cell cell, boolean[][] neighborMask) {
         ArrayList<Cell> neighbors = new ArrayList<>();
         //get neighbors on same row
         for(int i = cell.getCol()-2; i <= cell.getCol() + 2; i++){

@@ -1,10 +1,13 @@
-package model;
+package model.rule.fire;
+
+import model.Cell;
+import model.rule.Rule;
 
 import java.util.List;
 import java.util.Random;
 
 /**
- * Extension of main.model.Rule to apply rules specifically for Conway's Game Of Life
+ * Extension of main.model.rule.Rule to apply rules specifically for Conway's Game Of Life
  * Returns nextState for myCell
  *
  * @author Scott McConnell skm44

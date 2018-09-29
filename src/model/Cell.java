@@ -12,7 +12,7 @@ public class Cell {
     private int myCol;
 
 
-    Cell(int row, int col, int initState) {
+    public Cell(int row, int col, int initState) {
         myRow = row;
         myCol = col;
         myCurrentState = initState;

@@ -1,5 +1,7 @@
-package model;
+package model.rule;
 
+
+import model.Cell;
 
 import java.util.List;
 

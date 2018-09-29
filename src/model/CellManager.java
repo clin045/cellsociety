@@ -1,5 +1,7 @@
 package model;
 
+import model.rule.Rule;
+
 import java.util.List;
 
 /**
@@ -22,10 +24,10 @@ public class CellManager {
         myRowSize = rows;
         myColSize = cols;
         if (gridType == SQUARE_GRID) {
-            myGrid = new SquareGrid(rows, cols, initConditions, Grid.TOROIDAL, activeRule.getNumStates());
+            myGrid = new SquareGrid(rows, cols, initConditions, Grid.TOROIDAL, activeRule.getNumStates(), Cell.class);
         }
         else if (gridType == TRIANGLE_GRID){
-            myGrid = new TriangleGrid(rows, cols, initConditions, Grid.TOROIDAL, activeRule.getNumStates());
+            myGrid = new TriangleGrid(rows, cols, initConditions, Grid.TOROIDAL, activeRule.getNumStates(), Cell.class);
         }
         myActiveRule = activeRule;
     }
@@ -54,12 +56,17 @@ public class CellManager {
                 myGrid.getCell(i, j).setNextState(myGrid.getCell(i, j).getCurrentState());
             }
         }
+        boolean[] maskRow0 = {true, true, true};
+        boolean[] maskRow1 = {true,false,true};
+        boolean[] maskRow2 = {true,true,true};
+        boolean[][] mask = {maskRow0,maskRow1,maskRow2};
+
         //apply rules
         for (int k = 0; k < numPasses; k++) {
             for (int i = 0; i < myRowSize; i++) {
                 for (int j = 0; j < myColSize; j++) {
                     Cell currentCell = myGrid.getCell(i, j);
-                    List neighborList = myGrid.getNeighbors(currentCell);
+                    List neighborList = myGrid.getNeighbors(currentCell,mask);
                     myActiveRule.applyRule(currentCell, neighborList, k);
 
                 }
