@@ -24,10 +24,10 @@ public class CellManager {
         myRowSize = rows;
         myColSize = cols;
         if (gridType == SQUARE_GRID) {
-            myGrid = new SquareGrid(rows, cols, initConditions, Grid.TOROIDAL, activeRule.getNumStates(), Cell.class);
+            myGrid = new SquareGrid(rows, cols, initConditions, Grid.TOROIDAL, activeRule.getNumStates(), activeRule.getCellType());
         }
         else if (gridType == TRIANGLE_GRID){
-            myGrid = new TriangleGrid(rows, cols, initConditions, Grid.TOROIDAL, activeRule.getNumStates(), Cell.class);
+            myGrid = new TriangleGrid(rows, cols, initConditions, Grid.TOROIDAL, activeRule.getNumStates(), activeRule.getCellType());
         }
         myActiveRule = activeRule;
     }
@@ -68,7 +68,6 @@ public class CellManager {
                     Cell currentCell = myGrid.getCell(i, j);
                     List neighborList = myGrid.getNeighbors(currentCell,mask);
                     myActiveRule.applyRule(currentCell, neighborList, k);
-
                 }
             }
         }

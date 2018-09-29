@@ -41,6 +41,11 @@ public class PredatorPreyRule extends Rule {
         return 1;
     }
 
+    @Override
+    public Class<Cell> getCellType() {
+        return Cell.class;
+    }
+
     public void applyRule(Cell cell, List<Cell> neighborsArray, int passNum) {
         if (passNum == 0) {
             //maintain parity between cells and list of sharks/fish
