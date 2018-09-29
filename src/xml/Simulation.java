@@ -1,6 +1,7 @@
 package xml;
 
-import model.GeneralConfigurations;
+import model.rule.Rule;
+import UIManager;
 
 import java.util.HashMap;
 import java.util.List;
@@ -99,6 +100,11 @@ public class Simulation {
             }
         }
         return resultArray;
+    }
+
+    private int getNumStates() {
+        Rule currentRule = UIManager.findSimulationType(mySimulationName);
+        return currentRule.getNumStates();
     }
 
     private boolean isValidSimName(String name) {
