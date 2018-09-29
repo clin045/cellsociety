@@ -1,8 +1,7 @@
 package xml;
 
-import model.Rule;
+import model.GeneralConfigurations;
 
-import javax.swing.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,15 +52,15 @@ public class Simulation {
     /**
      * Create game data from given data.
      */
-    public Simulation(String simulationName, String title, String author, int rows, int cols, String configs, String neighbors, String colors) {
+    public Simulation(String simulationName, String title, String author, GeneralConfigurations configs) {
         mySimulationName = simulationName;
         myTitle = title;
         myAuthor = author;
-        myRows = rows;
-        myCols = cols;
-        myNeighbors = neighbors;
-        myConfigs = configs;
-        myColors = colors;
+        myRows = configs.getRows();
+        myCols = configs.getCols();
+        myNeighbors = configs.getNeighbors();
+        myConfigs = configs.getConfigs();
+        myColors = configs.getColors();
         // NOTE: this is useful so our code does not fail due to a NullPointerException
         myDataValues = new HashMap<>();
     }
@@ -75,11 +74,11 @@ public class Simulation {
         this(dataValues.get(DATA_FIELDS.get(SIM_NAME)),
                 dataValues.get(DATA_FIELDS.get(SIM_TITLE)),
                 dataValues.get(DATA_FIELDS.get(SIM_AUTHOR)),
-                Integer.parseInt(dataValues.get(DATA_FIELDS.get(COLS))),
+                new GeneralConfigurations(Integer.parseInt(dataValues.get(DATA_FIELDS.get(COLS))),
                 Integer.parseInt(dataValues.get(DATA_FIELDS.get(ROWS))),
                 dataValues.get(DATA_FIELDS.get(CONFIGS)),
                 dataValues.get(DATA_FIELDS.get(NEIGHBORS)),
-                dataValues.get(DATA_FIELDS.get(COLORS)));
+                dataValues.get(DATA_FIELDS.get(COLORS))));
         myDataValues = dataValues;
     }
 
@@ -112,7 +111,7 @@ public class Simulation {
         }
         return false;
     }
-
+    
     private boolean hasValidStates(int[][] cellStates) {
         int maxStateAllowed = 3;
         for (int[] i : cellStates) {
@@ -167,7 +166,7 @@ public class Simulation {
                 throw new XMLException("Cell configuration contains states that are not allowed for this rule");
             }
         } else {
-            throw new XMLException("Cell configuration does not match row/column size");
+            throw new XMLException("Cell configuration contains cell locations that are outside the bounds of the grid size");
         }
     }
 
@@ -176,7 +175,14 @@ public class Simulation {
     }
 
     public String getColors() {
-        return myColors;
+        int maxStateAllowed = 3;
+        if (myColors.split(",").length == maxStateAllowed) {
+                return myColors;
+            } else if (myColors.split(",").length > maxStateAllowed){
+                throw new XMLException("Too many colors provided in XML file: Number of colors must equal number of states");
+            } else {
+            throw new XMLException("Not enough colors provided in XML file: Number of colors must equal number of states");
+        }
     }
 
     /**
