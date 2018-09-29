@@ -10,6 +10,7 @@ import java.util.List;
 public class CellManager {
     //Constants
     public static final int SQUARE_GRID = 0;
+    public static final int TRIANGLE_GRID = 1;
     Rule myActiveRule;
     private Grid myGrid;
     private int myRowSize;
@@ -22,6 +23,9 @@ public class CellManager {
         myColSize = cols;
         if (gridType == SQUARE_GRID) {
             myGrid = new SquareGrid(rows, cols, initConditions, Grid.TOROIDAL, activeRule.getNumStates());
+        }
+        else if (gridType == TRIANGLE_GRID){
+            myGrid = new TriangleGrid(rows, cols, initConditions, Grid.TOROIDAL, activeRule.getNumStates());
         }
         myActiveRule = activeRule;
     }
