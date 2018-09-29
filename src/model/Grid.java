@@ -12,7 +12,7 @@ public abstract class Grid {
     private int myColSize;
     private int myEdgeType;
 
-    Grid(int rowSize, int colSize, int edgeType, int numStates, Class<Cell> cellType) {
+    Grid(int rowSize, int colSize, int edgeType, int numStates, Class cellType) {
         myRowSize = rowSize;
         myColSize = colSize;
         myEdgeType = edgeType;
