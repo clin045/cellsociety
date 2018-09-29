@@ -23,7 +23,7 @@ public class RPSRule extends Rule {
     public static final double DIFFUSION_RATE = 0.3;
     public static final double EMISSION_AMT = 5;
 
-    RPSRule(){
+    public RPSRule(){
         myNumStates = 4;
     }
 
