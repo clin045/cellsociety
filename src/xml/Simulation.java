@@ -1,5 +1,8 @@
 package xml;
 
+import model.Rule;
+
+import javax.swing.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -110,6 +113,18 @@ public class Simulation {
         return false;
     }
 
+    private boolean hasValidStates(int[][] cellStates) {
+        int maxStateAllowed = 3;
+        for (int[] i : cellStates) {
+            for (int j : i) {
+                if (j < 0 || j > maxStateAllowed) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     // provide getters, not setters
     public String getSimulationName() throws XMLException {
         if (isValidSimName(mySimulationName)) {
@@ -145,9 +160,14 @@ public class Simulation {
 
     public int[][] getConfigs() throws XMLException {
         if (myConfigs.length() + 1 == 2 * getCols() * getRows()) {
-            return stringToIntArray(myConfigs);
+            int[][] result = stringToIntArray(myConfigs);
+            if (hasValidStates(result)) {
+                return result;
+            } else {
+                throw new XMLException("Cell configuration contains states that are not allowed for this rule");
+            }
         } else {
-            throw new XMLException("Coordinates do not match row/column input size");
+            throw new XMLException("Cell configuration does not match row/column size");
         }
     }
 
