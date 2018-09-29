@@ -38,6 +38,11 @@ public class SegregationRule extends Rule {
         return 1;
     }
 
+    @Override
+    public Class getCellType() {
+        return Cell.class;
+    }
+
 
     public void applyRule(Cell cell, List<Cell> neighborsArray, int passNum) {
         int similarNeighborsCount = 0;

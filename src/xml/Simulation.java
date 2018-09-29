@@ -1,6 +1,6 @@
 package xml;
 
-import model.Rule;
+import model.rule.Rule;
 
 import javax.swing.*;
 import java.util.HashMap;

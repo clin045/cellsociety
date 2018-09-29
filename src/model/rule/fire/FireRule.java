@@ -32,6 +32,11 @@ public class FireRule extends Rule {
         return 1;
     }
 
+    @Override
+    public Class<Cell> getCellType() {
+        return Cell.class;
+    }
+
     public void applyRule(Cell cell, List<Cell> neighborsArray, int passNum) {
         boolean nearFire = false;
         //throw out diagonals

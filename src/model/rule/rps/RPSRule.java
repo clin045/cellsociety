@@ -17,6 +17,11 @@ public class RPSRule extends Rule {
     }
 
     @Override
+    public Class getCellType() {
+        return RPSCell.class;
+    }
+
+    @Override
     public int getPasses() {
         return 0;
     }

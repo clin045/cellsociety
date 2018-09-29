@@ -31,6 +31,11 @@ public class GameOfLifeRule extends Rule {
         return 1;
     }
 
+    @Override
+    public Class<Cell> getCellType() {
+        return Cell.class;
+    }
+
     public void applyRule(Cell cell, List<Cell> neighborsArray, int passNum) {
         int liveNeighborsCount = 0;
         for (Cell neighbor : neighborsArray) {
