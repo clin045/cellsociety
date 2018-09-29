@@ -111,7 +111,7 @@ public class Simulation {
         }
         return false;
     }
-
+    
     private boolean hasValidStates(int[][] cellStates) {
         int maxStateAllowed = 3;
         for (int[] i : cellStates) {
