@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data media="Simulation">
+    <simulationName>Rock Paper Scissors</simulationName>
+    <title>Version 1</title>
+    <author>Scott McConnell</author>
+    <rows>5</rows>
+    <cols>5</cols>
+    <configs>0,0,0,0,0,0,0,0,0,0,1,2,3,0,0,0,0,0,0,0,0,0,0,0,0</configs>
+    <colors>000000,ffff00,00cd00,ff0000</colors>
+</data>

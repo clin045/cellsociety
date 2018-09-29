@@ -22,6 +22,7 @@ import model.rule.Rule;
 import model.rule.fire.FireRule;
 import model.rule.gameoflife.GameOfLifeRule;
 import model.rule.predatorprey.PredatorPreyRule;
+import model.rule.rps.RPSRule;
 import model.rule.segregation.SegregationRule;
 import xml.Simulation;
 import xml.XMLException;
@@ -170,6 +171,8 @@ public class UIManager extends Application {
             myRule = new PredatorPreyRule();
         } else if (name.compareToIgnoreCase("Fire") == 0) {
             myRule = new FireRule();
+        } else if (name.compareToIgnoreCase("Rock Paper Scissors") == 0) {
+            myRule = new RPSRule();
         } else {
             myRule = new SegregationRule();
         }
