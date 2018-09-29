@@ -1,7 +1,7 @@
 package xml;
 
 import model.rule.Rule;
-import UIManager;
+//import UI.UIManager;
 
 import java.util.HashMap;
 import java.util.List;
@@ -102,10 +102,17 @@ public class Simulation {
         return resultArray;
     }
 
-    private int getNumStates() {
-        Rule currentRule = UIManager.findSimulationType(mySimulationName);
-        return currentRule.getNumStates();
-    }
+//    private int getNumStates() {
+//        Rule currentRule = UI.UIManager.findSimulationType(mySimulationName);
+//        return currentRule.getNumStates();
+//    }
+
+//    private int[][] generateRandomStates() {
+//        String randomStatesString = "";
+//        for (int i = 0; i < (2 * getCols() * getRows() - 1); i++) {
+//            //addRandomState();
+//        }
+//    }
 
     private boolean isValidSimName(String name) {
         String[] validSimulationNames = new String[]{"Game of Life", "Segregation", "Predator Prey", "Fire", "Rock, Paper, Scissors", "Foraging Ants", "Langton's Loop", "SugarScape"};
@@ -164,6 +171,9 @@ public class Simulation {
     }
 
     public int[][] getConfigs() throws XMLException {
+//        if (myConfigs.length() == 0) {
+//            return generateRandomStates();
+//        } else
         if (myConfigs.length() + 1 == 2 * getCols() * getRows()) {
             int[][] result = stringToIntArray(myConfigs);
             if (hasValidStates(result)) {
