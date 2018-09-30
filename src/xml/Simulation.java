@@ -31,7 +31,8 @@ public class Simulation {
             "rows",
             "configs",
             "neighbors",
-            "colors"
+            "colors",
+            "description"
     );
     static private final int SIM_NAME = 0;
     static private final int SIM_TITLE = 1;
@@ -44,6 +45,7 @@ public class Simulation {
     static private final int CONFIGS = 8;
     static private final int NEIGHBORS = 9;
     static private final int COLORS = 10;
+    static private final int DESCRIPTION = 11;
     static private final int NEIGHBOR_COORDINATES_SIZE = 3;
     // specific data values for this instance
     private String mySimulationName;
@@ -58,6 +60,7 @@ public class Simulation {
     private String myNeighbors;
     private String myColors;
     private Rule myRule;
+    private String myDescription;
     private static final String DEFAULT_RESOURCE_PACKAGE = "English";
     private ResourceBundle myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE);
     // NOTE: keep just as an example for converting toString(), otherwise not used
@@ -79,7 +82,9 @@ public class Simulation {
         myNeighbors = configs.getNeighbors();
         myConfigs = configs.getConfigs();
         myColors = configs.getColors();
+        myDescription = configs.getDescription();
         myRule = UI.ConfigurationManager.findSimulationType(mySimulationName);
+
         // NOTE: this is useful so our code does not fail due to a NullPointerException
         myDataValues = new HashMap<>();
     }
@@ -100,7 +105,8 @@ public class Simulation {
                 Integer.parseInt(dataValues.get(DATA_FIELDS.get(ROWS))),
                 dataValues.get(DATA_FIELDS.get(CONFIGS)),
                 dataValues.get(DATA_FIELDS.get(NEIGHBORS)),
-                dataValues.get(DATA_FIELDS.get(COLORS))));
+                dataValues.get(DATA_FIELDS.get(COLORS)),
+                dataValues.get(DATA_FIELDS.get(DESCRIPTION))));
         myDataValues = dataValues;
     }
 
@@ -243,6 +249,10 @@ public class Simulation {
             } else {
             throw new XMLException(myResources.getString("TooFewColors"));
         }
+    }
+
+    public String getDescription() {
+        return myDescription;
     }
 
     /**
