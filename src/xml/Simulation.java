@@ -202,7 +202,7 @@ public class Simulation {
         if (myEdgeType.compareToIgnoreCase("finite") == 0 || myEdgeType.compareToIgnoreCase("toroidal") == 0) {
             return myEdgeType;
         } else {
-            throw new XMLException(myResources.getString("InvalidEdge"));
+            return "finite";
         }
     }
 
