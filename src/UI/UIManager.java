@@ -48,6 +48,7 @@ public class UIManager extends Application {
     private String title;
     private String author;
     private String simulationName;
+    //private String description;
     private int[][] neighbors;
     private String[] colors;
     private String shape;
@@ -166,6 +167,7 @@ public class UIManager extends Application {
         colors = configs.getColors().split(",");
         shape = configs.getShape();
         edgeType = configs.getEdgeType();
+        //description = configs.getDescription();
         return initialStates;
     }
 
@@ -191,6 +193,7 @@ public class UIManager extends Application {
         Label myTitle = new Label(title);
         Label myAuthor = new Label(author);
         Label mySimulationName = new Label(simulationName);
+        //Label myDescription = new Label(description);
 
         GridPane displayInfo = new GridPane();
         displayInfo.setAlignment(Pos.CENTER);
@@ -201,6 +204,8 @@ public class UIManager extends Application {
         GridPane.setHalignment(myAuthor, HPos.CENTER);
         displayInfo.add(mySimulationName, 0, 2);
         GridPane.setHalignment(mySimulationName, HPos.CENTER);
+        //displayInfo.add(myDescription, 0, 3);
+        //GridPane.setHalignment(myDescription, HPos.CENTER);
 
         return displayInfo;
     }
