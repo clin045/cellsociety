@@ -134,7 +134,7 @@ public class Simulation {
         String[] validSimulationNames = new String[]{"Game of Life", "Segregation", "Predator Prey", "Fire", "Rock Paper Scissors", "Foraging Ants", "Langton's Loop", "SugarScape"};
 
         for (String validName : validSimulationNames) {
-            if (name.equals(validName)) {
+            if (name.compareToIgnoreCase(validName) == 0) {
                 return true;
             }
         }
@@ -171,7 +171,7 @@ public class Simulation {
 
     public String getShape() {
         if (myShape.compareToIgnoreCase("square") == 0 || myShape.compareToIgnoreCase("triangle") == 0) {
-            if (myShape.compareToIgnoreCase("triangle") == 0 && ((getRows() % 2) == 0) && ((getCols() % 2) == 0)) {
+            if ((myShape.compareToIgnoreCase("triangle") == 0 && ((getRows() % 2) == 0) && ((getCols() % 2) == 0)) || myShape.compareToIgnoreCase("square") == 0) {
                 return myShape;
             } else {
                 throw new XMLException("You have chosen triangle shape but inputted odd rows/cols values. Please enter even rows/cols value");
@@ -193,7 +193,7 @@ public class Simulation {
         if (myGridLines == 0 || myGridLines == 1) {
             return (myGridLines == 1);
         } else {
-            throw new XMLException("Gridlines input must be either 0 or 1");
+            return true;
         }
     }
 
