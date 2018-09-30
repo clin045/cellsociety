@@ -25,8 +25,6 @@ import xml.XMLException;
 import xml.XMLParser;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Optional;
 import java.util.ResourceBundle;
 
 /**
@@ -53,9 +51,8 @@ public class UIManager extends Application {
     private String[] colors;
     private String shape;
     private String edgeType;
-    //private Timeline animation = new Timeline();
-    private ArrayList<Timeline> myAnimations = new ArrayList<>();
-    private ArrayList<Stage> myStages = new ArrayList<>();
+    private Timeline animation = new Timeline();
+    private Stage myStage;
     private GraphManager myGraph;
     private GridUI myGridUI;
 
@@ -64,22 +61,21 @@ public class UIManager extends Application {
     }
 
     public void start(Stage stage) {
-        myStages.add(stage);
-        myAnimations.add(new Timeline());
+        myStage = stage;
 
         Text chooseFileLabel = new Text(myResources.getString("ChooseFileLabel"));
         Text fileName = new Text(myResources.getString("NoFile"));
 
         Button loadButton = new Button(myResources.getString("SelectButton"));
         loadButton.setOnAction(event -> {
-            chooseFile(myStages.get(0));
+            chooseFile();
             if (chosen != null) {
                 fileName.setText(chosen.getName());
             }
         });
 
         Button startButton = new Button(myResources.getString("StartButton"));
-        startButton.setOnAction(event -> createSimulator(myStages.get(0)));
+        startButton.setOnAction(event -> createSimulator());
 
         GridPane myGridPane = new GridPane();
         myGridPane.setMinSize(WINDOW_SIZE, WINDOW_SIZE);
@@ -95,24 +91,22 @@ public class UIManager extends Application {
 
         Scene myScene = new Scene(myGridPane);
 
-        myStages.get(0).setTitle(myResources.getString("WindowTitle"));
-        myStages.get(0).setScene(myScene);
-        myStages.get(0).show();
+        myStage.setTitle(myResources.getString("WindowTitle"));
+        myStage.setScene(myScene);
+        myStage.show();
     }
 
-    private void createSimulator(Stage stageToUse) {
-        initializeWindow(stageToUse);
+    private void createSimulator() {
+        initializeWindow();
 
         var frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e -> step());
-        for(Timeline animation:myAnimations){
-            animation.setCycleCount(Timeline.INDEFINITE);
-            animation.getKeyFrames().add(frame);
-            animation.playFromStart();
-        }
+        animation.setCycleCount(Timeline.INDEFINITE);
+        animation.getKeyFrames().add(frame);
+        animation.playFromStart();
 
     }
 
-    private void initializeWindow(Stage stageToUse) {
+    private void initializeWindow() {
         try {
             int[][] initialStates = readConfiguration();
             Rule myRule = findSimulationType(simulationName);
@@ -135,19 +129,19 @@ public class UIManager extends Application {
             rootPane.add(myGridUI.getGridPane(), 0, 1);
             rootPane.add(createControlsBlock(), 0, 2);
 
-            stageToUse.setScene(new Scene(rootPane));
+            myStage.setScene(new Scene(rootPane));
         } catch (XMLException e) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("XML File Error");
             alert.setHeaderText(null);
             alert.setContentText(e.getMessage());
             alert.showAndWait();
-            chooseFile((Stage)simulatorGridPane.getScene().getWindow());
-            initializeWindow(stageToUse);
+            chooseFile();
+            initializeWindow();
         }
     }
 
-    private void chooseFile(Stage stageToUse) {
+    private void chooseFile() {
         FileChooser myFileChooser = new FileChooser();
         myFileChooser.setTitle(myResources.getString("ChooserWindowTitle"));
         FileChooser.ExtensionFilter xmlFilter = new FileChooser.ExtensionFilter("XML files (*.xml)", "*.xml");
@@ -155,7 +149,7 @@ public class UIManager extends Application {
         myFileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
         chosen = null;
         while(chosen == null){
-            chosen = myFileChooser.showOpenDialog(stageToUse);
+            chosen = myFileChooser.showOpenDialog(myStage);
         }
     }
 
@@ -214,22 +208,22 @@ public class UIManager extends Application {
         controls.setAlignment(Pos.CENTER);
 
         Button play = new Button(myResources.getString("PlayButton"));
-        play.setOnAction(event -> myAnimations.get(0).play());
+        play.setOnAction(event -> animation.play());
 
         Button pause = new Button(myResources.getString("PauseButton"));
-        pause.setOnAction(event -> myAnimations.get(0).pause());
+        pause.setOnAction(event -> animation.pause());
 
         Button step = new Button(myResources.getString("StepButton"));
         step.setOnAction(event -> step());
 
         Button halfSpeed = new Button(myResources.getString("HalfSpeedButton"));
-        halfSpeed.setOnAction(event -> myAnimations.get(0).setRate(.5));
+        halfSpeed.setOnAction(event -> animation.setRate(.5));
 
         Button normalSpeed = new Button(myResources.getString("NormalSpeedButton"));
-        normalSpeed.setOnAction(event -> myAnimations.get(0).setRate(1));
+        normalSpeed.setOnAction(event -> animation.setRate(1));
 
         Button doubleSpeed = new Button(myResources.getString("DoubleSpeedButton"));
-        doubleSpeed.setOnAction(event -> myAnimations.get(0).setRate(2));
+        doubleSpeed.setOnAction(event -> animation.setRate(2));
 
         Button newSimulation = new Button(myResources.getString("NewSimulation"));
         newSimulation.setOnAction(event -> newSimulation());
@@ -238,7 +232,7 @@ public class UIManager extends Application {
         toggleChart.setOnAction(event -> myGraph.toggleChart());
 
         Button reset = new Button(myResources.getString("Reset"));
-        reset.setOnAction(event -> createSimulator(myStages.get(0)));
+        reset.setOnAction(event -> createSimulator());
 
         controls.getChildren().addAll(play, pause, step, halfSpeed, normalSpeed, doubleSpeed, newSimulation, toggleChart, reset);
 
@@ -246,31 +240,9 @@ public class UIManager extends Application {
     }
 
     private void newSimulation(){
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("New Simulation");
-        alert.setHeaderText("New Simulation");
-        alert.setContentText("Open the new simulation in this window or a new window?");
-
-        ButtonType thisWindow = new ButtonType("This Window");
-        ButtonType newWindow = new ButtonType("New Window");
-        ButtonType cancel = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
-
-        alert.getButtonTypes().setAll(thisWindow, newWindow, cancel);
-
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.get() == thisWindow){
-            chooseFile((Stage)simulatorGridPane.getScene().getWindow());
-            myGraph.closeChart();
-            createSimulator((Stage)simulatorGridPane.getScene().getWindow());
-        }
-        else if (result.get() == newWindow) {
-            Stage newStage = new Stage();
-            myStages.add(newStage);
-            newStage.setTitle(myResources.getString("WindowTitle"));
-            chooseFile(newStage);
-            newStage.show();
-            createSimulator(newStage);
-        }
+        chooseFile();
+        myGraph.closeChart();
+        createSimulator();
     }
 
     private void step() {
