@@ -170,8 +170,8 @@ public class Simulation {
     }
 
     public String getShape() {
-        if (myShape == "square" || myShape == "triangle") {
-            if (myShape == "triangle" && ((getRows() % 2) == 0) && ((getCols() % 2) == 0)) {
+        if (myShape.compareToIgnoreCase("square") == 0 || myShape.compareToIgnoreCase("triangle") == 0) {
+            if (myShape.compareToIgnoreCase("triangle") == 0 && ((getRows() % 2) == 0) && ((getCols() % 2) == 0)) {
                 return myShape;
             } else {
                 throw new XMLException("You have chosen triangle shape but inputted odd rows/cols values. Please enter even rows/cols value");
@@ -182,7 +182,7 @@ public class Simulation {
     }
 
     public String getEdgeType() {
-        if (myEdgeType == "finite" || myEdgeType == "toroidal") {
+        if (myEdgeType.compareToIgnoreCase("finite") == 0 || myEdgeType.compareToIgnoreCase("toroidal") == 0) {
             return myEdgeType;
         } else {
             throw new XMLException("Edge type is invalid. Please choose finite or toroidal");
