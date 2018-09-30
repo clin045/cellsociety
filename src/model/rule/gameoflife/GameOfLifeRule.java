@@ -1,9 +1,12 @@
-package model;
+package model.rule.gameoflife;
+
+import model.Cell;
+import model.rule.Rule;
 
 import java.util.List;
 
 /**
- * Extension of main.model.Rule to apply rules specifically for Conway's Game Of Life
+ * Extension of main.model.rule.Rule to apply rules specifically for Conway's Game Of Life
  * Returns nextState for myCell
  *
  * @author Scott McConnell skm44
@@ -26,6 +29,11 @@ public class GameOfLifeRule extends Rule {
 
     public int getNeighborhoodSize() {
         return 1;
+    }
+
+    @Override
+    public Class<Cell> getCellType() {
+        return Cell.class;
     }
 
     public void applyRule(Cell cell, List<Cell> neighborsArray, int passNum) {

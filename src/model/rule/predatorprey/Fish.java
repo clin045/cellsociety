@@ -1,23 +1,15 @@
-package model;
+package model.rule.predatorprey;
 
-public class Shark {
-    final static int STARTING_ENERGY = 3;
+import model.Cell;
+
+public class Fish {
+
+    public static final int ENERGY_YIELD = 2;
     Cell myCell;
     int myAge = 0;
-    int myEnergy;
 
-
-    Shark(Cell cell) {
+    Fish(Cell cell) {
         myCell = cell;
-        myEnergy = STARTING_ENERGY;
-    }
-
-    public int getEnergy() {
-        return myEnergy;
-    }
-
-    public void setEnergy(int myEnergy) {
-        this.myEnergy = myEnergy;
     }
 
     public int getAge() {

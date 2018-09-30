@@ -1,5 +1,7 @@
-package model;
+package model.rule;
 
+
+import model.Cell;
 
 import java.util.List;
 
@@ -22,7 +24,7 @@ public abstract class Rule {
     public abstract void applyRule(Cell myCell, List<Cell> myNeighbors, int passNum);
 
     public abstract int getNeighborhoodSize();
-
+    public abstract Class getCellType();
 
     public abstract int getPasses();
 }

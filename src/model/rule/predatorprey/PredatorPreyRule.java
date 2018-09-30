@@ -1,11 +1,14 @@
-package model;
+package model.rule.predatorprey;
+
+import model.Cell;
+import model.rule.Rule;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * Extension of main.model.Rule to apply rules specifically for SegregationLife
+ * Extension of main.model.rule.Rule to apply rules specifically for SegregationLife
  * Returns nextState for myCell
  *
  * @author Scott McConnell skm44
@@ -36,6 +39,11 @@ public class PredatorPreyRule extends Rule {
 
     public int getNeighborhoodSize() {
         return 1;
+    }
+
+    @Override
+    public Class<Cell> getCellType() {
+        return Cell.class;
     }
 
     public void applyRule(Cell cell, List<Cell> neighborsArray, int passNum) {

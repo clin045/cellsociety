@@ -1,3 +1,5 @@
+package UI;
+
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -13,6 +15,13 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.*;
+import model.Cell;
+import model.rule.Rule;
+import model.rule.fire.FireRule;
+import model.rule.gameoflife.GameOfLifeRule;
+import model.rule.predatorprey.PredatorPreyRule;
+import model.rule.rps.RPSRule;
+import model.rule.segregation.SegregationRule;
 import xml.Simulation;
 import xml.XMLException;
 import xml.XMLParser;
@@ -43,6 +52,7 @@ public class UIManager extends Application {
     private String title;
     private String author;
     private String simulationName;
+    private int[][] neighbors;
     private String[] colors;
     private Timeline animation = new Timeline();
     private ArrayList<Stage> myStages = new ArrayList();
@@ -145,11 +155,12 @@ public class UIManager extends Application {
         author = configs.getAuthor();
         simulationName = configs.getSimulationName();
         int[][] initialStates = configs.getConfigs();
+        neighbors = configs.getNeighborCoordinates();
         colors = configs.getColors().split(",");
         return initialStates;
     }
 
-    private Rule findSimulationType(String name) {
+    public static Rule findSimulationType(String name) {
         Rule myRule;
         if (name.compareToIgnoreCase("Game of Life") == 0) {
             myRule = new GameOfLifeRule();
@@ -157,6 +168,8 @@ public class UIManager extends Application {
             myRule = new PredatorPreyRule();
         } else if (name.compareToIgnoreCase("Fire") == 0) {
             myRule = new FireRule();
+        } else if (name.compareToIgnoreCase("Rock Paper Scissors") == 0) {
+            myRule = new RPSRule();
         } else {
             myRule = new SegregationRule();
         }

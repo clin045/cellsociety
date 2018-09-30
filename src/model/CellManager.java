@@ -1,5 +1,7 @@
 package model;
 
+import model.rule.Rule;
+
 import java.util.List;
 
 /**
@@ -15,19 +17,21 @@ public class CellManager {
     private Grid myGrid;
     private int myRowSize;
     private int myColSize;
+    private int[][] myNeighbors;
 
 
     //Initializes the myGrid of cells
-    public CellManager(int rows, int cols, int[][] initConditions, Rule activeRule, int gridType) {
+    public CellManager(int rows, int cols, int[][] initConditions, Rule activeRule, int gridType, int[][] neighbors) {
         myRowSize = rows;
         myColSize = cols;
         if (gridType == SQUARE_GRID) {
-            myGrid = new SquareGrid(rows, cols, initConditions, Grid.TOROIDAL, activeRule.getNumStates());
+            myGrid = new SquareGrid(rows, cols, initConditions, Grid.TOROIDAL, activeRule.getNumStates(), activeRule.getCellType());
         }
         else if (gridType == TRIANGLE_GRID){
-            myGrid = new TriangleGrid(rows, cols, initConditions, Grid.TOROIDAL, activeRule.getNumStates());
+            myGrid = new TriangleGrid(rows, cols, initConditions, Grid.TOROIDAL, activeRule.getNumStates(), activeRule.getCellType());
         }
         myActiveRule = activeRule;
+        myNeighbors = neighbors;
     }
 
     public Grid getGrid() {
@@ -54,14 +58,14 @@ public class CellManager {
                 myGrid.getCell(i, j).setNextState(myGrid.getCell(i, j).getCurrentState());
             }
         }
+
         //apply rules
         for (int k = 0; k < numPasses; k++) {
             for (int i = 0; i < myRowSize; i++) {
                 for (int j = 0; j < myColSize; j++) {
                     Cell currentCell = myGrid.getCell(i, j);
-                    List neighborList = myGrid.getNeighbors(currentCell);
+                    List neighborList = myGrid.getNeighbors(currentCell, myNeighbors);
                     myActiveRule.applyRule(currentCell, neighborList, k);
-
                 }
             }
         }

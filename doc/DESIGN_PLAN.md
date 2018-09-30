@@ -95,7 +95,7 @@ Design Details
     * Interactions with other components
         * model.CellManager
             * Passes initial conditions
-        * UIManager
+        * UI.UIManager
             * Passes state colors
     * Error Handling:
         * Check that all parameters are present

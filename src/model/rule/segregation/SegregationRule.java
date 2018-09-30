@@ -1,10 +1,13 @@
-package model;
+package model.rule.segregation;
 
+
+import model.Cell;
+import model.rule.Rule;
 
 import java.util.List;
 
 /**
- * Extension of main.model.Rule to apply rules specifically for SegregationLife
+ * Extension of main.model.rule.Rule to apply rules specifically for SegregationLife
  * Returns nextState for myCell
  *
  * @author Scott McConnell skm44
@@ -22,7 +25,7 @@ public class SegregationRule extends Rule {
     private int unallocated_red = 0;
 
     public SegregationRule(){
-        myNumStates = 4;
+        myNumStates = 3;
     }
 
     public int getPasses() {
@@ -33,6 +36,11 @@ public class SegregationRule extends Rule {
 
     public int getNeighborhoodSize() {
         return 1;
+    }
+
+    @Override
+    public Class getCellType() {
+        return Cell.class;
     }
 
 
