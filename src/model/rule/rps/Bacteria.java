@@ -16,7 +16,7 @@ public class Bacteria {
         return myAge;
     }
 
-    public static final int MAX_AGE = 5;
+    public static final int MAX_AGE = 10;
     Bacteria(int type){
         myType = type;
         myAge = 0;

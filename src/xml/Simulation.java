@@ -171,10 +171,9 @@ public class Simulation {
     }
 
     public int[][] getConfigs() throws XMLException {
-//        if (myConfigs.length() == 0) {
-//            return generateRandomStates();
-        //} else
-        if (myConfigs.length() + 1 == 2 * getCols() * getRows()) {
+        if (myConfigs.length() == 0) {
+            return generateRandomStates();
+        } else if (myConfigs.length() + 1 == 2 * getCols() * getRows()) {
             int[][] result = stringToIntArray(myConfigs, myRows, myCols);
             if (hasValidStates(result)) {
                 return result;
