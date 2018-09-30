@@ -53,7 +53,8 @@ public class UIManager extends Application {
     private String[] colors;
     private String shape;
     private String edgeType;
-    private Timeline animation = new Timeline();
+    //private Timeline animation = new Timeline();
+    private ArrayList<Timeline> myAnimations = new ArrayList<>();
     private ArrayList<Stage> myStages = new ArrayList<>();
     private GraphManager myGraph;
     private GridUI myGridUI;
@@ -64,6 +65,7 @@ public class UIManager extends Application {
 
     public void start(Stage stage) {
         myStages.add(stage);
+        myAnimations.add(new Timeline());
 
         Text chooseFileLabel = new Text(myResources.getString("ChooseFileLabel"));
         Text fileName = new Text(myResources.getString("NoFile"));
@@ -102,9 +104,11 @@ public class UIManager extends Application {
         initializeWindow(stageToUse);
 
         var frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e -> step());
-        animation.setCycleCount(Timeline.INDEFINITE);
-        animation.getKeyFrames().add(frame);
-        animation.playFromStart();
+        for(Timeline animation:myAnimations){
+            animation.setCycleCount(Timeline.INDEFINITE);
+            animation.getKeyFrames().add(frame);
+            animation.playFromStart();
+        }
 
     }
 
@@ -210,22 +214,22 @@ public class UIManager extends Application {
         controls.setAlignment(Pos.CENTER);
 
         Button play = new Button(myResources.getString("PlayButton"));
-        play.setOnAction(event -> animation.play());
+        play.setOnAction(event -> myAnimations.get(0).play());
 
         Button pause = new Button(myResources.getString("PauseButton"));
-        pause.setOnAction(event -> animation.pause());
+        pause.setOnAction(event -> myAnimations.get(0).pause());
 
         Button step = new Button(myResources.getString("StepButton"));
         step.setOnAction(event -> step());
 
         Button halfSpeed = new Button(myResources.getString("HalfSpeedButton"));
-        halfSpeed.setOnAction(event -> animation.setRate(.5));
+        halfSpeed.setOnAction(event -> myAnimations.get(0).setRate(.5));
 
         Button normalSpeed = new Button(myResources.getString("NormalSpeedButton"));
-        normalSpeed.setOnAction(event -> animation.setRate(1));
+        normalSpeed.setOnAction(event -> myAnimations.get(0).setRate(1));
 
         Button doubleSpeed = new Button(myResources.getString("DoubleSpeedButton"));
-        doubleSpeed.setOnAction(event -> animation.setRate(2));
+        doubleSpeed.setOnAction(event -> myAnimations.get(0).setRate(2));
 
         Button newSimulation = new Button(myResources.getString("NewSimulation"));
         newSimulation.setOnAction(event -> newSimulation());
@@ -261,6 +265,7 @@ public class UIManager extends Application {
         }
         else if (result.get() == newWindow) {
             Stage newStage = new Stage();
+            myStages.add(newStage);
             newStage.setTitle(myResources.getString("WindowTitle"));
             chooseFile(newStage);
             newStage.show();
