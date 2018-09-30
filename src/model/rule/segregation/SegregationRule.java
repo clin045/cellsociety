@@ -19,7 +19,7 @@ public class SegregationRule extends Rule {
     static final int BLUE = 1;
     static final int RED = 2;
     static final int UNSATISFIED = 3;
-    static final double PERCENT_SIMILAR_TOLERANCE = 0.3;
+    static double PERCENT_SIMILAR_TOLERANCE = 0.3;
 
     private int unallocated_blue = 0;
     private int unallocated_red = 0;
@@ -33,6 +33,13 @@ public class SegregationRule extends Rule {
     }
     // percent of neighbors that must be similar for happiness
 
+    public double getTolerance(){
+        return PERCENT_SIMILAR_TOLERANCE;
+    }
+
+    public void setTolerance(double tolerance){
+        PERCENT_SIMILAR_TOLERANCE = tolerance;
+    }
 
     public int getNeighborhoodSize() {
         return 1;

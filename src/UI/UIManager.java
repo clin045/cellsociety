@@ -258,6 +258,18 @@ public class UIManager extends Application {
             fireProb.valueProperty().addListener((observable, oldValue, newValue) -> ((FireRule) myRule).setProbability(newValue.doubleValue()));
             controls.getChildren().add(fireProb);
         }
+        if(simulationName.compareToIgnoreCase("Segregation") == 0){
+            Slider tolerance = new Slider();
+            tolerance.setMin(0);
+            tolerance.setMax(1);
+            tolerance.setValue(((SegregationRule)myRule).getTolerance());
+            tolerance.setShowTickLabels(true);
+            tolerance.setShowTickMarks(true);
+            tolerance.setBlockIncrement(.1);
+            tolerance.valueProperty().addListener((observable, oldValue, newValue) -> ((SegregationRule) myRule).setTolerance(newValue.doubleValue()));
+            controls.getChildren().add(tolerance);
+        }
+
 
         return controls;
     }
