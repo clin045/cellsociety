@@ -243,6 +243,7 @@ public class UIManager extends Application {
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == thisWindow){
             chooseFile((Stage)simulatorGridPane.getScene().getWindow());
+            myGraph.closeChart();
             createSimulator((Stage)simulatorGridPane.getScene().getWindow());
         }
         else if (result.get() == newWindow) {
