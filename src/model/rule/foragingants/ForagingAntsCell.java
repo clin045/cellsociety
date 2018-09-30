@@ -72,6 +72,7 @@ public class ForagingAntsCell extends Cell {
 
     public ForagingAntsCell(int row, int col, int initState) {
         super(row, col, initState);
+        antList = new ArrayList<Ant>();
         initialized = false;
     }
 }

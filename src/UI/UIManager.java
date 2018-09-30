@@ -16,6 +16,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.rule.Rule;
 import model.rule.fire.FireRule;
+import model.rule.foragingants.ForagingAntsRule;
 import model.rule.gameoflife.GameOfLifeRule;
 import model.rule.predatorprey.PredatorPreyRule;
 import model.rule.rps.RPSRule;
@@ -184,6 +185,8 @@ public class UIManager extends Application {
             myRule = new FireRule();
         } else if (name.compareToIgnoreCase("Rock Paper Scissors") == 0) {
             myRule = new RPSRule();
+        } else if (name.compareToIgnoreCase("Foraging Ants") == 0) {
+            myRule = new ForagingAntsRule();
         } else {
             myRule = new SegregationRule();
         }

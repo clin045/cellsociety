@@ -4,6 +4,7 @@ import model.Cell;
 import model.rule.Rule;
 
 import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -13,7 +14,6 @@ public class ForagingAntsRule extends Rule {
     public final int FOOD = 2;
     public final int OBSTACLE = 3;
     public final int DISPLAY_FOOD_PHEROMONE = 4;
-    public final int DISPLAY_HOME_PHEROMONE = 5;
 
 
     public final int NUM_HOME_ANTS = 50;
@@ -23,10 +23,15 @@ public class ForagingAntsRule extends Rule {
     public final int MAX_ANT_DENSITY = 10;
     public final double DISPLAY_FOOD_THRESHOLD = 10;
     public final double DISPLAY_HOME_THRESHOLD = 10;
-    public final double EVAPORATION_RATE = 0.2;
+    public final double EVAPORATION_RATE = 0.05;
+
+    public ForagingAntsRule(){
+        myNumStates = 5;
+    }
 
     @Override
     public void applyRule(Cell cell, List<Cell> neighbors, int passNum) {
+
         //reset all ants' hasMoved
         if(passNum == 0){
             //initiialize things on first pass
@@ -43,40 +48,42 @@ public class ForagingAntsRule extends Rule {
                 if(cell.getCurrentState() == OBSTACLE){
                     ((ForagingAntsCell) cell).setObstacle(true);
                 }
+                ((ForagingAntsCell) cell).setInitialized(true);
             }
             List<Ant> antList = ((ForagingAntsCell) cell).getAntList();
-            for(Ant a : antList){
-                a.setHasMoved(false);
+            if(antList.size() > 0){
+                for(Ant a : antList){
+                    a.setHasMoved(false);
+                }
             }
+            //evaporate pheromones
             ((ForagingAntsCell) cell).setFoodLevel(((ForagingAntsCell) cell).getFoodLevel() * (1-EVAPORATION_RATE));
             ((ForagingAntsCell) cell).setHomeLevel(((ForagingAntsCell) cell).getHomeLevel()*(1-EVAPORATION_RATE));
         }
         else if(passNum == 1){
             List<Ant> currentAntList = ((ForagingAntsCell) cell).getAntList();
-            for(Ant a : currentAntList){
-                if(!a.getHasFoodItem() && ((ForagingAntsCell) cell).isFood()){
-                    a.setHasFoodItem(true);
+            for(int i = 0; i < currentAntList.size(); i++){
+                if(!currentAntList.get(i).getHasFoodItem() && ((ForagingAntsCell) cell).isFood()){
+                    currentAntList.get(i).setHasFoodItem(true);
                 }
-                if(a.getHasFoodItem() && ((ForagingAntsCell) cell).isHome()){
-                    a.setHasFoodItem(false);
+                if(currentAntList.get(i).getHasFoodItem() && ((ForagingAntsCell) cell).isHome()){
+                    currentAntList.get(i).setHasFoodItem(false);
                 }
-                if(!a.hasMoved()){
-                    if(a.getHasFoodItem()){
-                        returnToNest(a, (ForagingAntsCell) cell, neighbors);
+                if(!currentAntList.get(i).hasMoved()){
+                    if(currentAntList.get(i).getHasFoodItem()){
+                        returnToNest(currentAntList.get(i), (ForagingAntsCell) cell, neighbors);
                     }
                     else{
-                        findFood(a, (ForagingAntsCell) cell, neighbors);
+                        findFood(currentAntList.get(i), (ForagingAntsCell) cell, neighbors);
                     }
                 }
             }
         }
         else {
-            if (((ForagingAntsCell) cell).getFoodLevel() > DISPLAY_FOOD_THRESHOLD) {
+            if (((ForagingAntsCell) cell).getFoodLevel() > DISPLAY_FOOD_THRESHOLD && cell.getCurrentState() != HOME && cell.getCurrentState() != FOOD && cell.getCurrentState() != OBSTACLE) {
                 cell.setNextState(DISPLAY_FOOD_PHEROMONE);
             }
-            if (((ForagingAntsCell) cell).getFoodLevel() > DISPLAY_HOME_THRESHOLD) {
-                cell.setNextState(DISPLAY_HOME_PHEROMONE);
-            }
+
             else{
                 if(cell.getCurrentState() != HOME && cell.getCurrentState() != FOOD && cell.getCurrentState() != OBSTACLE){
                     cell.setNextState(NEUTRAL);
@@ -86,26 +93,30 @@ public class ForagingAntsRule extends Rule {
     }
 
     private void findFood(Ant ant, ForagingAntsCell cell, List<Cell> neighbors) {
-        List<Cell> possNeighbors = neighbors;
+        ArrayList<Cell> possNeighbors  = new ArrayList<>();
+        possNeighbors.addAll(neighbors);
         dropHomePheromones(cell, getMaxHomePheromones(neighbors));
         //move ant
-        for(int i = 0; i < possNeighbors.size(); i++){
-            ForagingAntsCell currentCell = (ForagingAntsCell) possNeighbors.get(i);
-            if(currentCell.isObstacle()){
-                possNeighbors.remove(i);
+        for(int i = 0; i < neighbors.size(); i++){
+            ForagingAntsCell currentCell = (ForagingAntsCell) neighbors.get(i);
+            if(!currentCell.isObstacle() && !(currentCell.getAntList().size() > MAX_ANT_DENSITY)){
+                possNeighbors.add(neighbors.get(i));
             }
-            if(currentCell.getAntList().size() > MAX_ANT_DENSITY){
-                possNeighbors.remove(i);
+
+        }
+        if(possNeighbors.size() > 0){
+            double[] indexProbs = new double[possNeighbors.size()];
+            for(int i = 0; i < possNeighbors.size(); i++){
+                indexProbs[i] = ((ForagingAntsCell) possNeighbors.get(i)).getFoodLevel();
             }
+            int destIndex = indexSelector(indexProbs);
+            ForagingAntsCell destCell = (ForagingAntsCell) possNeighbors.get(destIndex);
+            destCell.getAntList().add(ant);
+            cell.getAntList().remove(ant);
         }
-        double[] indexProbs = new double[possNeighbors.size()];
-        for(int i = 0; i < possNeighbors.size(); i++){
-            indexProbs[i] = ((ForagingAntsCell) possNeighbors.get(i)).getFoodLevel();
-        }
-        int destIndex = indexSelector(indexProbs);
-        ForagingAntsCell destCell = (ForagingAntsCell) possNeighbors.get(destIndex);
-        destCell.getAntList().add(ant);
-        cell.getAntList().remove(ant);
+
+        ant.setHasMoved(true);
+
     }
 
     private int indexSelector(double[] indexProbs){
@@ -113,7 +124,9 @@ public class ForagingAntsRule extends Rule {
         for(double d : indexProbs){
             sum = sum + d;
         }
-
+        if(sum == 0){
+            return ThreadLocalRandom.current().nextInt(0, indexProbs.length);
+        }
         double rand = ThreadLocalRandom.current().nextDouble(0, sum);
         int index = 0;
         double runningSum = 0;
@@ -190,7 +203,7 @@ public class ForagingAntsRule extends Rule {
 
     @Override
     public Class getCellType() {
-        return ForagingAntsRule.class;
+        return ForagingAntsCell.class;
     }
 
     @Override
