@@ -16,11 +16,11 @@ public class SquareGridUI extends GridUI {
     private int myColumns;
     private CellManager myCellManager;
 
-    SquareGridUI(int[][] initialStates, int rows, int columns, String[] colors, Rule myRule, int[][] neighbors){
+    SquareGridUI(int[][] initialStates, int rows, int columns, String[] colors, Rule myRule, int[][] neighbors, String edgeType){
         myColors = colors;
         myRows = rows;
         myColumns = columns;
-        myCellManager = new CellManager(rows, columns, initialStates, myRule, CellManager.SQUARE_GRID, neighbors);
+        myCellManager = new CellManager(rows, columns, initialStates, myRule, CellManager.SQUARE_GRID, neighbors, edgeType);
         simulatorGridPane = new GridPane();
         simulatorGridPane.setAlignment(Pos.CENTER);
         for (int i = 0; i < myRows; i++) {
