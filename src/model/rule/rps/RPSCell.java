@@ -39,7 +39,7 @@ public class RPSCell extends Cell {
     double paper_level;
     double scissors_level;
     Bacteria myBacteria;
-    RPSCell(int row, int col, int initState) {
+    public RPSCell(int row, int col, int initState) {
         super(row, col, initState);
         myBacteria = null;
         rock_level = 0;

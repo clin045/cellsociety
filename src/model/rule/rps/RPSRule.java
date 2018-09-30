@@ -22,8 +22,9 @@ public class RPSRule extends Rule {
     public static final int INHIBITION_THRESHOLD = 20;
     public static final double DIFFUSION_RATE = 0.3;
     public static final double EMISSION_AMT = 5;
+    public static final double DECAY_RATE = 0.2;
 
-    RPSRule(){
+    public RPSRule(){
         myNumStates = 4;
     }
 
@@ -34,19 +35,28 @@ public class RPSRule extends Rule {
             ((RPSCell) cell).setBacteria(new Bacteria(cell.getCurrentState()));
         }
         killBacteria(cell);
+        //decay AI particles
+        ((RPSCell) cell).setRock_level(((RPSCell) cell).getRock_level()*(1-DECAY_RATE));
+        ((RPSCell) cell).setPaper_level(((RPSCell) cell).getPaper_level()*(1-DECAY_RATE));
+        ((RPSCell) cell).setScissors_level(((RPSCell) cell).getScissors_level()*(1-DECAY_RATE));
+
+
         diffuseAIParticles((RPSCell) cell, neighbors);
         reproduceBacteria((RPSCell) cell, neighbors);
         emitAIParticles((RPSCell) cell, neighbors);
         if(((RPSCell) cell).getBacteria() == null){
-            ((RPSCell) cell).getBacteria().incAge();
             cell.setNextState(EMPTY);
         }
         else{
+            ((RPSCell) cell).getBacteria().incAge();
             cell.setNextState(((RPSCell) cell).getBacteria().getType());
         }
     }
 
     private void emitAIParticles(RPSCell cell, List<Cell> neighbors) {
+        if(cell.getBacteria() == null){
+            return;
+        }
         for(Cell c : neighbors){
             if(cell.getBacteria().getType() == ROCK){
                 ((RPSCell) c).setRock_level(((RPSCell) c).getRock_level()+EMISSION_AMT);
