@@ -19,14 +19,14 @@ public class TriangleGridUI extends GridUI {
     private CellManager myCellManager;
     private Polygon[][] myTriangles;
 
-    TriangleGridUI(int[][] initialStates, int rows, int columns, String[] colors, Rule myRule, int[][] neighbors){
+    TriangleGridUI(int[][] initialStates, int rows, int columns, String[] colors, Rule myRule, int[][] neighbors, String edgeType){
         myColors = colors;
         myRows = rows;
         myColumns = columns;
         double triangleWidth = USABLE_WINDOW_SIZE / (myColumns / 2.0 + .5);
         double triangleHeight = (double)USABLE_WINDOW_SIZE / myRows;
         myTriangles = new Polygon[myRows][myColumns];
-        myCellManager = new CellManager(rows, columns, initialStates, myRule, CellManager.TRIANGLE_GRID, neighbors);
+        myCellManager = new CellManager(rows, columns, initialStates, myRule, CellManager.TRIANGLE_GRID, neighbors, edgeType);
         simulatorGridPane = new GridPane();
         simulatorGridPane.setAlignment(Pos.CENTER);
         Pane triangleHolder = generateTriangles(triangleWidth, triangleHeight, initialStates);

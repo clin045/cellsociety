@@ -51,6 +51,8 @@ public class UIManager extends Application {
     private String simulationName;
     private int[][] neighbors;
     private String[] colors;
+    private String shape;
+    private String edgeType;
     private Timeline animation = new Timeline();
     private ArrayList<Stage> myStages = new ArrayList<>();
     private GraphManager myGraph;
@@ -112,7 +114,13 @@ public class UIManager extends Application {
             Rule myRule = findSimulationType(simulationName);
 
             myGraph = new GraphManager(colors.length, colors);
-            myGridUI = new SquareGridUI(initialStates, rows, columns, colors, myRule, neighbors);
+
+            if(shape.compareToIgnoreCase("square") == 0){
+                myGridUI = new SquareGridUI(initialStates, rows, columns, colors, myRule, neighbors, edgeType);
+            }
+            else {
+                myGridUI = new TriangleGridUI(initialStates, rows, columns, colors, myRule, neighbors, edgeType);
+            }
 
             GridPane rootPane = new GridPane();
             rootPane.setPadding(new Insets(PADDING_SIZE, PADDING_SIZE, PADDING_SIZE, PADDING_SIZE));
@@ -154,6 +162,7 @@ public class UIManager extends Application {
         int[][] initialStates = configs.getConfigs();
         neighbors = configs.getNeighborCoordinates();
         colors = configs.getColors().split(",");
+        shape = configs.getShape();
         return initialStates;
     }
 

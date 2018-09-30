@@ -21,14 +21,24 @@ public class CellManager {
 
 
     //Initializes the myGrid of cells
-    public CellManager(int rows, int cols, int[][] initConditions, Rule activeRule, int gridType, int[][] neighbors) {
+    public CellManager(int rows, int cols, int[][] initConditions, Rule activeRule, int gridType, int[][] neighbors, String edgeType) {
         myRowSize = rows;
         myColSize = cols;
         if (gridType == SQUARE_GRID) {
-            myGrid = new SquareGrid(rows, cols, initConditions, Grid.TOROIDAL, activeRule.getNumStates(), activeRule.getCellType());
+            if(edgeType.compareToIgnoreCase("toroidal") == 0){
+                myGrid = new SquareGrid(rows, cols, initConditions, Grid.TOROIDAL, activeRule.getNumStates(), activeRule.getCellType());
+            }
+            else {
+                myGrid = new SquareGrid(rows, cols, initConditions, Grid.FINITE, activeRule.getNumStates(), activeRule.getCellType());
+            }
         }
         else if (gridType == TRIANGLE_GRID){
-            myGrid = new TriangleGrid(rows, cols, initConditions, Grid.TOROIDAL, activeRule.getNumStates(), activeRule.getCellType());
+            if(edgeType.compareToIgnoreCase("toroidal") == 0){
+                myGrid = new TriangleGrid(rows, cols, initConditions, Grid.TOROIDAL, activeRule.getNumStates(), activeRule.getCellType());
+            }
+            else {
+                myGrid = new TriangleGrid(rows, cols, initConditions, Grid.FINITE, activeRule.getNumStates(), activeRule.getCellType());
+            }
         }
         myActiveRule = activeRule;
         myNeighbors = neighbors;
