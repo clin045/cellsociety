@@ -193,7 +193,7 @@ public class Simulation {
         if (myGridLines == 0 || myGridLines == 1) {
             return (myGridLines == 1);
         } else {
-            throw new XMLException("Gridlines input must be either 0 or 1");
+            return true;
         }
     }
 
