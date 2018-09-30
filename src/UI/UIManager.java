@@ -149,7 +149,10 @@ public class UIManager extends Application {
         FileChooser.ExtensionFilter xmlFilter = new FileChooser.ExtensionFilter("XML files (*.xml)", "*.xml");
         myFileChooser.getExtensionFilters().add(xmlFilter);
         myFileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
-        chosen = myFileChooser.showOpenDialog(stageToUse);
+        chosen = null;
+        while(chosen == null){
+            chosen = myFileChooser.showOpenDialog(stageToUse);
+        }
     }
 
     private int[][] readConfiguration() {
@@ -163,6 +166,7 @@ public class UIManager extends Application {
         neighbors = configs.getNeighborCoordinates();
         colors = configs.getColors().split(",");
         shape = configs.getShape();
+        edgeType = configs.getEdgeType();
         return initialStates;
     }
 
