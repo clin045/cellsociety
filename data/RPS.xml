@@ -4,7 +4,7 @@
     <title>Version 1</title>
     <author>Scott McConnell</author>
     <shape>square</shape>
-    <edgeType>finite</edgeType>
+    <edgeType>toroidal</edgeType>
     <gridLines>1</gridLines>
     <rows>12</rows>
     <cols>12</cols>

@@ -1,5 +1,6 @@
 package UI;
 
+import javafx.scene.control.Slider;
 import model.rule.Rule;
 import model.rule.fire.FireRule;
 import model.rule.foragingants.ForagingAntsRule;
@@ -7,6 +8,8 @@ import model.rule.gameoflife.GameOfLifeRule;
 import model.rule.predatorprey.PredatorPreyRule;
 import model.rule.rps.RPSRule;
 import model.rule.segregation.SegregationRule;
+
+import java.util.ArrayList;
 
 public class ConfigurationManager {
     private int[][] myInitialStates;
@@ -90,5 +93,47 @@ public class ConfigurationManager {
             rule = new SegregationRule();
         }
         return rule;
+    }
+
+    public ArrayList<Slider> getSliders(Rule myRule){
+        ArrayList<Slider> mySliders = new ArrayList<>();
+        if(mySimulationName.compareToIgnoreCase("Fire") == 0){
+            Slider fireProb = new Slider(0, 1, ((FireRule)myRule).getProbability());
+            fireProb.setShowTickLabels(true);
+            fireProb.setShowTickMarks(true);
+            fireProb.setBlockIncrement(.1);
+            fireProb.valueProperty().addListener((observable, oldValue, newValue) -> ((FireRule) myRule).setProbability(newValue.doubleValue()));
+            mySliders.add(fireProb);
+        }
+        else if(mySimulationName.compareToIgnoreCase("Segregation") == 0){
+            Slider tolerance = new Slider(0, 1, ((SegregationRule)myRule).getTolerance());
+            tolerance.setShowTickLabels(true);
+            tolerance.setShowTickMarks(true);
+            tolerance.setBlockIncrement(.1);
+            tolerance.valueProperty().addListener((observable, oldValue, newValue) -> ((SegregationRule) myRule).setTolerance(newValue.doubleValue()));
+            mySliders.add(tolerance);
+        }
+        else if(mySimulationName.compareToIgnoreCase("Predator Prey") == 0){
+            Slider fishTime = new Slider(1, 30, ((PredatorPreyRule)myRule).getFishReproductionTime());
+            Slider sharkTime = new Slider(1, 30, ((PredatorPreyRule)myRule).getSharkReproductionTime());
+            fishTime.setShowTickLabels(true);
+            sharkTime.setShowTickLabels(true);
+            fishTime.setShowTickMarks(true);
+            sharkTime.setShowTickLabels(true);
+            sharkTime.setBlockIncrement(1);
+            fishTime.setBlockIncrement(1);
+            fishTime.valueProperty().addListener((observable, oldValue, newValue) -> ((PredatorPreyRule) myRule).setFishReproductionTime(newValue.intValue()));
+            sharkTime.valueProperty().addListener((observable, oldValue, newValue) -> ((PredatorPreyRule)myRule).setSharkReproductionTime(newValue.intValue()));
+            mySliders.add(sharkTime);
+            mySliders.add(fishTime);
+        }
+        return mySliders;
+    }
+
+    public GridUI createGridUI(Rule myRule){
+        if(myShape.compareToIgnoreCase("square") == 0){
+            return new SquareGridUI(myInitialStates, myRows, myColumns, myColors, myRule, myNeighbors, myEdgeType);
+        }
+        return new TriangleGridUI(myInitialStates, myRows, myColumns, myColors, myRule, myNeighbors, myEdgeType);
     }
 }
