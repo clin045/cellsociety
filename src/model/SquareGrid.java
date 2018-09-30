@@ -28,9 +28,9 @@ public class SquareGrid extends Grid {
         ArrayList<Cell> neighbors = new ArrayList<>();
         for (int i = cell.getRow() - 1; i <= cell.getRow() + 1; i++) {
             for (int j = cell.getCol() - 1; j <= cell.getCol() + 1; j++) {
-                if (getCell(i, j) != null) {
+                if (getNeighborCell(i, j) != null) {
                     if(neighborMask[i-(cell.getRow()-1)][j-(cell.getCol()-1)] == 1){
-                        neighbors.add(getCell(i, j));
+                        neighbors.add(getNeighborCell(i, j));
                     }
                 }
             }
