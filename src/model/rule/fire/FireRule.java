@@ -17,7 +17,7 @@ public class FireRule extends Rule {
     static final int BURNING = 2;
     static final int TREE = 1;
     static final int EMPTY = 0;
-    static final double PROB_CATCH = 0.8;
+    static double PROB_CATCH = 0.1;
 
     public FireRule(){
         myNumStates = 3;
@@ -30,6 +30,14 @@ public class FireRule extends Rule {
 
     public int getNeighborhoodSize() {
         return 1;
+    }
+
+    public void setProbability(double prob){
+        PROB_CATCH = prob;
+    }
+
+    public double getProbability(){
+        return PROB_CATCH;
     }
 
     @Override

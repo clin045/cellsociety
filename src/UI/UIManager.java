@@ -3,6 +3,8 @@ package UI;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -57,6 +59,7 @@ public class UIManager extends Application {
     private Stage myStage;
     private GraphManager myGraph;
     private GridUI myGridUI;
+    private Rule myRule;
 
     public static void main(String args[]) {
         launch(args);
@@ -111,7 +114,7 @@ public class UIManager extends Application {
     private void initializeWindow() {
         try {
             int[][] initialStates = readConfiguration();
-            Rule myRule = findSimulationType(simulationName);
+            myRule = findSimulationType(simulationName);
 
             myGraph = new GraphManager(colors.length, colors);
 
@@ -172,21 +175,21 @@ public class UIManager extends Application {
     }
 
     public static Rule findSimulationType(String name) {
-        Rule myRule;
+        Rule rule;
         if (name.compareToIgnoreCase("Game of Life") == 0) {
-            myRule = new GameOfLifeRule();
+            rule = new GameOfLifeRule();
         } else if (name.compareToIgnoreCase("Predator Prey") == 0) {
-            myRule = new PredatorPreyRule();
+            rule = new PredatorPreyRule();
         } else if (name.compareToIgnoreCase("Fire") == 0) {
-            myRule = new FireRule();
+            rule = new FireRule();
         } else if (name.compareToIgnoreCase("Rock Paper Scissors") == 0) {
-            myRule = new RPSRule();
+            rule = new RPSRule();
         } else if (name.compareToIgnoreCase("Foraging Ants") == 0) {
-            myRule = new ForagingAntsRule();
+            rule = new ForagingAntsRule();
         } else {
-            myRule = new SegregationRule();
+            rule = new SegregationRule();
         }
-        return myRule;
+        return rule;
     }
 
     private GridPane createTitleBlock() {
@@ -243,6 +246,18 @@ public class UIManager extends Application {
         reset.setOnAction(event -> createSimulator());
 
         controls.getChildren().addAll(play, pause, step, halfSpeed, normalSpeed, doubleSpeed, newSimulation, toggleChart, reset);
+
+        if(simulationName.compareToIgnoreCase("Fire") == 0){
+            Slider fireProb = new Slider();
+            fireProb.setMin(0);
+            fireProb.setMax(1);
+            fireProb.setValue(((FireRule)myRule).getProbability());
+            fireProb.setShowTickLabels(true);
+            fireProb.setShowTickMarks(true);
+            fireProb.setBlockIncrement(.1);
+            fireProb.valueProperty().addListener((observable, oldValue, newValue) -> ((FireRule) myRule).setProbability(newValue.doubleValue()));
+            controls.getChildren().add(fireProb);
+        }
 
         return controls;
     }
