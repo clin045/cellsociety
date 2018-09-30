@@ -1,12 +1,13 @@
+package UI;
+
 import javafx.geometry.Pos;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import model.Cell;
 import model.CellManager;
-import model.Rule;
+import model.rule.Rule;
 
 
 public class TriangleGridUI extends GridUI {
@@ -20,14 +21,14 @@ public class TriangleGridUI extends GridUI {
     private double triangleWidth;
     private double triangleHeight;
 
-    TriangleGridUI(int[][] initialStates, int rows, int columns, String[] colors, Rule myRule){
+    TriangleGridUI(int[][] initialStates, int rows, int columns, String[] colors, Rule myRule, int[][] neighbors){
         myColors = colors;
         myRows = rows;
         myColumns = columns;
         triangleWidth = USABLE_WINDOW_SIZE/(myColumns/2 + .5);
         triangleHeight = USABLE_WINDOW_SIZE/myRows;
         myTriangles = new Polygon[myRows][myColumns];
-        myCellManager = new CellManager(rows, columns, initialStates, myRule, CellManager.TRIANGLE_GRID);
+        myCellManager = new CellManager(rows, columns, initialStates, myRule, CellManager.TRIANGLE_GRID, neighbors);
         simulatorGridPane = new GridPane();
         simulatorGridPane.setAlignment(Pos.CENTER);
         Pane triangleHolder = new Pane();

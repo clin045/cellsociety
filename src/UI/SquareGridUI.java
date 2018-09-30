@@ -1,10 +1,13 @@
+package UI;
+
+import UI.GridUI;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import model.Cell;
 import model.CellManager;
-import model.Rule;
+import model.rule.Rule;
 
 public class SquareGridUI extends GridUI {
     private static final int USABLE_WINDOW_SIZE = 500;
@@ -14,11 +17,11 @@ public class SquareGridUI extends GridUI {
     private int myColumns;
     private CellManager myCellManager;
 
-    SquareGridUI(int[][] initialStates, int rows, int columns, String[] colors, Rule myRule){
+    SquareGridUI(int[][] initialStates, int rows, int columns, String[] colors, Rule myRule, int[][] neighbors){
         myColors = colors;
         myRows = rows;
         myColumns = columns;
-        myCellManager = new CellManager(rows, columns, initialStates, myRule, CellManager.SQUARE_GRID);
+        myCellManager = new CellManager(rows, columns, initialStates, myRule, CellManager.SQUARE_GRID, neighbors);
         simulatorGridPane = new GridPane();
         simulatorGridPane.setAlignment(Pos.CENTER);
         for (int i = 0; i < myRows; i++) {
