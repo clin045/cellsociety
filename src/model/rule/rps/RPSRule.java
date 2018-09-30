@@ -22,6 +22,7 @@ public class RPSRule extends Rule {
     public static final int INHIBITION_THRESHOLD = 20;
     public static final double DIFFUSION_RATE = 0.3;
     public static final double EMISSION_AMT = 5;
+    public static final double DECAY_RATE = 0.2;
 
     public RPSRule(){
         myNumStates = 4;
@@ -34,6 +35,8 @@ public class RPSRule extends Rule {
             ((RPSCell) cell).setBacteria(new Bacteria(cell.getCurrentState()));
         }
         killBacteria(cell);
+        //decay AI particles
+        ((RPSCell) cell).setRock_level(((RPSCell) cell).getRock_level()*(1-DECAY_RATE));
         diffuseAIParticles((RPSCell) cell, neighbors);
         reproduceBacteria((RPSCell) cell, neighbors);
         emitAIParticles((RPSCell) cell, neighbors);
