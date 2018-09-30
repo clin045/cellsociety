@@ -5,6 +5,7 @@ import model.rule.Rule;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.concurrent.ThreadLocalRandom;
 
 
@@ -23,6 +24,9 @@ public class Simulation {
             "simulationName",
             "title",
             "author",
+            "shape",
+            "edgeType",
+            "gridLines",
             "cols",
             "rows",
             "configs",
@@ -32,22 +36,30 @@ public class Simulation {
     static private final int SIM_NAME = 0;
     static private final int SIM_TITLE = 1;
     static private final int SIM_AUTHOR = 2;
-    static private final int COLS = 3;
-    static private final int ROWS = 4;
-    static private final int CONFIGS = 5;
-    static private final int NEIGHBORS = 6;
+    static private final int SHAPE = 3;
+    static private final int EDGE_TYPE = 4;
+    static private final int GRIDLINES = 5;
+    static private final int COLS = 6;
+    static private final int ROWS = 7;
+    static private final int CONFIGS = 8;
+    static private final int NEIGHBORS = 9;
+    static private final int COLORS = 10;
     static private final int NEIGHBOR_COORDINATES_SIZE = 3;
-    static private final int COLORS = 7;
     // specific data values for this instance
     private String mySimulationName;
     private String myTitle;
     private String myAuthor;
+    private String myShape;
+    private String myEdgeType;
+    private int myGridLines;
     private int myRows;
     private int myCols;
     private String myConfigs;
     private String myNeighbors;
     private String myColors;
     private Rule myRule;
+    private static final String DEFAULT_RESOURCE_PACKAGE = "English";
+    private ResourceBundle myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE);
     // NOTE: keep just as an example for converting toString(), otherwise not used
     private Map<String, String> myDataValues;
 
@@ -55,10 +67,13 @@ public class Simulation {
     /**
      * Create game data from given data.
      */
-    public Simulation(String simulationName, String title, String author, GeneralConfigurations configs) {
+    public Simulation(String simulationName, String title, String author, String shape, String edgeType, int gridLines, GeneralConfigurations configs) {
         mySimulationName = simulationName;
         myTitle = title;
         myAuthor = author;
+        myShape = shape;
+        myEdgeType = edgeType;
+        myGridLines = gridLines;
         myRows = configs.getRows();
         myCols = configs.getCols();
         myNeighbors = configs.getNeighbors();
@@ -78,6 +93,9 @@ public class Simulation {
         this(dataValues.get(DATA_FIELDS.get(SIM_NAME)),
                 dataValues.get(DATA_FIELDS.get(SIM_TITLE)),
                 dataValues.get(DATA_FIELDS.get(SIM_AUTHOR)),
+                dataValues.get(DATA_FIELDS.get(SHAPE)),
+                dataValues.get(DATA_FIELDS.get(EDGE_TYPE)),
+                Integer.parseInt(dataValues.get(DATA_FIELDS.get(GRIDLINES))),
                 new GeneralConfigurations(Integer.parseInt(dataValues.get(DATA_FIELDS.get(COLS))),
                 Integer.parseInt(dataValues.get(DATA_FIELDS.get(ROWS))),
                 dataValues.get(DATA_FIELDS.get(CONFIGS)),
@@ -119,7 +137,7 @@ public class Simulation {
         String[] validSimulationNames = new String[]{"Game of Life", "Segregation", "Predator Prey", "Fire", "Rock Paper Scissors", "Foraging Ants", "Langton's Loop", "SugarScape"};
 
         for (String validName : validSimulationNames) {
-            if (name.equals(validName)) {
+            if (name.compareToIgnoreCase(validName) == 0) {
                 return true;
             }
         }
@@ -142,7 +160,7 @@ public class Simulation {
         if (isValidSimName(mySimulationName)) {
             return mySimulationName;
         } else {
-            throw new XMLException("Invalid Simulation Name");
+            throw new XMLException(myResources.getString("InvalidSimName"));
         }
     }
 
@@ -154,11 +172,39 @@ public class Simulation {
         return myAuthor;
     }
 
+    public String getShape() {
+        if (myShape.compareToIgnoreCase("square") == 0 || myShape.compareToIgnoreCase("triangle") == 0) {
+            if ((myShape.compareToIgnoreCase("triangle") == 0 && ((getRows() % 2) == 0) && ((getCols() % 2) == 0)) || myShape.compareToIgnoreCase("square") == 0) {
+                return myShape;
+            } else {
+                throw new XMLException(myResources.getString("OddValuesWhenTriangle"));
+            }
+        } else {
+            throw new XMLException(myResources.getString("InvalidShape"));
+        }
+    }
+
+    public String getEdgeType() {
+        if (myEdgeType.compareToIgnoreCase("finite") == 0 || myEdgeType.compareToIgnoreCase("toroidal") == 0) {
+            return myEdgeType;
+        } else {
+            throw new XMLException(myResources.getString("InvalidEdge"));
+        }
+    }
+
+    public boolean getGridLines() {
+        if (myGridLines == 0 || myGridLines == 1) {
+            return (myGridLines == 1);
+        } else {
+            return true;
+        }
+    }
+
     public int getCols() throws XMLException {
         if (myCols != 0) {
             return Math.abs(myCols);
         } else {
-            throw new XMLException("Number of Columns must be nonzero");
+            throw new XMLException(myResources.getString("InvalidCols"));
         }
     }
 
@@ -166,7 +212,7 @@ public class Simulation {
         if (myRows != 0) {
             return Math.abs(myRows);
         } else {
-            throw new XMLException("Number of Rows must be nonzero");
+            throw new XMLException(myResources.getString("InvalidRows"));
         }
     }
 
@@ -178,10 +224,10 @@ public class Simulation {
             if (hasValidStates(result)) {
                 return result;
             } else {
-                throw new XMLException("Cell configuration contains states that are not allowed for this rule");
+                throw new XMLException(myResources.getString("InvalidStates"));
             }
         } else {
-            throw new XMLException("Cell configuration contains cell locations that are outside the bounds of the grid size");
+            throw new XMLException(myResources.getString("InvalidCoordinates"));
         }
     }
 
@@ -193,9 +239,9 @@ public class Simulation {
         if (myColors.split(",").length == myRule.getNumStates()) {
                 return myColors;
             } else if (myColors.split(",").length > myRule.getNumStates()){
-                throw new XMLException("Too many colors provided in XML file: Number of colors must equal number of states");
+                throw new XMLException(myResources.getString("TooManyColors"));
             } else {
-            throw new XMLException("Not enough colors provided in XML file: Number of colors must equal number of states");
+            throw new XMLException(myResources.getString("TooFewColors"));
         }
     }
 
