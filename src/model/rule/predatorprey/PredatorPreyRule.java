@@ -22,10 +22,26 @@ public class PredatorPreyRule extends Rule {
     static final int EMPTY = 0;
     static final int SHARK = 1;
     static final int FISH = 2;
-    static final int FISH_REPRODUCTION_TIME = 4;
-    static final int SHARK_REPRODUCTION_TIME = 12;
+    static int FISH_REPRODUCTION_TIME = 4;
+    static int SHARK_REPRODUCTION_TIME = 12;
     private ArrayList<Fish> fishList;
     private ArrayList<Shark> sharkList;
+
+    public int getFishReproductionTime(){
+        return FISH_REPRODUCTION_TIME;
+    }
+
+    public int getSharkReproductionTime(){
+        return SHARK_REPRODUCTION_TIME;
+    }
+
+    public void setFishReproductionTime(int time){
+        FISH_REPRODUCTION_TIME = time;
+    }
+
+    public void setSharkReproductionTime(int time){
+        SHARK_REPRODUCTION_TIME = time;
+    }
 
     public PredatorPreyRule() {
         fishList = new ArrayList<>();
