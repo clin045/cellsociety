@@ -5,6 +5,7 @@ import model.rule.Rule;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.concurrent.ThreadLocalRandom;
 
 
@@ -57,6 +58,8 @@ public class Simulation {
     private String myNeighbors;
     private String myColors;
     private Rule myRule;
+    private static final String DEFAULT_RESOURCE_PACKAGE = "English";
+    private ResourceBundle myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE);
     // NOTE: keep just as an example for converting toString(), otherwise not used
     private Map<String, String> myDataValues;
 
@@ -157,7 +160,7 @@ public class Simulation {
         if (isValidSimName(mySimulationName)) {
             return mySimulationName;
         } else {
-            throw new XMLException("Invalid Simulation Name");
+            throw new XMLException(myResources.getString("InvalidSimName"));
         }
     }
 
@@ -174,10 +177,10 @@ public class Simulation {
             if ((myShape.compareToIgnoreCase("triangle") == 0 && ((getRows() % 2) == 0) && ((getCols() % 2) == 0)) || myShape.compareToIgnoreCase("square") == 0) {
                 return myShape;
             } else {
-                throw new XMLException("You have chosen triangle shape but inputted odd rows/cols values. Please enter even rows/cols value");
+                throw new XMLException(myResources.getString("OddValuesWhenTriangle"));
             }
         } else {
-            throw new XMLException("Shape type is invalid. Please choose square or triangle");
+            throw new XMLException(myResources.getString("InvalidShape"));
         }
     }
 
@@ -185,7 +188,7 @@ public class Simulation {
         if (myEdgeType.compareToIgnoreCase("finite") == 0 || myEdgeType.compareToIgnoreCase("toroidal") == 0) {
             return myEdgeType;
         } else {
-            throw new XMLException("Edge type is invalid. Please choose finite or toroidal");
+            throw new XMLException(myResources.getString("InvalidEdge"));
         }
     }
 
@@ -201,7 +204,7 @@ public class Simulation {
         if (myCols != 0) {
             return Math.abs(myCols);
         } else {
-            throw new XMLException("Number of Columns must be nonzero");
+            throw new XMLException(myResources.getString("InvalidCols"));
         }
     }
 
@@ -209,7 +212,7 @@ public class Simulation {
         if (myRows != 0) {
             return Math.abs(myRows);
         } else {
-            throw new XMLException("Number of Rows must be nonzero");
+            throw new XMLException(myResources.getString("InvalidRows"));
         }
     }
 
@@ -221,10 +224,10 @@ public class Simulation {
             if (hasValidStates(result)) {
                 return result;
             } else {
-                throw new XMLException("Cell configuration contains states that are not allowed for this rule");
+                throw new XMLException(myResources.getString("InvalidStates"));
             }
         } else {
-            throw new XMLException("Cell configuration contains cell locations that are outside the bounds of the grid size");
+            throw new XMLException(myResources.getString("InvalidCoordinates"));
         }
     }
 
@@ -236,9 +239,9 @@ public class Simulation {
         if (myColors.split(",").length == myRule.getNumStates()) {
                 return myColors;
             } else if (myColors.split(",").length > myRule.getNumStates()){
-                throw new XMLException("Too many colors provided in XML file: Number of colors must equal number of states");
+                throw new XMLException(myResources.getString("TooManyColors"));
             } else {
-            throw new XMLException("Not enough colors provided in XML file: Number of colors must equal number of states");
+            throw new XMLException(myResources.getString("TooFewColors"));
         }
     }
 
