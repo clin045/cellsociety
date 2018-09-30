@@ -1,5 +1,7 @@
 package model.rule.foragingants;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 public class Ant {
     public static final int N = 0;
     public static final int NE = 1;
@@ -12,14 +14,23 @@ public class Ant {
 
     private int myOrientation;
     private boolean hasMoved;
+
+    public boolean getHasFoodItem() {
+        return hasFoodItem;
+    }
+
+    public void setHasFoodItem(boolean hasFoodItem) {
+        this.hasFoodItem = hasFoodItem;
+    }
+
     private boolean hasFoodItem;
 
 
     public Ant(){
-
+        myOrientation = ThreadLocalRandom.current().nextInt(0, 8);
     }
 
-    public boolean isHasMoved() {
+    public boolean hasMoved() {
         return hasMoved;
     }
 
