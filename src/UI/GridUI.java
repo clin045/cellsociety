@@ -1,3 +1,5 @@
+package UI;
+
 import javafx.scene.layout.GridPane;
 
 public abstract class GridUI {

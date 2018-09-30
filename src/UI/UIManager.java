@@ -14,8 +14,6 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import model.*;
-import model.Cell;
 import model.rule.Rule;
 import model.rule.fire.FireRule;
 import model.rule.gameoflife.GameOfLifeRule;
@@ -115,7 +113,7 @@ public class UIManager extends Application {
             Rule myRule = findSimulationType(simulationName);
 
             myGraph = new GraphManager(colors.length, colors);
-            myGridUI = new TriangleGridUI(initialStates, rows, columns, colors, myRule);
+            myGridUI = new TriangleGridUI(initialStates, rows, columns, colors, myRule, neighbors);
 
             GridPane rootPane = new GridPane();
             rootPane.setPadding(new Insets(PADDING_SIZE, PADDING_SIZE, PADDING_SIZE, PADDING_SIZE));
