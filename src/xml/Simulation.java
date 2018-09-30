@@ -171,7 +171,7 @@ public class Simulation {
 
     public String getShape() {
         if (myShape.compareToIgnoreCase("square") == 0 || myShape.compareToIgnoreCase("triangle") == 0) {
-            if (myShape.compareToIgnoreCase("triangle") == 0 && ((getRows() % 2) == 0) && ((getCols() % 2) == 0)) {
+            if ((myShape.compareToIgnoreCase("triangle") == 0 && ((getRows() % 2) == 0) && ((getCols() % 2) == 0)) || myShape.compareToIgnoreCase("square") == 0) {
                 return myShape;
             } else {
                 throw new XMLException("You have chosen triangle shape but inputted odd rows/cols values. Please enter even rows/cols value");
