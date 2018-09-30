@@ -15,12 +15,6 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.rule.Rule;
-import model.rule.fire.FireRule;
-import model.rule.foragingants.ForagingAntsRule;
-import model.rule.gameoflife.GameOfLifeRule;
-import model.rule.predatorprey.PredatorPreyRule;
-import model.rule.rps.RPSRule;
-import model.rule.segregation.SegregationRule;
 import xml.Simulation;
 import xml.XMLException;
 import xml.XMLParser;
@@ -57,7 +51,6 @@ public class UIManager extends Application {
     public void start(Stage stage) {
         myStage = stage;
 
-        Text chooseFileLabel = new Text(myResources.getString("ChooseFileLabel"));
         Text fileName = new Text(myResources.getString("NoFile"));
 
         Button loadButton = new Button(myResources.getString("SelectButton"));
@@ -78,7 +71,7 @@ public class UIManager extends Application {
         myGridPane.setHgap(HORIZONTAL_GUI_GAP);
         myGridPane.setAlignment(Pos.CENTER);
 
-        myGridPane.add(chooseFileLabel, 0, 0);
+        myGridPane.add(new Text(myResources.getString("ChooseFileLabel")), 0, 0);
         myGridPane.add(fileName, 0, 1);
         myGridPane.add(loadButton, 1, 1);
         myGridPane.add(startButton, 0, 2);
@@ -104,15 +97,8 @@ public class UIManager extends Application {
         try {
             readConfiguration();
             myRule = ConfigurationManager.findSimulationType(myConfigurationManager.getSimulationName());
-
             myGraph = new GraphManager(myConfigurationManager.getColors().length, myConfigurationManager.getColors());
-
-            if(myConfigurationManager.getShape().compareToIgnoreCase("square") == 0){
-                myGridUI = new SquareGridUI(myConfigurationManager.getInitialStates(), myConfigurationManager.getRows(), myConfigurationManager.getColumns(), myConfigurationManager.getColors(), myRule, myConfigurationManager.getNeighbors(), myConfigurationManager.getEdgeType());
-            }
-            else {
-                myGridUI = new TriangleGridUI(myConfigurationManager.getInitialStates(), myConfigurationManager.getRows(), myConfigurationManager.getColumns(), myConfigurationManager.getColors(), myRule, myConfigurationManager.getNeighbors(), myConfigurationManager.getEdgeType());
-            }
+            myGridUI = myConfigurationManager.createGridUI(myRule);
 
             GridPane rootPane = new GridPane();
             rootPane.setPadding(new Insets(PADDING_SIZE, PADDING_SIZE, PADDING_SIZE, PADDING_SIZE));
@@ -125,10 +111,8 @@ public class UIManager extends Application {
 
             myStage.setScene(new Scene(rootPane));
         } catch (XMLException e) {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("XML File Error");
-            alert.setHeaderText(null);
-            alert.setContentText(e.getMessage());
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, e.getMessage());
+            alert.setTitle(myResources.getString("XMLAlertTitle"));
             alert.showAndWait();
             chooseFile();
             initializeWindow();
@@ -138,8 +122,7 @@ public class UIManager extends Application {
     private void chooseFile() {
         FileChooser myFileChooser = new FileChooser();
         myFileChooser.setTitle(myResources.getString("ChooserWindowTitle"));
-        FileChooser.ExtensionFilter xmlFilter = new FileChooser.ExtensionFilter("XML files (*.xml)", "*.xml");
-        myFileChooser.getExtensionFilters().add(xmlFilter);
+        myFileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("XML files (*.xml)", "*.xml"));
         myFileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
         chosen = null;
         while(chosen == null){
@@ -205,41 +188,11 @@ public class UIManager extends Application {
         Button reset = new Button(myResources.getString("Reset"));
         reset.setOnAction(event -> {
             myGraph.closeChart();
-            newSimulation();
+            createSimulator();
         });
 
         controls.getChildren().addAll(play, pause, step, halfSpeed, normalSpeed, doubleSpeed, newSimulation, toggleChart, reset);
-
-        if(myConfigurationManager.getSimulationName().compareToIgnoreCase("Fire") == 0){
-            Slider fireProb = new Slider(0, 1, ((FireRule)myRule).getProbability());
-            fireProb.setShowTickLabels(true);
-            fireProb.setShowTickMarks(true);
-            fireProb.setBlockIncrement(.1);
-            fireProb.valueProperty().addListener((observable, oldValue, newValue) -> ((FireRule) myRule).setProbability(newValue.doubleValue()));
-            controls.getChildren().add(fireProb);
-        }
-        else if(myConfigurationManager.getSimulationName().compareToIgnoreCase("Segregation") == 0){
-            Slider tolerance = new Slider(0, 1, ((SegregationRule)myRule).getTolerance());
-            tolerance.setShowTickLabels(true);
-            tolerance.setShowTickMarks(true);
-            tolerance.setBlockIncrement(.1);
-            tolerance.valueProperty().addListener((observable, oldValue, newValue) -> ((SegregationRule) myRule).setTolerance(newValue.doubleValue()));
-            controls.getChildren().add(tolerance);
-        }
-         else if(myConfigurationManager.getSimulationName().compareToIgnoreCase("Predator Prey") == 0){
-            Slider fishTime = new Slider(1, 30, ((PredatorPreyRule)myRule).getFishReproductionTime());
-            Slider sharkTime = new Slider(1, 30, ((PredatorPreyRule)myRule).getSharkReproductionTime());
-            fishTime.setShowTickLabels(true);
-            sharkTime.setShowTickLabels(true);
-            fishTime.setShowTickMarks(true);
-            sharkTime.setShowTickLabels(true);
-            sharkTime.setBlockIncrement(1);
-            fishTime.setBlockIncrement(1);
-            fishTime.valueProperty().addListener((observable, oldValue, newValue) -> ((PredatorPreyRule) myRule).setFishReproductionTime(newValue.intValue()));
-            sharkTime.valueProperty().addListener((observable, oldValue, newValue) -> ((PredatorPreyRule)myRule).setSharkReproductionTime(newValue.intValue()));
-            controls.getChildren().addAll(fishTime, sharkTime);
-        }
-
+        controls.getChildren().addAll(myConfigurationManager.getSliders(myRule));
 
         return controls;
     }
