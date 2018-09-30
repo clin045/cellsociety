@@ -171,11 +171,19 @@ public class Simulation {
     }
 
     public String getTitle() {
-        return myTitle;
+        if (myTitle !=  null && !myTitle.isEmpty()) {
+            return myTitle;
+        } else {
+            return "No Title";
+        }
     }
 
     public String getAuthor() {
-        return myAuthor;
+        if (myAuthor !=  null && !myAuthor.isEmpty()) {
+            return myAuthor;
+        } else {
+            return "No Author";
+        }
     }
 
     public String getShape() {
@@ -252,7 +260,11 @@ public class Simulation {
     }
 
     public String getDescription() {
-        return myDescription;
+        if (myDescription !=  null && !myDescription.isEmpty()) {
+            return myDescription;
+        } else {
+            return "No Description";
+        }
     }
 
     /**
