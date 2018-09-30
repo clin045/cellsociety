@@ -55,6 +55,7 @@ public class UIManager extends Application {
     private String title;
     private String author;
     private String simulationName;
+    private int[][] neighbors;
     private String[] colors;
     private Timeline animation = new Timeline();
     private ArrayList<Stage> myStages = new ArrayList();
@@ -128,7 +129,7 @@ public class UIManager extends Application {
             rootPane.add(createControlsBlock(), 0, 2);
 
             Rule myRule = findSimulationType(simulationName);
-            myCellManager = new CellManager(rows, columns, initialStates, myRule, CellManager.SQUARE_GRID);
+            myCellManager = new CellManager(rows, columns, initialStates, myRule, CellManager.SQUARE_GRID, neighbors);
 
             stageToUse.setScene(new Scene(rootPane));
         } catch (XMLException e) {
@@ -159,6 +160,7 @@ public class UIManager extends Application {
         author = configs.getAuthor();
         simulationName = configs.getSimulationName();
         int[][] initialStates = configs.getConfigs();
+        neighbors = configs.getNeighborCoordinates();
         colors = configs.getColors().split(",");
         return initialStates;
     }
