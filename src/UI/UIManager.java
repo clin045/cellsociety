@@ -37,7 +37,6 @@ import java.util.ResourceBundle;
 public class UIManager extends Application {
     private static final double MILLISECOND_DELAY = 300;
     private static final int WINDOW_SIZE = 600;
-    private static final int USABLE_WINDOW_SIZE = 500;
     private static final int PADDING_SIZE = 10;
     private static final int HORIZONTAL_GUI_GAP = 5;
     private static final int VERTICAL_GUI_GAP = 5;
@@ -52,8 +51,10 @@ public class UIManager extends Application {
     private String simulationName;
     private int[][] neighbors;
     private String[] colors;
+    private String shape;
+    private String edgeType;
     private Timeline animation = new Timeline();
-    private ArrayList<Stage> myStages = new ArrayList();
+    private ArrayList<Stage> myStages = new ArrayList<>();
     private GraphManager myGraph;
     private GridUI myGridUI;
 
@@ -113,7 +114,13 @@ public class UIManager extends Application {
             Rule myRule = findSimulationType(simulationName);
 
             myGraph = new GraphManager(colors.length, colors);
-            myGridUI = new TriangleGridUI(initialStates, rows, columns, colors, myRule, neighbors);
+
+            if(shape.compareToIgnoreCase("square") == 0){
+                myGridUI = new SquareGridUI(initialStates, rows, columns, colors, myRule, neighbors, edgeType);
+            }
+            else {
+                myGridUI = new TriangleGridUI(initialStates, rows, columns, colors, myRule, neighbors, edgeType);
+            }
 
             GridPane rootPane = new GridPane();
             rootPane.setPadding(new Insets(PADDING_SIZE, PADDING_SIZE, PADDING_SIZE, PADDING_SIZE));
@@ -155,6 +162,7 @@ public class UIManager extends Application {
         int[][] initialStates = configs.getConfigs();
         neighbors = configs.getNeighborCoordinates();
         colors = configs.getColors().split(",");
+        shape = configs.getShape();
         return initialStates;
     }
 
@@ -221,7 +229,10 @@ public class UIManager extends Application {
         Button toggleChart = new Button(myResources.getString("ToggleChart"));
         toggleChart.setOnAction(event -> myGraph.toggleChart());
 
-        controls.getChildren().addAll(play, pause, step, halfSpeed, normalSpeed, doubleSpeed, newSimulation, toggleChart);
+        Button reset = new Button(myResources.getString("Reset"));
+        reset.setOnAction(event -> createSimulator(myStages.get(0)));
+
+        controls.getChildren().addAll(play, pause, step, halfSpeed, normalSpeed, doubleSpeed, newSimulation, toggleChart, reset);
 
         return controls;
     }
@@ -241,6 +252,7 @@ public class UIManager extends Application {
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == thisWindow){
             chooseFile((Stage)simulatorGridPane.getScene().getWindow());
+            myGraph.closeChart();
             createSimulator((Stage)simulatorGridPane.getScene().getWindow());
         }
         else if (result.get() == newWindow) {

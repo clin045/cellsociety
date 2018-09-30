@@ -1,6 +1,5 @@
 package UI;
 
-import UI.GridUI;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.layout.BorderPane;
@@ -17,11 +16,11 @@ public class SquareGridUI extends GridUI {
     private int myColumns;
     private CellManager myCellManager;
 
-    SquareGridUI(int[][] initialStates, int rows, int columns, String[] colors, Rule myRule, int[][] neighbors){
+    SquareGridUI(int[][] initialStates, int rows, int columns, String[] colors, Rule myRule, int[][] neighbors, String edgeType){
         myColors = colors;
         myRows = rows;
         myColumns = columns;
-        myCellManager = new CellManager(rows, columns, initialStates, myRule, CellManager.SQUARE_GRID, neighbors);
+        myCellManager = new CellManager(rows, columns, initialStates, myRule, CellManager.SQUARE_GRID, neighbors, edgeType);
         simulatorGridPane = new GridPane();
         simulatorGridPane.setAlignment(Pos.CENTER);
         for (int i = 0; i < myRows; i++) {
@@ -44,7 +43,7 @@ public class SquareGridUI extends GridUI {
         }
     }
 
-    public BorderPane createCell(String color){
+    private BorderPane createCell(String color){
         BorderPane cell = new BorderPane();
         int cellSize = USABLE_WINDOW_SIZE / Math.max(myRows, myColumns);
         cell.setMinSize(cellSize, cellSize);
@@ -56,22 +55,16 @@ public class SquareGridUI extends GridUI {
 
     }
 
-    public void updateCellAppearance(String color, BorderPane myCell){
+    private void updateCellAppearance(String color, BorderPane myCell){
         myCell.setStyle("-fx-border-color: #000000;" +
                 "-fx-background-color: #" + color + ";" +
                 "-fx-border-width: 1;");
     }
 
-    public void toggleNextState(BorderPane cell){
+    private void toggleNextState(BorderPane cell){
         int numStates = myColors.length;
         Cell thisCell = myCellManager.getGrid().getCell(GridPane.getColumnIndex(cell), GridPane.getRowIndex(cell));
-        if (thisCell.getCurrentState() == numStates - 1) {
-            thisCell.setCurrentState(0);
-            thisCell.setNextState(0);
-        } else {
-            thisCell.setNextState(thisCell.getCurrentState() + 1);
-            thisCell.setCurrentState(thisCell.getCurrentState() + 1);
-        }
+        this.setNextStates(thisCell, numStates);
         updateCellAppearance(myColors[thisCell.getNextState()], cell);
     }
 

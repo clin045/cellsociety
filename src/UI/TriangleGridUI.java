@@ -18,60 +18,38 @@ public class TriangleGridUI extends GridUI {
     private int myColumns;
     private CellManager myCellManager;
     private Polygon[][] myTriangles;
-    private double triangleWidth;
-    private double triangleHeight;
 
-    TriangleGridUI(int[][] initialStates, int rows, int columns, String[] colors, Rule myRule, int[][] neighbors){
+    TriangleGridUI(int[][] initialStates, int rows, int columns, String[] colors, Rule myRule, int[][] neighbors, String edgeType){
         myColors = colors;
         myRows = rows;
         myColumns = columns;
-        triangleWidth = USABLE_WINDOW_SIZE/(myColumns/2 + .5);
-        triangleHeight = USABLE_WINDOW_SIZE/myRows;
+        double triangleWidth = USABLE_WINDOW_SIZE / (myColumns / 2.0 + .5);
+        double triangleHeight = (double)USABLE_WINDOW_SIZE / myRows;
         myTriangles = new Polygon[myRows][myColumns];
-        myCellManager = new CellManager(rows, columns, initialStates, myRule, CellManager.TRIANGLE_GRID, neighbors);
+        myCellManager = new CellManager(rows, columns, initialStates, myRule, CellManager.TRIANGLE_GRID, neighbors, edgeType);
         simulatorGridPane = new GridPane();
         simulatorGridPane.setAlignment(Pos.CENTER);
+        Pane triangleHolder = generateTriangles(triangleWidth, triangleHeight, initialStates);
+        simulatorGridPane.add(triangleHolder, 0, 0);
+    }
+
+    private Pane generateTriangles(double triangleWidth, double triangleHeight, int[][] initialStates){
         Pane triangleHolder = new Pane();
         for (int i = 0; i < myRows; i++) {
             for (int j = 0; j < myColumns; j++) {
                 myTriangles[i][j] = new Polygon();
-                if(i%2 == 0){
-                    //even row
-                    if(j%2 == 0){
-                        //even col
-                        myTriangles[i][j].getPoints().addAll(
-                                triangleWidth*(j/2.0), triangleHeight*(i+1),
-                                triangleWidth*(j/2.0)+triangleWidth, triangleHeight*(i+1),
-                                triangleWidth*(j/2.0)+triangleWidth/2.0, triangleHeight*i
-                        );
-                    }
-                    else {
-                        //odd col
-                        myTriangles[i][j].getPoints().addAll(
-                                triangleWidth*(j/2.0), triangleHeight*i,
-                                triangleWidth*(j/2.0)+triangleWidth, triangleHeight*i,
-                                triangleWidth*(j/2.0)+triangleWidth/2.0, triangleHeight*(i+1)
-                        );
-                    }
-                }
-                else {
-                    //odd row
-                    if(j%2 == 0){
-                        //even col
-                        myTriangles[i][j].getPoints().addAll(
-                                triangleWidth*(j/2.0), triangleHeight*i,
-                                triangleWidth*(j/2.0)+triangleWidth, triangleHeight*i,
-                                triangleWidth*(j/2.0)+triangleWidth/2.0, triangleHeight*(i+1)
-                        );
-                    }
-                    else {
-                        //odd col
-                        myTriangles[i][j].getPoints().addAll(
-                                triangleWidth*(j/2.0), triangleHeight*(i+1),
-                                triangleWidth*(j/2.0)+triangleWidth, triangleHeight*(i+1),
-                                triangleWidth*(j/2.0)+triangleWidth/2.0, triangleHeight*i
-                        );
-                    }
+                if ((i % 2 == 0 && j % 2 == 0) || (i % 2 != 0 && j % 2 != 0)) {
+                    myTriangles[i][j].getPoints().addAll(
+                            triangleWidth * (j / 2.0), triangleHeight * (i + 1),
+                            triangleWidth * (j / 2.0) + triangleWidth, triangleHeight * (i + 1),
+                            triangleWidth * (j / 2.0) + triangleWidth / 2.0, triangleHeight * i
+                    );
+                } else {
+                    myTriangles[i][j].getPoints().addAll(
+                            triangleWidth * (j / 2.0), triangleHeight * i,
+                            triangleWidth * (j / 2.0) + triangleWidth, triangleHeight * i,
+                            triangleWidth * (j / 2.0) + triangleWidth / 2.0, triangleHeight * (i + 1)
+                    );
                 }
                 myTriangles[i][j].setFill(Color.web(myColors[initialStates[i][j]]));
                 myTriangles[i][j].setStroke(Color.BLACK);
@@ -81,7 +59,7 @@ public class TriangleGridUI extends GridUI {
                 triangleHolder.getChildren().add(myTriangles[i][j]);
             }
         }
-        simulatorGridPane.add(triangleHolder, 0, 0);
+        return triangleHolder;
     }
 
     public void step(){
@@ -94,20 +72,14 @@ public class TriangleGridUI extends GridUI {
         }
     }
 
-    public void updateCellAppearance(String color, int i, int j){
+    private void updateCellAppearance(String color, int i, int j){
         myTriangles[i][j].setFill(Color.web(color));
     }
 
-    public void toggleNextState(int i, int j){
+    private void toggleNextState(int i, int j){
         int numStates = myColors.length;
         Cell thisCell = myCellManager.getGrid().getCell(i, j);
-        if (thisCell.getCurrentState() == numStates - 1) {
-            thisCell.setCurrentState(0);
-            thisCell.setNextState(0);
-        } else {
-            thisCell.setNextState(thisCell.getCurrentState() + 1);
-            thisCell.setCurrentState(thisCell.getCurrentState() + 1);
-        }
+        this.setNextStates(thisCell, numStates);
         updateCellAppearance(myColors[thisCell.getNextState()], i, j);
     }
 
