@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <data media="Simulation">
-    <simulationName>Fire</simulationName>
+    <simulationName>Foraging Ants</simulationName>
     <title>Version 1</title>
     <author>Scott McConnell</author>
     <shape>square</shape>
-    <edgeType>finite</edgeType>
+    <edgeType>toroidal</edgeType>
     <gridLines>1</gridLines>
     <rows>25</rows>
     <cols>25</cols>
