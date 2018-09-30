@@ -40,19 +40,10 @@ public class UIManager extends Application {
     private static final int HORIZONTAL_GUI_GAP = 5;
     private static final int VERTICAL_GUI_GAP = 5;
     private static final String DEFAULT_RESOURCE_PACKAGE = "English";
+
     private ResourceBundle myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE);
     private File chosen;
-    private GridPane simulatorGridPane;
-    private int rows;
-    private int columns;
-    private String title;
-    private String author;
-    private String simulationName;
-    //private String description;
-    private int[][] neighbors;
-    private String[] colors;
-    private String shape;
-    private String edgeType;
+    private ConfigurationManager myConfigurationManager;
     private Timeline animation = new Timeline();
     private Stage myStage;
     private GraphManager myGraph;
@@ -111,16 +102,16 @@ public class UIManager extends Application {
 
     private void initializeWindow() {
         try {
-            int[][] initialStates = readConfiguration();
-            myRule = findSimulationType(simulationName);
+            readConfiguration();
+            myRule = ConfigurationManager.findSimulationType(myConfigurationManager.getSimulationName());
 
-            myGraph = new GraphManager(colors.length, colors);
+            myGraph = new GraphManager(myConfigurationManager.getColors().length, myConfigurationManager.getColors());
 
-            if(shape.compareToIgnoreCase("square") == 0){
-                myGridUI = new SquareGridUI(initialStates, rows, columns, colors, myRule, neighbors, edgeType);
+            if(myConfigurationManager.getShape().compareToIgnoreCase("square") == 0){
+                myGridUI = new SquareGridUI(myConfigurationManager.getInitialStates(), myConfigurationManager.getRows(), myConfigurationManager.getColumns(), myConfigurationManager.getColors(), myRule, myConfigurationManager.getNeighbors(), myConfigurationManager.getEdgeType());
             }
             else {
-                myGridUI = new TriangleGridUI(initialStates, rows, columns, colors, myRule, neighbors, edgeType);
+                myGridUI = new TriangleGridUI(myConfigurationManager.getInitialStates(), myConfigurationManager.getRows(), myConfigurationManager.getColumns(), myConfigurationManager.getColors(), myRule, myConfigurationManager.getNeighbors(), myConfigurationManager.getEdgeType());
             }
 
             GridPane rootPane = new GridPane();
@@ -156,45 +147,16 @@ public class UIManager extends Application {
         }
     }
 
-    private int[][] readConfiguration() {
+    private void readConfiguration() {
         Simulation configs = new XMLParser("media").getSimulation(chosen);
-        rows = configs.getRows();
-        columns = configs.getCols();
-        title = configs.getTitle();
-        author = configs.getAuthor();
-        simulationName = configs.getSimulationName();
-        int[][] initialStates = configs.getConfigs();
-        neighbors = configs.getNeighborCoordinates();
-        colors = configs.getColors().split(",");
-        shape = configs.getShape();
-        edgeType = configs.getEdgeType();
-        //description = configs.getDescription();
-        return initialStates;
-    }
-
-    public static Rule findSimulationType(String name) {
-        Rule rule;
-        if (name.compareToIgnoreCase("Game of Life") == 0) {
-            rule = new GameOfLifeRule();
-        } else if (name.compareToIgnoreCase("Predator Prey") == 0) {
-            rule = new PredatorPreyRule();
-        } else if (name.compareToIgnoreCase("Fire") == 0) {
-            rule = new FireRule();
-        } else if (name.compareToIgnoreCase("Rock Paper Scissors") == 0) {
-            rule = new RPSRule();
-        } else if (name.compareToIgnoreCase("Foraging Ants") == 0) {
-            rule = new ForagingAntsRule();
-        } else {
-            rule = new SegregationRule();
-        }
-        return rule;
+        myConfigurationManager = new ConfigurationManager(configs.getConfigs(), configs.getRows(), configs.getCols(), configs.getTitle(), configs.getSimulationName(), configs.getAuthor(), configs.getColors().split(","), configs.getShape(), configs.getEdgeType(), configs.getNeighborCoordinates());
     }
 
     private GridPane createTitleBlock() {
-        Label myTitle = new Label(title);
-        Label myAuthor = new Label(author);
-        Label mySimulationName = new Label(simulationName);
-        //Label myDescription = new Label(description);
+        Label myTitle = new Label(myConfigurationManager.getTitle());
+        Label myAuthor = new Label(myConfigurationManager.getAuthor());
+        Label mySimulationName = new Label(myConfigurationManager.getAuthor());
+        //Label myDescription = new Label(myConfigurationManager.getDescription());
 
         GridPane displayInfo = new GridPane();
         displayInfo.setAlignment(Pos.CENTER);
@@ -248,37 +210,25 @@ public class UIManager extends Application {
 
         controls.getChildren().addAll(play, pause, step, halfSpeed, normalSpeed, doubleSpeed, newSimulation, toggleChart, reset);
 
-        if(simulationName.compareToIgnoreCase("Fire") == 0){
-            Slider fireProb = new Slider();
-            fireProb.setMin(0);
-            fireProb.setMax(1);
-            fireProb.setValue(((FireRule)myRule).getProbability());
+        if(myConfigurationManager.getSimulationName().compareToIgnoreCase("Fire") == 0){
+            Slider fireProb = new Slider(0, 1, ((FireRule)myRule).getProbability());
             fireProb.setShowTickLabels(true);
             fireProb.setShowTickMarks(true);
             fireProb.setBlockIncrement(.1);
             fireProb.valueProperty().addListener((observable, oldValue, newValue) -> ((FireRule) myRule).setProbability(newValue.doubleValue()));
             controls.getChildren().add(fireProb);
         }
-        else if(simulationName.compareToIgnoreCase("Segregation") == 0){
-            Slider tolerance = new Slider();
-            tolerance.setMin(0);
-            tolerance.setMax(1);
-            tolerance.setValue(((SegregationRule)myRule).getTolerance());
+        else if(myConfigurationManager.getSimulationName().compareToIgnoreCase("Segregation") == 0){
+            Slider tolerance = new Slider(0, 1, ((SegregationRule)myRule).getTolerance());
             tolerance.setShowTickLabels(true);
             tolerance.setShowTickMarks(true);
             tolerance.setBlockIncrement(.1);
             tolerance.valueProperty().addListener((observable, oldValue, newValue) -> ((SegregationRule) myRule).setTolerance(newValue.doubleValue()));
             controls.getChildren().add(tolerance);
         }
-         else if(simulationName.compareToIgnoreCase("Predator Prey") == 0){
-            Slider fishTime = new Slider();
-            Slider sharkTime = new Slider();
-            fishTime.setMin(1);
-            sharkTime.setMin(1);
-            fishTime.setMax(30);
-            sharkTime.setMax(30);
-            fishTime.setValue(((PredatorPreyRule)myRule).getFishReproductionTime());
-            sharkTime.setValue(((PredatorPreyRule)myRule).getSharkReproductionTime());
+         else if(myConfigurationManager.getSimulationName().compareToIgnoreCase("Predator Prey") == 0){
+            Slider fishTime = new Slider(1, 30, ((PredatorPreyRule)myRule).getFishReproductionTime());
+            Slider sharkTime = new Slider(1, 30, ((PredatorPreyRule)myRule).getSharkReproductionTime());
             fishTime.setShowTickLabels(true);
             sharkTime.setShowTickLabels(true);
             fishTime.setShowTickMarks(true);
@@ -296,13 +246,12 @@ public class UIManager extends Application {
 
     private void newSimulation(){
         chooseFile();
-        myGraph.closeChart();;
+        myGraph.closeChart();
         createSimulator();
     }
 
     private void step() {
         myGridUI.step();
-        simulatorGridPane = myGridUI.getGridPane();
         myGraph.updateGraph(myGridUI.getCellStateList());
     }
 }

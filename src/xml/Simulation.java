@@ -79,7 +79,7 @@ public class Simulation {
         myNeighbors = configs.getNeighbors();
         myConfigs = configs.getConfigs();
         myColors = configs.getColors();
-        myRule = UI.UIManager.findSimulationType(mySimulationName);
+        myRule = UI.ConfigurationManager.findSimulationType(mySimulationName);
         // NOTE: this is useful so our code does not fail due to a NullPointerException
         myDataValues = new HashMap<>();
     }
