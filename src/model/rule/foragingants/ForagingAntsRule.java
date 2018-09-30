@@ -8,20 +8,26 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
+/**
+ * A CA that simulates ants looking for food. Cells light up when the amount of pheromone in them reaches a certain threshold.
+ * Run at 2x speed for best results
+ *
+ * @author Christopher Lin cl349
+ */
+
 public class ForagingAntsRule extends Rule {
     public final int NEUTRAL = 0;
     public final int HOME = 1;
     public final int FOOD = 2;
     public final int OBSTACLE = 3;
-    public final int DISPLAY_FOOD_PHEROMONE = 4;
+    public final int DISPLAY_HOME_PHEROMONE = 4;
 
 
     public final int NUM_HOME_ANTS = 50;
     public final int MAX_HOME_LEVEL = 50;
     public final int MAX_FOOD_LEVEL = 50;
     public final int DESIRE_ADJUST = 2;
-    public final int MAX_ANT_DENSITY = 10;
-    public final double DISPLAY_FOOD_THRESHOLD = 10;
+    public final int MAX_ANT_DENSITY = 15;
     public final double DISPLAY_HOME_THRESHOLD = 10;
     public final double EVAPORATION_RATE = 0.05;
 
@@ -48,7 +54,6 @@ public class ForagingAntsRule extends Rule {
                 if(cell.getCurrentState() == OBSTACLE){
                     ((ForagingAntsCell) cell).setObstacle(true);
                 }
-                ((ForagingAntsCell) cell).setInitialized(true);
             }
             List<Ant> antList = ((ForagingAntsCell) cell).getAntList();
             if(antList.size() > 0){
@@ -80,10 +85,9 @@ public class ForagingAntsRule extends Rule {
             }
         }
         else {
-            if (((ForagingAntsCell) cell).getFoodLevel() > DISPLAY_FOOD_THRESHOLD && cell.getCurrentState() != HOME && cell.getCurrentState() != FOOD && cell.getCurrentState() != OBSTACLE) {
-                cell.setNextState(DISPLAY_FOOD_PHEROMONE);
+            if (((ForagingAntsCell) cell).getFoodLevel() > DISPLAY_HOME_THRESHOLD && cell.getCurrentState() != HOME && cell.getCurrentState() != FOOD && cell.getCurrentState() != OBSTACLE) {
+                cell.setNextState(DISPLAY_HOME_PHEROMONE);
             }
-
             else{
                 if(cell.getCurrentState() != HOME && cell.getCurrentState() != FOOD && cell.getCurrentState() != OBSTACLE){
                     cell.setNextState(NEUTRAL);
