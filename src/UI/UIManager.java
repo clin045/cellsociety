@@ -3,8 +3,6 @@ package UI;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -243,7 +241,10 @@ public class UIManager extends Application {
         toggleChart.setOnAction(event -> myGraph.toggleChart());
 
         Button reset = new Button(myResources.getString("Reset"));
-        reset.setOnAction(event -> createSimulator());
+        reset.setOnAction(event -> {
+            myGraph.closeChart();
+            newSimulation();
+        });
 
         controls.getChildren().addAll(play, pause, step, halfSpeed, normalSpeed, doubleSpeed, newSimulation, toggleChart, reset);
 
@@ -258,7 +259,7 @@ public class UIManager extends Application {
             fireProb.valueProperty().addListener((observable, oldValue, newValue) -> ((FireRule) myRule).setProbability(newValue.doubleValue()));
             controls.getChildren().add(fireProb);
         }
-        if(simulationName.compareToIgnoreCase("Segregation") == 0){
+        else if(simulationName.compareToIgnoreCase("Segregation") == 0){
             Slider tolerance = new Slider();
             tolerance.setMin(0);
             tolerance.setMax(1);
@@ -269,6 +270,25 @@ public class UIManager extends Application {
             tolerance.valueProperty().addListener((observable, oldValue, newValue) -> ((SegregationRule) myRule).setTolerance(newValue.doubleValue()));
             controls.getChildren().add(tolerance);
         }
+         else if(simulationName.compareToIgnoreCase("Predator Prey") == 0){
+            Slider fishTime = new Slider();
+            Slider sharkTime = new Slider();
+            fishTime.setMin(1);
+            sharkTime.setMin(1);
+            fishTime.setMax(30);
+            sharkTime.setMax(30);
+            fishTime.setValue(((PredatorPreyRule)myRule).getFishReproductionTime());
+            sharkTime.setValue(((PredatorPreyRule)myRule).getSharkReproductionTime());
+            fishTime.setShowTickLabels(true);
+            sharkTime.setShowTickLabels(true);
+            fishTime.setShowTickMarks(true);
+            sharkTime.setShowTickLabels(true);
+            sharkTime.setBlockIncrement(1);
+            fishTime.setBlockIncrement(1);
+            fishTime.valueProperty().addListener((observable, oldValue, newValue) -> ((PredatorPreyRule) myRule).setFishReproductionTime(newValue.intValue()));
+            sharkTime.valueProperty().addListener((observable, oldValue, newValue) -> ((PredatorPreyRule)myRule).setSharkReproductionTime(newValue.intValue()));
+            controls.getChildren().addAll(fishTime, sharkTime);
+        }
 
 
         return controls;
@@ -276,7 +296,7 @@ public class UIManager extends Application {
 
     private void newSimulation(){
         chooseFile();
-        myGraph.closeChart();
+        myGraph.closeChart();;
         createSimulator();
     }
 

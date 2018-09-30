@@ -4,7 +4,7 @@
     <title>Version 1</title>
     <author>Christopher Lin</author>
     <shape>square</shape>
-    <edgeType>finite</edgeType>
+    <edgeType>toroidal</edgeType>
     <gridLines>1</gridLines>
     <rows>25</rows>
     <cols>25</cols>
