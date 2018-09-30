@@ -60,4 +60,8 @@ public class GraphManager {
             myStage.show();
         }
     }
+
+    public void closeChart(){
+        myStage.close();
+    }
 }
