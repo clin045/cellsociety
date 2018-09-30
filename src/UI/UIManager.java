@@ -3,8 +3,6 @@ package UI;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -243,7 +241,10 @@ public class UIManager extends Application {
         toggleChart.setOnAction(event -> myGraph.toggleChart());
 
         Button reset = new Button(myResources.getString("Reset"));
-        reset.setOnAction(event -> createSimulator());
+        reset.setOnAction(event -> {
+            myGraph.closeChart();
+            newSimulation();
+        });
 
         controls.getChildren().addAll(play, pause, step, halfSpeed, normalSpeed, doubleSpeed, newSimulation, toggleChart, reset);
 
@@ -295,7 +296,7 @@ public class UIManager extends Application {
 
     private void newSimulation(){
         chooseFile();
-        myGraph.closeChart();
+        myGraph.closeChart();;
         createSimulator();
     }
 
