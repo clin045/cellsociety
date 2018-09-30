@@ -3,6 +3,9 @@
     <simulationName>Rock Paper Scissors</simulationName>
     <title>Version 1</title>
     <author>Scott McConnell</author>
+    <shape>square</shape>
+    <edgeType>finite</edgeType>
+    <gridLines>1</gridLines>
     <rows>12</rows>
     <cols>12</cols>
     <configs>0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0</configs>

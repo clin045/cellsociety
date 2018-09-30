@@ -23,6 +23,9 @@ public class Simulation {
             "simulationName",
             "title",
             "author",
+            "shape",
+            "edgeType",
+            "gridLines",
             "cols",
             "rows",
             "configs",
@@ -32,16 +35,22 @@ public class Simulation {
     static private final int SIM_NAME = 0;
     static private final int SIM_TITLE = 1;
     static private final int SIM_AUTHOR = 2;
-    static private final int COLS = 3;
-    static private final int ROWS = 4;
-    static private final int CONFIGS = 5;
-    static private final int NEIGHBORS = 6;
+    static private final int SHAPE = 3;
+    static private final int EDGE_TYPE = 4;
+    static private final int GRIDLINES = 5;
+    static private final int COLS = 6;
+    static private final int ROWS = 7;
+    static private final int CONFIGS = 8;
+    static private final int NEIGHBORS = 9;
+    static private final int COLORS = 10;
     static private final int NEIGHBOR_COORDINATES_SIZE = 3;
-    static private final int COLORS = 7;
     // specific data values for this instance
     private String mySimulationName;
     private String myTitle;
     private String myAuthor;
+    private String myShape;
+    private String myEdgeType;
+    private int myGridLines;
     private int myRows;
     private int myCols;
     private String myConfigs;
@@ -55,10 +64,13 @@ public class Simulation {
     /**
      * Create game data from given data.
      */
-    public Simulation(String simulationName, String title, String author, GeneralConfigurations configs) {
+    public Simulation(String simulationName, String title, String author, String shape, String edgeType, int gridLines, GeneralConfigurations configs) {
         mySimulationName = simulationName;
         myTitle = title;
         myAuthor = author;
+        myShape = shape;
+        myEdgeType = edgeType;
+        myGridLines = gridLines;
         myRows = configs.getRows();
         myCols = configs.getCols();
         myNeighbors = configs.getNeighbors();
@@ -78,6 +90,9 @@ public class Simulation {
         this(dataValues.get(DATA_FIELDS.get(SIM_NAME)),
                 dataValues.get(DATA_FIELDS.get(SIM_TITLE)),
                 dataValues.get(DATA_FIELDS.get(SIM_AUTHOR)),
+                dataValues.get(DATA_FIELDS.get(SHAPE)),
+                dataValues.get(DATA_FIELDS.get(EDGE_TYPE)),
+                Integer.parseInt(dataValues.get(DATA_FIELDS.get(GRIDLINES))),
                 new GeneralConfigurations(Integer.parseInt(dataValues.get(DATA_FIELDS.get(COLS))),
                 Integer.parseInt(dataValues.get(DATA_FIELDS.get(ROWS))),
                 dataValues.get(DATA_FIELDS.get(CONFIGS)),
@@ -152,6 +167,34 @@ public class Simulation {
 
     public String getAuthor() {
         return myAuthor;
+    }
+
+    public String getShape() {
+        if (myShape == "square" || myShape == "triangle") {
+            if (myShape == "triangle" && ((getRows() % 2) == 0) && ((getCols() % 2) == 0)) {
+                return myShape;
+            } else {
+                throw new XMLException("You have chosen triangle shape but inputted odd rows/cols values. Please enter even rows/cols value");
+            }
+        } else {
+            throw new XMLException("Shape type is invalid. Please choose square or triangle");
+        }
+    }
+
+    public String getEdgeType() {
+        if (myEdgeType == "finite" || myEdgeType == "toroidal") {
+            return myEdgeType;
+        } else {
+            throw new XMLException("Edge type is invalid. Please choose finite or toroidal");
+        }
+    }
+
+    public boolean getGridLines() {
+        if (myGridLines == 0 || myGridLines == 1) {
+            return (myGridLines == 1);
+        } else {
+            throw new XMLException("Gridlines input must be either 0 or 1");
+        }
     }
 
     public int getCols() throws XMLException {
