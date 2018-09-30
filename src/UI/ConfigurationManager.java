@@ -24,7 +24,7 @@ public class ConfigurationManager {
     private String myEdgeType;
     private int[][] myNeighbors;
 
-    ConfigurationManager(int[][] initialStates, int rows, int columns, String title, String name, String author, String[] colors, String shape, String edgeType, int[][] neighbors){
+    ConfigurationManager(int[][] initialStates, int rows, int columns, String title, String name, String author, String[] colors, String shape, String edgeType, int[][] neighbors, String description){
         myInitialStates = initialStates;
         myRows = rows;
         myColumns = columns;
@@ -35,6 +35,7 @@ public class ConfigurationManager {
         myShape = shape;
         myEdgeType = edgeType;
         myNeighbors = neighbors;
+        myDescription = description;
     }
 
     public int[][] getInitialStates(){
@@ -47,6 +48,10 @@ public class ConfigurationManager {
 
     public int getColumns(){
         return myColumns;
+    }
+
+    public String getDescription(){
+        return myDescription;
     }
 
     public String getTitle(){
