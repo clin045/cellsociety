@@ -194,7 +194,7 @@ public class Simulation {
                 throw new XMLException(myResources.getString("OddValuesWhenTriangle"));
             }
         } else {
-            throw new XMLException(myResources.getString("InvalidShape"));
+            return "square";
         }
     }
 
