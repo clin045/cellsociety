@@ -37,6 +37,10 @@ public class RPSRule extends Rule {
         killBacteria(cell);
         //decay AI particles
         ((RPSCell) cell).setRock_level(((RPSCell) cell).getRock_level()*(1-DECAY_RATE));
+        ((RPSCell) cell).setPaper_level(((RPSCell) cell).getPaper_level()*(1-DECAY_RATE));
+        ((RPSCell) cell).setScissors_level(((RPSCell) cell).getScissors_level()*(1-DECAY_RATE));
+
+
         diffuseAIParticles((RPSCell) cell, neighbors);
         reproduceBacteria((RPSCell) cell, neighbors);
         emitAIParticles((RPSCell) cell, neighbors);
