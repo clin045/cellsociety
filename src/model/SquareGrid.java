@@ -24,12 +24,12 @@ public class SquareGrid extends Grid {
     }
 
     @Override
-    public List getNeighbors(Cell cell, boolean[][] neighborMask) {
+    public List getNeighbors(Cell cell, int[][] neighborMask) {
         ArrayList<Cell> neighbors = new ArrayList<>();
         for (int i = cell.getRow() - 1; i <= cell.getRow() + 1; i++) {
             for (int j = cell.getCol() - 1; j <= cell.getCol() + 1; j++) {
                 if (getCell(i, j) != null) {
-                    if(neighborMask[i-(cell.getRow()-1)][j-(cell.getCol()-1)]){
+                    if(neighborMask[i-(cell.getRow()-1)][j-(cell.getCol()-1)] == 1){
                         neighbors.add(getCell(i, j));
                     }
                 }

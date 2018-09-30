@@ -36,6 +36,7 @@ public class Simulation {
     static private final int ROWS = 4;
     static private final int CONFIGS = 5;
     static private final int NEIGHBORS = 6;
+    static private final int NEIGHBOR_COORDINATES_SIZE = 3;
     static private final int COLORS = 7;
     // specific data values for this instance
     private String mySimulationName;
@@ -85,7 +86,7 @@ public class Simulation {
         myDataValues = dataValues;
     }
 
-    private int[][] stringToIntArray(String arrayString) {
+    private int[][] stringToIntArray(String arrayString, int xSize, int ySize) {
         String[] integerStringArray = arrayString.split(",");
         int[] oneDimArray = new int[integerStringArray.length];
         int counter = 0;
@@ -94,9 +95,9 @@ public class Simulation {
             counter++;
         }
         counter = 0;
-        int[][] resultArray = new int[myRows][myCols];
-        for (int i = 0; i < myRows; i++) {
-            for (int j = 0; j < myCols; j++) {
+        int[][] resultArray = new int[xSize][ySize];
+        for (int i = 0; i < xSize; i++) {
+            for (int j = 0; j < ySize; j++) {
                 resultArray[i][j] = oneDimArray[counter];
                 counter++;
             }
@@ -106,11 +107,11 @@ public class Simulation {
 
     private int[][] generateRandomStates() {
         StringBuilder s = new StringBuilder();
-        for (int i = 0; i < (2 * getCols() * getRows() - 1); i++) {
+        for (int i = 0; i < (getCols() * getRows()); i++) {
             s.append(ThreadLocalRandom.current().nextInt(0, myRule.getNumStates())).append(",");
         }
         String resultString = s.toString();
-        return stringToIntArray(resultString);
+        return stringToIntArray(resultString, myRows, myCols);
     }
 
 
@@ -174,7 +175,7 @@ public class Simulation {
 //            return generateRandomStates();
         //} else
         if (myConfigs.length() + 1 == 2 * getCols() * getRows()) {
-            int[][] result = stringToIntArray(myConfigs);
+            int[][] result = stringToIntArray(myConfigs, myRows, myCols);
             if (hasValidStates(result)) {
                 return result;
             } else {
@@ -186,11 +187,10 @@ public class Simulation {
     }
 
     public int[][] getNeighborCoordinates() {
-        return stringToIntArray(myNeighbors);
+        return stringToIntArray(myNeighbors, NEIGHBOR_COORDINATES_SIZE, NEIGHBOR_COORDINATES_SIZE);
     }
 
     public String getColors() {
-        System.out.println(myRule.getNumStates());
         if (myColors.split(",").length == myRule.getNumStates()) {
                 return myColors;
             } else if (myColors.split(",").length > myRule.getNumStates()){

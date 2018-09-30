@@ -23,7 +23,7 @@ public class TriangleGrid extends Grid {
         }
     }
     @Override
-    public List<Cell> getNeighbors(Cell cell, boolean[][] neighborMask) {
+    public List<Cell> getNeighbors(Cell cell, int[][] neighborMask) {
         ArrayList<Cell> neighbors = new ArrayList<>();
         //get neighbors on same row
         for(int i = cell.getCol()-2; i <= cell.getCol() + 2; i++){
