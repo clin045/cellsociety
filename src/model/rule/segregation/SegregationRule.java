@@ -14,7 +14,7 @@ import java.util.List;
  **/
 
 public class SegregationRule extends Rule {
-    static final int NUM_PASSES = 2;
+    static final int NUM_PASSES = 3;
     static final int VACANT = 0;
     static final int BLUE = 1;
     static final int RED = 2;
@@ -52,26 +52,35 @@ public class SegregationRule extends Rule {
 
 
     public void applyRule(Cell cell, List<Cell> neighborsArray, int passNum) {
-        int similarNeighborsCount = 0;
-        for (Cell neighbor : neighborsArray) {
-            if (cell.getCurrentState() == neighbor.getCurrentState()) {
-                similarNeighborsCount += neighbor.getCurrentState();
-            }
-        }
-
-        // percent of neighbors that are similar
-        double percentSimilarNeighbors = similarNeighborsCount / neighborsArray.size();
 
         // find next state of occupied cells
         if (passNum == 0) {
-            markUnsatisfied(cell, percentSimilarNeighbors);
-        } else {
-            moveCells(cell);
+            int similarNeighborsCount = 0;
+            for (Cell neighbor : neighborsArray) {
+                if (cell.getCurrentState() == neighbor.getCurrentState()) {
+                    similarNeighborsCount += neighbor.getCurrentState();
+                }
+            }
 
+            // percent of neighbors that are similar
+            double percentSimilarNeighbors = similarNeighborsCount / neighborsArray.size();
+
+            markUnsatisfied(cell, percentSimilarNeighbors);
+        } else if (passNum == 1){
+            allocateUnsatisfiedCells(cell);
+        }
+        else{
+            resetToVacant(cell);
         }
     }
 
-    private void moveCells(Cell cell) {
+    private void resetToVacant(Cell cell) {
+        if(cell.getNextState() == UNSATISFIED){
+            cell.setNextState(VACANT);
+        }
+    }
+
+    private void allocateUnsatisfiedCells(Cell cell) {
         if (cell.getNextState() == VACANT) {
             if (unallocated_blue > 0) {
                 unallocated_blue--;
@@ -80,26 +89,19 @@ public class SegregationRule extends Rule {
                 unallocated_red--;
                 cell.setNextState(RED);
             }
-        } else if (cell.getNextState() == UNSATISFIED) {
-            cell.setNextState(VACANT);
         }
-        cell.setNextState(cell.getNextState());
     }
 
     private void markUnsatisfied(Cell cell, double percentSimilarNeighbors) {
         if (cell.getCurrentState() == RED || cell.getCurrentState() == BLUE) {
             if (percentSimilarNeighbors < PERCENT_SIMILAR_TOLERANCE) {
-                if (cell.getCurrentState() == RED) {
+                if (cell.getNextState() == RED) {
                     unallocated_red++;
                 } else {
                     unallocated_blue++;
                 }
                 cell.setNextState(UNSATISFIED);
-            } else {
-                cell.setNextState(cell.getCurrentState());
             }
-        } else {
-            cell.setNextState(VACANT);
         }
     }
 }
