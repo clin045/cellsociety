@@ -64,6 +64,9 @@ Features implemented:
     - Null/Empty Title, Author, Description strings even (default shows “No Title” / “No Author” / “No Description”)
 - Cell population graph
 - Dynamic simulation parameter changing
+- Interaction with cells through the UI
+- Multiple windows
+    - Graph only works for last graph opened
 
 Assumptions or Simplifications:
 - RPS uses simplified methods for autoinducer decay and release
@@ -78,6 +81,9 @@ Extra credit:
 
 ### Notes
 
+- For multiple windows, the graph only displays for the last window opened. Additionally, a previously implemented reset button no longer works and was commented out.
+    - We chose to create new windows because we wanted to give the users the flexibility to arrange the simulations as they saw fit.
+    - They do not need to be the same simulation type because we
 
 ### Impressions
 
