@@ -5,7 +5,9 @@ This project implements a cellular automata simulator.
 
 Names:
 Allen Qiu (asq3)
+
 Christopher Lin (cl349)
+
 Scott McConnell (skm44)
 
 ### Timeline
