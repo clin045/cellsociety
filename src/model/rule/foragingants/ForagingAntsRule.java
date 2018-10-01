@@ -3,7 +3,6 @@ package model.rule.foragingants;
 import model.Cell;
 import model.rule.Rule;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -198,11 +197,6 @@ public class ForagingAntsRule extends Rule {
                 cell.setFoodLevel(cell.getFoodLevel()+toDeposit);
             }
         }
-    }
-
-    @Override
-    public int getNeighborhoodSize() {
-        return 0;
     }
 
     @Override

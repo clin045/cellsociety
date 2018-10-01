@@ -28,10 +28,6 @@ public class FireRule extends Rule {
     }
 
 
-    public int getNeighborhoodSize() {
-        return 1;
-    }
-
     public void setProbability(double prob){
         PROB_CATCH = prob;
     }
