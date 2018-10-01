@@ -32,7 +32,7 @@ public class SquareGridUI extends GridUI {
         simulatorGridPane.setAlignment(Pos.CENTER);
         for (int i = 0; i < myRows; i++) {
             for (int j = 0; j < myColumns; j++) {
-                simulatorGridPane.add(createCell(myColors[initialStates[i][j]]), j, i);
+                simulatorGridPane.add(createCell(myColors[initialStates[i][j]]), i, j);
             }
         }
     }
