@@ -19,6 +19,11 @@ import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+/**
+ * This class manages the configuration of the animation.
+ *
+ * @author Allen Qiu (asq3)
+ */
 public class ConfigurationManager {
     private int[][] myInitialStates;
     private int myRows;

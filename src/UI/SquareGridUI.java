@@ -8,6 +8,11 @@ import model.Cell;
 import model.CellManager;
 import model.rule.Rule;
 
+/**
+ * This class manages the square UI grid.
+ *
+ * @author Allen Qiu (asq3)
+ */
 public class SquareGridUI extends GridUI {
     private static final int USABLE_WINDOW_SIZE = 500;
     private GridPane simulatorGridPane;
