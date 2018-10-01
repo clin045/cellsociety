@@ -19,11 +19,10 @@ public class LangtonsLoopRule extends Rule {
     static final int VACANT = 0; //black
     static final int SIGNAL = 1; //dark blue
     static final int SHEATH = 2; //red
-    static final int VACANT = 0;
+    static final int UNKNOWN1 = 3;
     static final int TURN = 4; //green
     static final int MESSENGER = 5; //pink
-    static final int VACANT = 0;
-    static final int VACANT = 0;
+    static final int UNKNOWN2 = 6;
     static final int ADVANCE = 7; //light blue
 
 
@@ -95,7 +94,7 @@ public class LangtonsLoopRule extends Rule {
     }
 
     public void applyRule(Cell cell, List<Cell> neighborsArray, int passNum) {
-
+        cell.setNextState(genState(statesToString(cell, neighborsArray)));
 
     }
 
@@ -164,29 +163,26 @@ public class LangtonsLoopRule extends Rule {
                 } else {
                     return relevantCells.get(1).getCurrentState();
                 }
-                break;
             case "below":
                 if (relevantCells.get(0).getRow() > relevantCells.get(1).getRow()) {
                     return relevantCells.get(0).getCurrentState();
                 } else {
                     return relevantCells.get(1).getCurrentState();
                 }
-                break;
             case "left":
                 if (relevantCells.get(0).getCol() > relevantCells.get(1).getCol()) {
                     return relevantCells.get(0).getCurrentState();
                 } else {
                     return relevantCells.get(1).getCurrentState();
                 }
-                break;
             case "right":
                 if (relevantCells.get(0).getCol() < relevantCells.get(1).getCol()) {
                     return relevantCells.get(0).getCurrentState();
                 } else {
                     return relevantCells.get(1).getCurrentState();
                 }
-                break;
         }
+        return 0;
     }
 
 
