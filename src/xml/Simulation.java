@@ -174,7 +174,7 @@ public class Simulation {
         if (myTitle !=  null && !myTitle.isEmpty()) {
             return myTitle;
         } else {
-            return "No Title";
+            return myResources.getString("NoTitle");
         }
     }
 
@@ -182,7 +182,7 @@ public class Simulation {
         if (myAuthor !=  null && !myAuthor.isEmpty()) {
             return myAuthor;
         } else {
-            return "No Author";
+            return myResources.getString("NoAuthor");
         }
     }
 
@@ -263,7 +263,7 @@ public class Simulation {
         if (myDescription !=  null && !myDescription.isEmpty()) {
             return myDescription;
         } else {
-            return "No Description";
+            return myResources.getString("NoDescription");
         }
     }
 
