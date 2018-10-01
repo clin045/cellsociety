@@ -3,7 +3,7 @@
     <simulationName>Game of Life</simulationName>
     <title>Glider</title>
     <author>Scott McConnell</author>
-    <shape>triangle</shape>
+    <shape>square</shape>
     <edgeType>toroidal</edgeType>
     <gridLines>1</gridLines>
     <rows>24</rows>
