@@ -64,8 +64,8 @@ public class LangtonsLoopRule extends Rule {
         return ruleArray;
     }
 
-    private int genState(String search){
-        int nextState = 0;
+    private int genState(String search, Cell currentCell){
+        int nextState = currentCell.getCurrentState();
         for(String s : ruleArray){
             if(search.equals(s.substring(0,s.length()-1))){
                 nextState = Integer.parseInt(s.substring(s.length()-1),s.length());
@@ -84,9 +84,7 @@ public class LangtonsLoopRule extends Rule {
         return NUM_PASSES;
     }
 
-    public int getNeighborhoodSize() {
-        return 1;
-    }
+
 
     @Override
     public Class getCellType() {
@@ -94,7 +92,7 @@ public class LangtonsLoopRule extends Rule {
     }
 
     public void applyRule(Cell cell, List<Cell> neighborsArray, int passNum) {
-        cell.setNextState(genState(makeString(cell, neighborsArray)));
+        cell.setNextState(genState(makeString(cell, neighborsArray), cell));
 
     }
 
@@ -140,8 +138,8 @@ public class LangtonsLoopRule extends Rule {
         }
         else if(cellsBelow > 1){
             if(cellsInCol.get(0).getCol() < cellsInCol.get(1).getCol()){
-                north = cellsInCol.get(0);
-                south = cellsInCol.get(1);
+                north = cellsInCol.get(1);
+                south = cellsInCol.get(0);
             }
             else{
                 north = cellsInCol.get(0);
@@ -175,12 +173,12 @@ public class LangtonsLoopRule extends Rule {
         if(cellsEast > 1){
 
             if(cellsInRow.get(0).getRow() < cellsInRow.get(1).getRow()){
-                east = cellsInCol.get(1);
-                west = cellsInCol.get(0);
-            }
-            else{
                 east = cellsInCol.get(0);
                 west = cellsInCol.get(1);
+            }
+            else{
+                east = cellsInCol.get(1);
+                west = cellsInCol.get(0);
             }
         }
         else if(cellsWest > 1){
@@ -200,8 +198,8 @@ public class LangtonsLoopRule extends Rule {
                 west = cellsInRow.get(0);
             }
             else{
-                west = cellsInCol.get(1);
                 east = cellsInCol.get(0);
+                west = cellsInCol.get(1);
             }
         }
         return (Integer.toString(cell.getCurrentState())
