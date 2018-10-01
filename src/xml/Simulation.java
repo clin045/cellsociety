@@ -10,7 +10,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 
 /**
- * Simple immutable value object representing game product data.
+ * Simple immutable value object representing Simulation product data.
  *
  * @author Robert C. Duvall
  * @author Scott McConnell
