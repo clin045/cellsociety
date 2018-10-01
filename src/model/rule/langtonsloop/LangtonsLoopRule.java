@@ -94,94 +94,122 @@ public class LangtonsLoopRule extends Rule {
     }
 
     public void applyRule(Cell cell, List<Cell> neighborsArray, int passNum) {
-        cell.setNextState(genState(statesToString(cell, neighborsArray)));
+        cell.setNextState(genState(makeString(cell, neighborsArray)));
 
     }
 
-    //NESW
-    private String statesToString(Cell cell, List<Cell> neighborsArray) {
-
+    private String makeString(Cell cell, List<Cell> neighborsArray){
         CellManager.throwOutDiagonals(cell, neighborsArray);
-
-        String cellState = Integer.toString(cell.getCurrentState());
-        List<Cell> aboveCells = new ArrayList<>();
-        List<Cell> belowCells = new ArrayList<>();
-        List<Cell> leftCells = new ArrayList<>();
-        List<Cell> rightCells = new ArrayList<>();
-        String aboveCellState;
-        String belowCellState;
-        String rightCellState;
-        String leftCellState;
-
-        // determine whether at edge
-        for (Cell c : neighborsArray) {
-            if (c.getRow() > cell.getRow()) {
-                aboveCells.add(c);
+        Cell north;
+        Cell south;
+        Cell east;
+        Cell west;
+        ArrayList<Cell> cellsInCol = new ArrayList<>();
+        ArrayList<Cell> cellsInRow = new ArrayList<>();
+        for(Cell c : neighborsArray){
+            if(c.getRow() == cell.getRow()){
+                cellsInRow.add(c);
             }
-            if (c.getRow() < cell.getRow()) {
-                belowCells.add(c);
+            else{
+                cellsInCol.add(c);
             }
-            if (c.getCol() < cell.getCol()) {
-                leftCells.add(c);
+        }
+        //establish north and south
+        int cellsAbove = 0;
+        int cellsBelow = 0;
+
+        for(Cell c : cellsInCol){
+            if(c.getCol() < cell.getCol()){
+                cellsAbove++;
             }
-            if (c.getCol() > cell.getCol()) {
-                rightCells.add(c);
+            else{
+                cellsBelow++;
             }
+        }
+        //case where 2 above
+        if(cellsAbove > 1){
 
+            if(cellsInCol.get(0).getCol() < cellsInCol.get(1).getCol()){
+                north = cellsInCol.get(1);
+                south = cellsInCol.get(0);
+            }
+            else{
+                north = cellsInCol.get(0);
+                south = cellsInCol.get(1);
+            }
+        }
+        else if(cellsBelow > 1){
+            if(cellsInCol.get(0).getCol() < cellsInCol.get(1).getCol()){
+                north = cellsInCol.get(0);
+                south = cellsInCol.get(1);
+            }
+            else{
+                north = cellsInCol.get(0);
+                south = cellsInCol.get(1);
+            }
+        }
+        else{
+            if(cellsInCol.get(0).getCol() < cellsInCol.get(1).getCol()){
+                north = cellsInCol.get(0);
+                south = cellsInCol.get(1);
+            }
+            else{
+                north = cellsInCol.get(1);
+                south = cellsInCol.get(0);
+            }
         }
 
-        if (aboveCells.size() == 1) {
-            aboveCellState = Integer.toString(aboveCells.get(0).getCurrentState());
-        } else {
-            aboveCellState = Integer.toString(edgeCellHandler(aboveCells, "above"));
-        }
-        if (belowCells.size() == 1) {
-            belowCellState = Integer.toString(belowCells.get(0).getCurrentState());
-        } else {
-            belowCellState = Integer.toString(edgeCellHandler(belowCells, "below"));
-        }
-        if (leftCells.size() == 1) {
-            leftCellState = Integer.toString(leftCells.get(0).getCurrentState());
-        } else {
-            leftCellState = Integer.toString(edgeCellHandler(leftCells, "left"));
-        }
-        if (rightCells.size() == 1) {
-            rightCellState = Integer.toString(aboveCells.get(0).getCurrentState());
-        } else {
-            rightCellState = Integer.toString(edgeCellHandler(rightCells, "right"));
-        }
+        //establish east and west
+        int cellsEast = 0;
+        int cellsWest = 0;
 
-        StringBuilder s = new StringBuilder();
-        return s.append(cellState).append(aboveCellState).append(rightCellState).append(belowCellState).append(leftCellState).toString();
+        for(Cell c : cellsInRow){
+            if(c.getRow() < cell.getRow()){
+                cellsEast++;
+            }
+            else{
+                cellsWest++;
+            }
+        }
+        //case where 2 east
+        if(cellsEast > 1){
+
+            if(cellsInRow.get(0).getRow() < cellsInRow.get(1).getRow()){
+                east = cellsInCol.get(1);
+                west = cellsInCol.get(0);
+            }
+            else{
+                east = cellsInCol.get(0);
+                west = cellsInCol.get(1);
+            }
+        }
+        else if(cellsWest > 1){
+
+            if(cellsInCol.get(0).getRow() < cellsInCol.get(1).getRow()){
+                east = cellsInCol.get(0);
+                west = cellsInCol.get(1);
+            }
+            else{
+                east = cellsInCol.get(1);
+                west = cellsInCol.get(0);
+            }
+        }
+        else{
+            if(cellsInRow.get(0).getRow() < cellsInRow.get(1).getRow()){
+                east = cellsInRow.get(1);
+                west = cellsInRow.get(0);
+            }
+            else{
+                west = cellsInCol.get(1);
+                east = cellsInCol.get(0);
+            }
+        }
+        return (Integer.toString(cell.getCurrentState())
+                + Integer.toString(north.getCurrentState())
+                + Integer.toString(east.getCurrentState())
+                + Integer.toString(south.getCurrentState())
+                + Integer.toString(west.getCurrentState()));
     }
 
-    private int edgeCellHandler(List<Cell> relevantCells, String type) {
-        switch (type) {
-            case "above":
-                if (relevantCells.get(0).getRow() < relevantCells.get(1).getRow()) {
-                    return relevantCells.get(0).getCurrentState();
-                } else {
-                    return relevantCells.get(1).getCurrentState();
-                }
-            case "below":
-                if (relevantCells.get(0).getRow() > relevantCells.get(1).getRow()) {
-                    return relevantCells.get(0).getCurrentState();
-                } else {
-                    return relevantCells.get(1).getCurrentState();
-                }
-            case "left":
-                if (relevantCells.get(0).getCol() > relevantCells.get(1).getCol()) {
-                    return relevantCells.get(0).getCurrentState();
-                } else {
-                    return relevantCells.get(1).getCurrentState();
-                }
-            case "right":
-                if (relevantCells.get(0).getCol() < relevantCells.get(1).getCol()) {
-                    return relevantCells.get(0).getCurrentState();
-                } else {
-                    return relevantCells.get(1).getCurrentState();
-                }
-        }
-        return 0;
-    }
+
 }
