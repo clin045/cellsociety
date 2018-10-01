@@ -51,5 +51,21 @@ public class LangtonsLoopRule extends Rule {
 
     public void applyRule(Cell cell, List<Cell> neighborsArray, int passNum) {
 
+
+    }
+
+    //NESW
+    public String statesToString(Cell cell, List<Cell> neighborsArray) {
+        String cellState = Integer.toString(cell.getCurrentState());
+        int aboveCount = 0;
+        for (Cell c : neighborsArray) {
+            if (c)
+
+        }
+
+        if (c.getRow() > cell.getRow()) {
+            String northCell = Integer.toString(c.getCurrentState());
+        }
+        return "";
     }
 }
