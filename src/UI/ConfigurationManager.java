@@ -17,8 +17,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 /**
  * This class manages the configuration of the animation.
@@ -192,7 +190,7 @@ public class ConfigurationManager {
         }
     }
 
-    public String matrixToString(int[][] matrix){
+    private String matrixToString(int[][] matrix){
         String s = "";
         for(int i=0;i<matrix.length;i++){
             for(int j=0;j<matrix[i].length;j++){
@@ -203,7 +201,7 @@ public class ConfigurationManager {
         return s;
     }
 
-    public int getGridlines(boolean gridlines){
+    private int getGridlines(boolean gridlines){
         if(myGridlines){
             return 1;
         }

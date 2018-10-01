@@ -1,13 +1,10 @@
 package UI;
 
-import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -26,7 +23,6 @@ import xml.XMLParser;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.ResourceBundle;
 
 /**
@@ -222,7 +218,7 @@ public class UIManager extends Application {
             new Thread(() -> {
                 System.out.println(Thread.currentThread().getId());
                 Platform.runLater(() -> {
-                    Task<Void> stepInBackground = new Task<Void>() {
+                    Task<Void> stepInBackground = new Task<>() {
                         @Override
                         public Void call() {
                             var frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e -> bgStep());
@@ -246,14 +242,14 @@ public class UIManager extends Application {
         Button toggleChart = new Button(myResources.getString("ToggleChart"));
         toggleChart.setOnAction(event -> myGraph.toggleChart());
 
-        /**
-         * Didn't figure out threads in time to figure this out :(((
+        /*
+          Didn't figure out threads in time to figure this out :(((
         Button reset = new Button(myResources.getString("Reset"));
         reset.setOnAction(event -> {
             myGraph.closeChart();
             createSimulator(myStage, myAnimationMap.get(Thread.currentThread().getId()));
         });
-         **/
+         */
 
         Button save = new Button(myResources.getString("Save"));
         save.setOnAction(event -> myConfigurationManager.saveConfiguration(myResources, myStage, myGridUI));
