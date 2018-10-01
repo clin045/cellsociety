@@ -20,12 +20,15 @@ Hours Spent: 100 total
 
 ### Primary Roles
 Christopher: Model/Simulation
+
 Allen: UI
+
 Scott: XML/Config
 
 
 ### Resources Used
 http://necsi.org/postdocs/sayama/sdsr/java/loops.java
+
 XMLException.java, XMLParser.java, and Game.java from spike_cellsociety
 
 ### Running the Program
