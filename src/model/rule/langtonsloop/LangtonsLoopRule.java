@@ -164,30 +164,26 @@ public class LangtonsLoopRule extends Rule {
                 } else {
                     return relevantCells.get(1).getCurrentState();
                 }
-                break;
             case "below":
                 if (relevantCells.get(0).getRow() > relevantCells.get(1).getRow()) {
                     return relevantCells.get(0).getCurrentState();
                 } else {
                     return relevantCells.get(1).getCurrentState();
                 }
-                break;
             case "left":
                 if (relevantCells.get(0).getCol() > relevantCells.get(1).getCol()) {
                     return relevantCells.get(0).getCurrentState();
                 } else {
                     return relevantCells.get(1).getCurrentState();
                 }
-                break;
             case "right":
                 if (relevantCells.get(0).getCol() < relevantCells.get(1).getCol()) {
                     return relevantCells.get(0).getCurrentState();
                 } else {
                     return relevantCells.get(1).getCurrentState();
                 }
-                break;
+            default:
+                return 0;
         }
     }
-
-
 }
