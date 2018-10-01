@@ -1,6 +1,7 @@
 package model.rule.predatorprey;
 
 import model.Cell;
+import model.CellManager;
 import model.rule.Rule;
 
 import java.util.ArrayList;
@@ -65,7 +66,7 @@ public class PredatorPreyRule extends Rule {
         }
         if (passNum == 1) {
             //throw out diagonal cells
-            throwOutDiagonals(cell, neighborsArray);
+            CellManager.throwOutDiagonals(cell, neighborsArray);
             if (cell.getNextState() == FISH) {
                 handleFish(cell, neighborsArray);
 
@@ -89,14 +90,6 @@ public class PredatorPreyRule extends Rule {
         if (currentFish != null) {
             reproduceFish(currentFish, neighborsArray);
             moveFish(currentFish, neighborsArray);
-        }
-    }
-
-    private void throwOutDiagonals(Cell cell, List<Cell> neighborsArray) {
-        for (int i = 0; i < neighborsArray.size(); i++) {
-            if (neighborsArray.get(i).getCol() != cell.getCol() && neighborsArray.get(i).getRow() != cell.getRow()) {
-                neighborsArray.remove(neighborsArray.get(i));
-            }
         }
     }
 

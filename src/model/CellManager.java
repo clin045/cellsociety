@@ -60,6 +60,14 @@ public class CellManager {
         }
     }
 
+    public static void throwOutDiagonals(Cell cell, List<Cell> neighborsArray) {
+        for (int i = 0; i < neighborsArray.size(); i++) {
+            if (neighborsArray.get(i).getCol() != cell.getCol() && neighborsArray.get(i).getRow() != cell.getRow()) {
+                neighborsArray.remove(neighborsArray.get(i));
+            }
+        }
+    }
+
     public void nextGeneration() {
         int numPasses = myActiveRule.getPasses();
         //default all nextState to currentState to make some simulations easier
