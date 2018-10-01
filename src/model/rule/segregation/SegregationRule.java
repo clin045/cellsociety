@@ -76,7 +76,15 @@ public class SegregationRule extends Rule {
 
     private void resetToVacant(Cell cell) {
         if(cell.getNextState() == UNSATISFIED){
-            cell.setNextState(VACANT);
+            if (unallocated_blue > 0) {
+                unallocated_blue--;
+                cell.setNextState(BLUE);
+            } else if (unallocated_red > 0) {
+                unallocated_red--;
+                cell.setNextState(RED);
+            }else{
+                cell.setNextState(VACANT);
+            }
         }
     }
 
@@ -95,12 +103,13 @@ public class SegregationRule extends Rule {
     private void markUnsatisfied(Cell cell, double percentSimilarNeighbors) {
         if (cell.getCurrentState() == RED || cell.getCurrentState() == BLUE) {
             if (percentSimilarNeighbors < PERCENT_SIMILAR_TOLERANCE) {
-                if (cell.getNextState() == RED) {
+                if (cell.getCurrentState() == RED) {
                     unallocated_red++;
-                } else {
+                    cell.setNextState(UNSATISFIED);
+                } else if(cell.getCurrentState() == BLUE){
                     unallocated_blue++;
+                    cell.setNextState(UNSATISFIED);
                 }
-                cell.setNextState(UNSATISFIED);
             }
         }
     }
