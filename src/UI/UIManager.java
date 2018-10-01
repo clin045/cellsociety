@@ -41,8 +41,6 @@ public class UIManager extends Application {
     private ResourceBundle myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE);
     private File chosen;
     private ConfigurationManager myConfigurationManager;
-    //private Timeline animation = new Timeline();
-    //private Stage myStage;
     private Timeline currentAnimation;
     private ArrayList<Timeline> myAnimations = new ArrayList<>();
     private ArrayList<Stage> myStages = new ArrayList<>();
