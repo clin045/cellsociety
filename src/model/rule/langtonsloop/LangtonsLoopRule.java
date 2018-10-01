@@ -2,8 +2,10 @@ package model.rule.langtonsloop;
 
 
 import model.Cell;
+import model.CellManager;
 import model.rule.Rule;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -98,18 +100,93 @@ public class LangtonsLoopRule extends Rule {
     }
 
     //NESW
-    public String statesToString(Cell cell, List<Cell> neighborsArray) {
+    private String statesToString(Cell cell, List<Cell> neighborsArray) {
+
+        CellManager.throwOutDiagonals(cell, neighborsArray);
+
         String cellState = Integer.toString(cell.getCurrentState());
-        int aboveCount = 0;
+        List<Cell> aboveCells = new ArrayList<>();
+        List<Cell> belowCells = new ArrayList<>();
+        List<Cell> leftCells = new ArrayList<>();
+        List<Cell> rightCells = new ArrayList<>();
+        String aboveCellState;
+        String belowCellState;
+        String rightCellState;
+        String leftCellState;
+
+        // determine whether at edge
         for (Cell c : neighborsArray) {
-            if (c)
+            if (c.getRow() > cell.getRow()) {
+                aboveCells.add(c);
+            }
+            if (c.getRow() < cell.getRow()) {
+                belowCells.add(c);
+            }
+            if (c.getCol() < cell.getCol()) {
+                leftCells.add(c);
+            }
+            if (c.getCol() > cell.getCol()) {
+                rightCells.add(c);
+            }
 
         }
 
-        if (c.getRow() > cell.getRow()) {
-            String northCell = Integer.toString(c.getCurrentState());
+        if (aboveCells.size() == 1) {
+            aboveCellState = Integer.toString(aboveCells.get(0).getCurrentState());
+        } else {
+            aboveCellState = Integer.toString(edgeCellHandler(aboveCells, "above"));
         }
-        return "";
+        if (belowCells.size() == 1) {
+            belowCellState = Integer.toString(belowCells.get(0).getCurrentState());
+        } else {
+            belowCellState = Integer.toString(edgeCellHandler(belowCells, "below"));
+        }
+        if (leftCells.size() == 1) {
+            leftCellState = Integer.toString(leftCells.get(0).getCurrentState());
+        } else {
+            leftCellState = Integer.toString(edgeCellHandler(leftCells, "left"));
+        }
+        if (rightCells.size() == 1) {
+            rightCellState = Integer.toString(aboveCells.get(0).getCurrentState());
+        } else {
+            rightCellState = Integer.toString(edgeCellHandler(rightCells, "right"));
+        }
+
+        StringBuilder s = new StringBuilder();
+        return s.append(cellState).append(aboveCellState).append(rightCellState).append(belowCellState).append(leftCellState).toString();
+    }
+
+    private int edgeCellHandler(List<Cell> relevantCells, String type) {
+        switch (type) {
+            case "above":
+                if (relevantCells.get(0).getRow() < relevantCells.get(1).getRow()) {
+                    return relevantCells.get(0).getCurrentState();
+                } else {
+                    return relevantCells.get(1).getCurrentState();
+                }
+                break;
+            case "below":
+                if (relevantCells.get(0).getRow() > relevantCells.get(1).getRow()) {
+                    return relevantCells.get(0).getCurrentState();
+                } else {
+                    return relevantCells.get(1).getCurrentState();
+                }
+                break;
+            case "left":
+                if (relevantCells.get(0).getCol() > relevantCells.get(1).getCol()) {
+                    return relevantCells.get(0).getCurrentState();
+                } else {
+                    return relevantCells.get(1).getCurrentState();
+                }
+                break;
+            case "right":
+                if (relevantCells.get(0).getCol() < relevantCells.get(1).getCol()) {
+                    return relevantCells.get(0).getCurrentState();
+                } else {
+                    return relevantCells.get(1).getCurrentState();
+                }
+                break;
+        }
     }
 
 
