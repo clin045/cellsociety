@@ -132,13 +132,13 @@ public class UIManager extends Application {
 
     private void readConfiguration() {
         Simulation configs = new XMLParser("media").getSimulation(chosen);
-        myConfigurationManager = new ConfigurationManager(configs.getConfigs(), configs.getRows(), configs.getCols(), configs.getTitle(), configs.getSimulationName(), configs.getAuthor(), configs.getColors().split(","), configs.getShape(), configs.getEdgeType(), configs.getNeighborCoordinates(), configs.getDescription());
+        myConfigurationManager = new ConfigurationManager(configs.getConfigs(), configs.getRows(), configs.getCols(), configs.getTitle(), configs.getSimulationName(), configs.getAuthor(), configs.getColors().split(","), configs.getShape(), configs.getEdgeType(), configs.getNeighborCoordinates(), configs.getDescription(), configs.getGridLines());
     }
 
     private GridPane createTitleBlock() {
         Label myTitle = new Label(myConfigurationManager.getTitle());
         Label myAuthor = new Label(myConfigurationManager.getAuthor());
-        Label mySimulationName = new Label(myConfigurationManager.getAuthor());
+        Label mySimulationName = new Label(myConfigurationManager.getSimulationName());
         Label myDescription = new Label(myConfigurationManager.getDescription());
 
         GridPane displayInfo = new GridPane();
@@ -191,7 +191,10 @@ public class UIManager extends Application {
             createSimulator();
         });
 
-        controls.getChildren().addAll(play, pause, step, halfSpeed, normalSpeed, doubleSpeed, newSimulation, toggleChart, reset);
+        Button save = new Button(myResources.getString("Save"));
+        save.setOnAction(event -> myConfigurationManager.saveConfiguration(myResources, myStage, myGridUI));
+
+        controls.getChildren().addAll(play, pause, step, halfSpeed, normalSpeed, doubleSpeed, newSimulation, toggleChart, reset, save);
         controls.getChildren().addAll(myConfigurationManager.getSliders(myRule));
 
         return controls;
