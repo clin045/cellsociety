@@ -37,7 +37,7 @@ public abstract class Grid {
 
     public abstract List<Cell> getNeighbors(Cell cell, int[][] neighborMask);
 
-    public Cell getCell(int row, int col) {
+    public Cell getNeighborCell(int row, int col) {
         if (getEdgeType() == Grid.TOROIDAL) {
             return (getWrappingCell(row, col));
         }
@@ -47,6 +47,10 @@ public abstract class Grid {
         else {
             return null;
         }
+    }
+
+    public Cell getCell(int row, int col){
+        return myGrid[row][col];
     }
 
     protected abstract Cell getWrappingCell(int row, int col);
