@@ -3,6 +3,11 @@ package UI;
 import javafx.scene.layout.GridPane;
 import model.Cell;
 
+/**
+ * The basic unit of a GridUI.
+ *
+ * @author Allen Qiu (asq3)
+ */
 public abstract class GridUI {
 
     public abstract void step();

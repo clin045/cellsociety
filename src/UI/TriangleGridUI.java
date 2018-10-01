@@ -9,7 +9,11 @@ import model.Cell;
 import model.CellManager;
 import model.rule.Rule;
 
-
+/**
+ * This class manages the triangle UI grid.
+ *
+ * @author Allen Qiu (asq3)
+ */
 public class TriangleGridUI extends GridUI {
     private static final int USABLE_WINDOW_SIZE = 500;
     private GridPane simulatorGridPane;
