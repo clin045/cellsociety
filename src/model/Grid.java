@@ -35,6 +35,17 @@ public abstract class Grid {
         return myStateList;
     }
 
+    public String getCellStates(){
+        String s = "";
+        for(int i=0;i<myGrid.length;i++){
+            for(int j=0;j<myGrid[i].length;j++){
+                s += Integer.toString(myGrid[i][j].getCurrentState()) + ",";
+            }
+        }
+        s = s.substring(0, s.length()-1);
+        return s;
+    }
+
     public abstract List<Cell> getNeighbors(Cell cell, int[][] neighborMask);
 
     public Cell getNeighborCell(int row, int col) {

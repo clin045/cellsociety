@@ -11,6 +11,8 @@ public abstract class GridUI {
 
     public abstract int[] getCellStateList();
 
+    public abstract String getCellStates();
+
     public void setNextStates(Cell thisCell, int numStates){
         if (thisCell.getCurrentState() == numStates - 1) {
             thisCell.setCurrentState(0);

@@ -39,7 +39,7 @@ public class Simulation {
     static private final int SIM_AUTHOR = 2;
     static private final int SHAPE = 3;
     static private final int EDGE_TYPE = 4;
-    static private final int GRIDLINES = 5;
+    static private final int GRID_LINES = 5;
     static private final int COLS = 6;
     static private final int ROWS = 7;
     static private final int CONFIGS = 8;
@@ -100,7 +100,7 @@ public class Simulation {
                 dataValues.get(DATA_FIELDS.get(SIM_AUTHOR)),
                 dataValues.get(DATA_FIELDS.get(SHAPE)),
                 dataValues.get(DATA_FIELDS.get(EDGE_TYPE)),
-                Integer.parseInt(dataValues.get(DATA_FIELDS.get(GRIDLINES))),
+                Integer.parseInt(dataValues.get(DATA_FIELDS.get(GRID_LINES))),
                 new GeneralConfigurations(Integer.parseInt(dataValues.get(DATA_FIELDS.get(COLS))),
                 Integer.parseInt(dataValues.get(DATA_FIELDS.get(ROWS))),
                 dataValues.get(DATA_FIELDS.get(CONFIGS)),
