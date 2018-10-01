@@ -94,8 +94,120 @@ public class LangtonsLoopRule extends Rule {
     }
 
     public void applyRule(Cell cell, List<Cell> neighborsArray, int passNum) {
-        cell.setNextState(genState(statesToString(cell, neighborsArray)));
+        cell.setNextState(genState(makeString(cell, neighborsArray)));
 
     }
-    
+
+    private String makeString(Cell cell, List<Cell> neighborsArray){
+        CellManager.throwOutDiagonals(cell, neighborsArray);
+        Cell north;
+        Cell south;
+        Cell east;
+        Cell west;
+        ArrayList<Cell> cellsInCol = new ArrayList<>();
+        ArrayList<Cell> cellsInRow = new ArrayList<>();
+        for(Cell c : neighborsArray){
+            if(c.getRow() == cell.getRow()){
+                cellsInRow.add(c);
+            }
+            else{
+                cellsInCol.add(c);
+            }
+        }
+        //establish north and south
+        int cellsAbove = 0;
+        int cellsBelow = 0;
+
+        for(Cell c : cellsInCol){
+            if(c.getCol() < cell.getCol()){
+                cellsAbove++;
+            }
+            else{
+                cellsBelow++;
+            }
+        }
+        //case where 2 above
+        if(cellsAbove > 1){
+
+            if(cellsInCol.get(0).getCol() < cellsInCol.get(1).getCol()){
+                north = cellsInCol.get(1);
+                south = cellsInCol.get(0);
+            }
+            else{
+                north = cellsInCol.get(0);
+                south = cellsInCol.get(1);
+            }
+        }
+        else if(cellsBelow > 1){
+            if(cellsInCol.get(0).getCol() < cellsInCol.get(1).getCol()){
+                north = cellsInCol.get(0);
+                south = cellsInCol.get(1);
+            }
+            else{
+                north = cellsInCol.get(0);
+                south = cellsInCol.get(1);
+            }
+        }
+        else{
+            if(cellsInCol.get(0).getCol() < cellsInCol.get(1).getCol()){
+                north = cellsInCol.get(0);
+                south = cellsInCol.get(1);
+            }
+            else{
+                north = cellsInCol.get(1);
+                south = cellsInCol.get(0);
+            }
+        }
+
+        //establish east and west
+        int cellsEast = 0;
+        int cellsWest = 0;
+
+        for(Cell c : cellsInRow){
+            if(c.getRow() < cell.getRow()){
+                cellsEast++;
+            }
+            else{
+                cellsWest++;
+            }
+        }
+        //case where 2 east
+        if(cellsEast > 1){
+
+            if(cellsInRow.get(0).getRow() < cellsInRow.get(1).getRow()){
+                east = cellsInCol.get(1);
+                west = cellsInCol.get(0);
+            }
+            else{
+                east = cellsInCol.get(0);
+                west = cellsInCol.get(1);
+            }
+        }
+        else if(cellsWest > 1){
+
+            if(cellsInCol.get(0).getRow() < cellsInCol.get(1).getRow()){
+                east = cellsInCol.get(0);
+                west = cellsInCol.get(1);
+            }
+            else{
+                east = cellsInCol.get(1);
+                west = cellsInCol.get(0);
+            }
+        }
+        else{
+            if(cellsInRow.get(0).getRow() < cellsInRow.get(1).getRow()){
+                east = cellsInRow.get(1);
+                west = cellsInRow.get(0);
+            }
+            else{
+                west = cellsInCol.get(1);
+                east = cellsInCol.get(0);
+            }
+        }
+        return (Integer.toString(cell.getCurrentState())
+                + Integer.toString(north.getCurrentState())
+                + Integer.toString(east.getCurrentState())
+                + Integer.toString(south.getCurrentState())
+                + Integer.toString(west.getCurrentState()));
+    }
 }
