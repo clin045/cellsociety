@@ -68,6 +68,7 @@ Features implemented:
 Assumptions or Simplifications:
 - RPS uses simplified methods for autoinducer decay and release
 - Foraging ants does not care about ant orientation
+- Langton's loop is always run on a square grid
 
 Known Bugs:
 - Triangle grid does not allow selection of neighbors
