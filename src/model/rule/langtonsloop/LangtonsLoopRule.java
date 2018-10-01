@@ -67,7 +67,7 @@ public class LangtonsLoopRule extends Rule {
         int nextState = 0;
         for(String s : ruleArray){
             if(search.equals(s.substring(0,s.length()-1))){
-                nextState = Integer.parseInt(s[s.length()-1]);
+                nextState = Integer.parseInt(s.substring(s.length()-1),s.length());
             }
         }
         return nextState;
