@@ -27,7 +27,9 @@ public class TriangleGrid extends Grid {
         ArrayList<Cell> neighbors = new ArrayList<>();
         //get neighbors on same row
         for(int i = cell.getCol()-2; i <= cell.getCol() + 2; i++){
-            neighbors.add(getCell(cell.getRow(), i));
+            if(getNeighborCell(cell.getRow(), i) != null){
+                neighbors.add(getNeighborCell(cell.getRow(), i));
+            }
         }
         //get neighbors in row w/ 3 neighbors
         int rowDisplacement;
@@ -39,7 +41,10 @@ public class TriangleGrid extends Grid {
             rowDisplacement = 1;
         }
         for(int i = cell.getCol()-1; i <= cell.getCol()+1; i++){
-            neighbors.add(getCell(cell.getRow()+ rowDisplacement, i));
+            if(getNeighborCell(cell.getRow()+ rowDisplacement, i)!= null){
+                neighbors.add(getNeighborCell(cell.getRow()+ rowDisplacement, i));
+
+            }
         }
 
         //get neighbors in row w/5 neighbors
@@ -50,7 +55,9 @@ public class TriangleGrid extends Grid {
             rowDisplacement = -1;
         }
         for(int i = cell.getCol()-2; i <= cell.getCol()+2; i++){
-            neighbors.add(getCell(cell.getRow()+ rowDisplacement, i));
+            if(getNeighborCell(cell.getRow()+ rowDisplacement, i) != null){
+                neighbors.add(getNeighborCell(cell.getRow()+ rowDisplacement, i));
+            }
         }
         return neighbors;
     }

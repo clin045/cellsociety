@@ -35,19 +35,22 @@ public class RPSRule extends Rule {
             ((RPSCell) cell).setBacteria(new Bacteria(cell.getCurrentState()));
         }
         killBacteria(cell);
+
         //decay AI particles
         ((RPSCell) cell).setRock_level(((RPSCell) cell).getRock_level()*(1-DECAY_RATE));
         ((RPSCell) cell).setPaper_level(((RPSCell) cell).getPaper_level()*(1-DECAY_RATE));
         ((RPSCell) cell).setScissors_level(((RPSCell) cell).getScissors_level()*(1-DECAY_RATE));
-        diffuseAIParticles((RPSCell) cell, neighbors);
-        reproduceBacteria((RPSCell) cell, neighbors);
-        emitAIParticles((RPSCell) cell, neighbors);
-        if(((RPSCell) cell).getBacteria() == null){
-            cell.setNextState(EMPTY);
-        }
-        else{
-            ((RPSCell) cell).getBacteria().incAge();
-            cell.setNextState(((RPSCell) cell).getBacteria().getType());
+        if(neighbors.size() > 0){
+            diffuseAIParticles((RPSCell) cell, neighbors);
+            reproduceBacteria((RPSCell) cell, neighbors);
+            emitAIParticles((RPSCell) cell, neighbors);
+            if(((RPSCell) cell).getBacteria() == null){
+                cell.setNextState(EMPTY);
+            }
+            else{
+                ((RPSCell) cell).getBacteria().incAge();
+                cell.setNextState(((RPSCell) cell).getBacteria().getType());
+            }
         }
     }
 
@@ -101,7 +104,12 @@ public class RPSRule extends Rule {
     }
 
     private void diffuseAIParticles(RPSCell cell, List<Cell> neighbors) {
+        if(neighbors.size() <= 0){
+            return;
+        }
+
         for(Cell c : neighbors){
+            System.out.println(neighbors.size());
             ((RPSCell) c).setRock_level(((RPSCell) c).getRock_level()+ cell.getRock_level()*(DIFFUSION_RATE/neighbors.size()));
             ((RPSCell) c).setPaper_level(((RPSCell) c).getPaper_level()+ cell.getPaper_level()*(DIFFUSION_RATE/neighbors.size()));
             ((RPSCell) c).setScissors_level(((RPSCell) c).getScissors_level()+ cell.getScissors_level()*(DIFFUSION_RATE/neighbors.size()));
