@@ -210,7 +210,7 @@ public class Simulation {
         if (myGridLines == 0 || myGridLines == 1) {
             return (myGridLines == 1);
         } else {
-            return true;
+            return false;
         }
     }
 
