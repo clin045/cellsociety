@@ -41,18 +41,7 @@ public class ForagingAntsRule extends Rule {
         if(passNum == 0){
             //initiialize things on first pass
             if(!((ForagingAntsCell) cell).isInitialized()){
-                if(cell.getCurrentState() == HOME) {
-                    ((ForagingAntsCell) cell).setHome(true);
-                    for (int i = 0; i < NUM_HOME_ANTS; i++) {
-                        ((ForagingAntsCell) cell).getAntList().add(new Ant());
-                    }
-                }
-                if(cell.getCurrentState() == FOOD){
-                    ((ForagingAntsCell) cell).setFood(true);
-                }
-                if(cell.getCurrentState() == OBSTACLE){
-                    ((ForagingAntsCell) cell).setObstacle(true);
-                }
+                initializeCell(cell);
             }
             List<Ant> antList = ((ForagingAntsCell) cell).getAntList();
             if(antList.size() > 0){
@@ -65,33 +54,56 @@ public class ForagingAntsRule extends Rule {
             ((ForagingAntsCell) cell).setHomeLevel(((ForagingAntsCell) cell).getHomeLevel()*(1-EVAPORATION_RATE));
         }
         else if(passNum == 1){
-            List<Ant> currentAntList = ((ForagingAntsCell) cell).getAntList();
-            for(int i = 0; i < currentAntList.size(); i++){
-                if(!currentAntList.get(i).getHasFoodItem() && ((ForagingAntsCell) cell).isFood()){
-                    currentAntList.get(i).setHasFoodItem(true);
+            handleAnts((ForagingAntsCell) cell, neighbors);
+        }
+        else {
+            updateStates(cell);
+        }
+    }
+
+    private void updateStates(Cell cell) {
+        if (((ForagingAntsCell) cell).getFoodLevel() > DISPLAY_HOME_THRESHOLD && cell.getCurrentState() != HOME && cell.getCurrentState() != FOOD && cell.getCurrentState() != OBSTACLE) {
+            cell.setNextState(DISPLAY_HOME_PHEROMONE);
+        }
+        else{
+            if(cell.getCurrentState() != HOME && cell.getCurrentState() != FOOD && cell.getCurrentState() != OBSTACLE){
+                cell.setNextState(NEUTRAL);
+            }
+        }
+    }
+
+    private void handleAnts(ForagingAntsCell cell, List<Cell> neighbors) {
+        List<Ant> currentAntList = cell.getAntList();
+        for(int i = 0; i < currentAntList.size(); i++){
+            if(!currentAntList.get(i).getHasFoodItem() && cell.isFood()){
+                currentAntList.get(i).setHasFoodItem(true);
+            }
+            if(currentAntList.get(i).getHasFoodItem() && cell.isHome()){
+                currentAntList.get(i).setHasFoodItem(false);
+            }
+            if(!currentAntList.get(i).hasMoved()){
+                if(currentAntList.get(i).getHasFoodItem()){
+                    returnToNest(currentAntList.get(i), cell, neighbors);
                 }
-                if(currentAntList.get(i).getHasFoodItem() && ((ForagingAntsCell) cell).isHome()){
-                    currentAntList.get(i).setHasFoodItem(false);
-                }
-                if(!currentAntList.get(i).hasMoved()){
-                    if(currentAntList.get(i).getHasFoodItem()){
-                        returnToNest(currentAntList.get(i), (ForagingAntsCell) cell, neighbors);
-                    }
-                    else{
-                        findFood(currentAntList.get(i), (ForagingAntsCell) cell, neighbors);
-                    }
+                else{
+                    findFood(currentAntList.get(i), cell, neighbors);
                 }
             }
         }
-        else {
-            if (((ForagingAntsCell) cell).getFoodLevel() > DISPLAY_HOME_THRESHOLD && cell.getCurrentState() != HOME && cell.getCurrentState() != FOOD && cell.getCurrentState() != OBSTACLE) {
-                cell.setNextState(DISPLAY_HOME_PHEROMONE);
+    }
+
+    private void initializeCell(Cell cell) {
+        if(cell.getCurrentState() == HOME) {
+            ((ForagingAntsCell) cell).setHome(true);
+            for (int i = 0; i < NUM_HOME_ANTS; i++) {
+                ((ForagingAntsCell) cell).getAntList().add(new Ant());
             }
-            else{
-                if(cell.getCurrentState() != HOME && cell.getCurrentState() != FOOD && cell.getCurrentState() != OBSTACLE){
-                    cell.setNextState(NEUTRAL);
-                }
-            }
+        }
+        if(cell.getCurrentState() == FOOD){
+            ((ForagingAntsCell) cell).setFood(true);
+        }
+        if(cell.getCurrentState() == OBSTACLE){
+            ((ForagingAntsCell) cell).setObstacle(true);
         }
     }
 
