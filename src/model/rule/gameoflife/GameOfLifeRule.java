@@ -27,10 +27,6 @@ public class GameOfLifeRule extends Rule {
         myNumStates = 2;
     }
 
-    public int getNeighborhoodSize() {
-        return 1;
-    }
-
     @Override
     public Class<Cell> getCellType() {
         return Cell.class;

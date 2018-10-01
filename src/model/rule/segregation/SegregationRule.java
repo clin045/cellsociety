@@ -41,10 +41,6 @@ public class SegregationRule extends Rule {
         PERCENT_SIMILAR_TOLERANCE = tolerance;
     }
 
-    public int getNeighborhoodSize() {
-        return 1;
-    }
-
     @Override
     public Class getCellType() {
         return Cell.class;

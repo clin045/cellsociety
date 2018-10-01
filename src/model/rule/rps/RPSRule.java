@@ -121,11 +121,6 @@ public class RPSRule extends Rule {
     }
 
     @Override
-    public int getNeighborhoodSize() {
-        return 0;
-    }
-
-    @Override
     public Class getCellType() {
         return RPSCell.class;
     }
