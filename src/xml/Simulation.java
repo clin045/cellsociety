@@ -31,19 +31,21 @@ public class Simulation {
             "rows",
             "configs",
             "neighbors",
-            "colors"
+            "colors",
+            "description"
     );
     static private final int SIM_NAME = 0;
     static private final int SIM_TITLE = 1;
     static private final int SIM_AUTHOR = 2;
     static private final int SHAPE = 3;
     static private final int EDGE_TYPE = 4;
-    static private final int GRIDLINES = 5;
+    static private final int GRID_LINES = 5;
     static private final int COLS = 6;
     static private final int ROWS = 7;
     static private final int CONFIGS = 8;
     static private final int NEIGHBORS = 9;
     static private final int COLORS = 10;
+    static private final int DESCRIPTION = 11;
     static private final int NEIGHBOR_COORDINATES_SIZE = 3;
     // specific data values for this instance
     private String mySimulationName;
@@ -58,6 +60,7 @@ public class Simulation {
     private String myNeighbors;
     private String myColors;
     private Rule myRule;
+    private String myDescription;
     private static final String DEFAULT_RESOURCE_PACKAGE = "English";
     private ResourceBundle myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE);
     // NOTE: keep just as an example for converting toString(), otherwise not used
@@ -79,7 +82,9 @@ public class Simulation {
         myNeighbors = configs.getNeighbors();
         myConfigs = configs.getConfigs();
         myColors = configs.getColors();
+        myDescription = configs.getDescription();
         myRule = UI.ConfigurationManager.findSimulationType(mySimulationName);
+
         // NOTE: this is useful so our code does not fail due to a NullPointerException
         myDataValues = new HashMap<>();
     }
@@ -95,12 +100,13 @@ public class Simulation {
                 dataValues.get(DATA_FIELDS.get(SIM_AUTHOR)),
                 dataValues.get(DATA_FIELDS.get(SHAPE)),
                 dataValues.get(DATA_FIELDS.get(EDGE_TYPE)),
-                Integer.parseInt(dataValues.get(DATA_FIELDS.get(GRIDLINES))),
+                Integer.parseInt(dataValues.get(DATA_FIELDS.get(GRID_LINES))),
                 new GeneralConfigurations(Integer.parseInt(dataValues.get(DATA_FIELDS.get(COLS))),
                 Integer.parseInt(dataValues.get(DATA_FIELDS.get(ROWS))),
                 dataValues.get(DATA_FIELDS.get(CONFIGS)),
                 dataValues.get(DATA_FIELDS.get(NEIGHBORS)),
-                dataValues.get(DATA_FIELDS.get(COLORS))));
+                dataValues.get(DATA_FIELDS.get(COLORS)),
+                dataValues.get(DATA_FIELDS.get(DESCRIPTION))));
         myDataValues = dataValues;
     }
 
@@ -165,11 +171,19 @@ public class Simulation {
     }
 
     public String getTitle() {
-        return myTitle;
+        if (myTitle !=  null && !myTitle.isEmpty()) {
+            return myTitle;
+        } else {
+            return myResources.getString("NoTitle");
+        }
     }
 
     public String getAuthor() {
-        return myAuthor;
+        if (myAuthor !=  null && !myAuthor.isEmpty()) {
+            return myAuthor;
+        } else {
+            return myResources.getString("NoAuthor");
+        }
     }
 
     public String getShape() {
@@ -180,7 +194,7 @@ public class Simulation {
                 throw new XMLException(myResources.getString("OddValuesWhenTriangle"));
             }
         } else {
-            throw new XMLException(myResources.getString("InvalidShape"));
+            return "square";
         }
     }
 
@@ -188,7 +202,7 @@ public class Simulation {
         if (myEdgeType.compareToIgnoreCase("finite") == 0 || myEdgeType.compareToIgnoreCase("toroidal") == 0) {
             return myEdgeType;
         } else {
-            throw new XMLException(myResources.getString("InvalidEdge"));
+            return "finite";
         }
     }
 
@@ -196,7 +210,7 @@ public class Simulation {
         if (myGridLines == 0 || myGridLines == 1) {
             return (myGridLines == 1);
         } else {
-            return true;
+            return false;
         }
     }
 
@@ -242,6 +256,14 @@ public class Simulation {
                 throw new XMLException(myResources.getString("TooManyColors"));
             } else {
             throw new XMLException(myResources.getString("TooFewColors"));
+        }
+    }
+
+    public String getDescription() {
+        if (myDescription !=  null && !myDescription.isEmpty()) {
+            return myDescription;
+        } else {
+            return myResources.getString("NoDescription");
         }
     }
 

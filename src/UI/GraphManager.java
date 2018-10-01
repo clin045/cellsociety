@@ -8,6 +8,11 @@ import javafx.stage.Stage;
 
 import java.util.ArrayList;
 
+/**
+ * This class manages the graphing of the UI.
+ *
+ * @author Allen Qiu (asq3)
+ */
 public class GraphManager {
     private static final int WINDOW_HEIGHT = 300;
     private static final int WINDOW_WIDTH = 1000;

@@ -9,7 +9,11 @@ import model.Cell;
 import model.CellManager;
 import model.rule.Rule;
 
-
+/**
+ * This class manages the triangle UI grid.
+ *
+ * @author Allen Qiu (asq3)
+ */
 public class TriangleGridUI extends GridUI {
     private static final int USABLE_WINDOW_SIZE = 500;
     private GridPane simulatorGridPane;
@@ -18,11 +22,13 @@ public class TriangleGridUI extends GridUI {
     private int myColumns;
     private CellManager myCellManager;
     private Polygon[][] myTriangles;
+    private boolean gridlines;
 
-    TriangleGridUI(int[][] initialStates, int rows, int columns, String[] colors, Rule myRule, int[][] neighbors, String edgeType){
+    TriangleGridUI(int[][] initialStates, int rows, int columns, String[] colors, Rule myRule, int[][] neighbors, String edgeType, boolean myGridlines){
         myColors = colors;
         myRows = rows;
         myColumns = columns;
+        gridlines = myGridlines;
         double triangleWidth = USABLE_WINDOW_SIZE / (myColumns / 2.0 + .5);
         double triangleHeight = (double)USABLE_WINDOW_SIZE / myRows;
         myTriangles = new Polygon[myRows][myColumns];
@@ -52,7 +58,9 @@ public class TriangleGridUI extends GridUI {
                     );
                 }
                 myTriangles[i][j].setFill(Color.web(myColors[initialStates[i][j]]));
-                myTriangles[i][j].setStroke(Color.BLACK);
+                if(gridlines){
+                    myTriangles[i][j].setStroke(Color.BLACK);
+                }
                 int togglei = i;
                 int togglej = j;
                 myTriangles[i][j].setOnMouseClicked(event -> toggleNextState(togglei, togglej));
@@ -89,5 +97,9 @@ public class TriangleGridUI extends GridUI {
 
     public int[] getCellStateList(){
         return myCellManager.getGrid().getStateList();
+    }
+
+    public String getCellStates(){
+        return myCellManager.getGrid().getCellStates();
     }
 }

@@ -77,7 +77,7 @@ public class XMLParser {
         if (nodeList != null && nodeList.getLength() > 0) {
             return nodeList.item(0).getTextContent();
         } else {
-            return "";
+            return "0";
         }
     }
 
