@@ -7,6 +7,7 @@ import model.rule.Rule;
 import model.rule.fire.FireRule;
 import model.rule.foragingants.ForagingAntsRule;
 import model.rule.gameoflife.GameOfLifeRule;
+import model.rule.langtonsloop.LangtonsLoopRule;
 import model.rule.predatorprey.PredatorPreyRule;
 import model.rule.rps.RPSRule;
 import model.rule.segregation.SegregationRule;
@@ -109,6 +110,8 @@ public class ConfigurationManager {
             rule = new RPSRule();
         } else if (name.compareToIgnoreCase("Foraging Ants") == 0) {
             rule = new ForagingAntsRule();
+        } else if (name.compareToIgnoreCase("Langtons Loop") == 0) {
+            rule = new LangtonsLoopRule();
         } else {
             rule = new SegregationRule();
         }

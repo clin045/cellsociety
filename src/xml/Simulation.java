@@ -140,7 +140,7 @@ public class Simulation {
 
 
     private boolean isValidSimName(String name) {
-        String[] validSimulationNames = new String[]{"Game of Life", "Segregation", "Predator Prey", "Fire", "Rock Paper Scissors", "Foraging Ants", "Langton's Loop", "SugarScape"};
+        String[] validSimulationNames = new String[]{"Game of Life", "Segregation", "Predator Prey", "Fire", "Rock Paper Scissors", "Foraging Ants", "Langtons Loop", "SugarScape"};
 
         for (String validName : validSimulationNames) {
             if (name.compareToIgnoreCase(validName) == 0) {

@@ -184,6 +184,4 @@ public class LangtonsLoopRule extends Rule {
         }
         return 0;
     }
-
-
 }
